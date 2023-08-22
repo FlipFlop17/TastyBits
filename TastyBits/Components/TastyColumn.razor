@@ -9,9 +9,7 @@
         What you see is what you get
         <ul>
             @foreach (var item in ColumnCardList) {
-               <li>
-                   @item
-               </li>
+               <li> @item </li>
             }
         </ul>
     </div>
@@ -27,9 +25,9 @@
     /// list of your bulletpoints
     /// </summary>
     [Parameter]
-    public List<string> ColumnCardList { get; set; }
+    public List<string> ColumnCardList { get; set; } = new List<string> { "Lorem", "Lorem2", "Lorem3" };
 
     [Parameter]
-    public  string ColumnCardFooter { get; set; }
+    public  string? ColumnCardFooter { get; set; }
 
 }
