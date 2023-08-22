@@ -1,0 +1,35 @@
+﻿
+
+<div id="colRow" class="flex flex-col bg-gray-200 border-2 drop-shadow-xl w-5/12">
+    <div id="title" class="text-emerald-700">
+        Unedited pictures
+    </div>
+    <img src="pics/eggs-breakfest.jpg" alt="eggsimg" />
+    <div id="footer">
+        What you see is what you get
+        <ul>
+            @foreach (var item in ColumnCardList) {
+               <li>
+                   @item
+               </li>
+            }
+        </ul>
+    </div>
+    
+</div>
+@code {
+    [Parameter]
+    public string ColumnCardTitle { get; set; } = "Title";
+
+    [Parameter]
+    public string ColumnCardPictureSrc { get; set; } = "/";
+    /// <summary>
+    /// list of your bulletpoints
+    /// </summary>
+    [Parameter]
+    public List<string> ColumnCardList { get; set; }
+
+    [Parameter]
+    public  string ColumnCardFooter { get; set; }
+
+}

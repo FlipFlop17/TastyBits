@@ -1,5 +1,31 @@
 ﻿@using TastyBits.Components;
 @page "/"
 
-<TastyHero/>
-<TastyCard/>
+<TastyHero></TastyHero>
+<div class="flex flex-col my-48">
+    <div class="flex justify-center">
+        <p class="text-6xl font-bold text-emerald-600 text-center">We help choose your favorites</p>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-7 mt-24">
+        <TastyCard CardTitle="Log & Track known recipes" CardBodyImgPath="pics/search.png" CardFooterContent="Search whats available"></TastyCard>
+        <TastyCard CardTitle="Add personal recipes" CardBodyImgPath="pics/food-heart.png" CardFooterContent="Create your own"></TastyCard>
+        <TastyCard CardTitle="Simplicity first" CardBodyImgPath="pics/easy.png" CardFooterContent="No ads, no flash"></TastyCard>
+    </div>
+</div>
+<div class="flex gap-5 justify-center">
+    <TastyColumn ColumnCardList="cardList1"></TastyColumn>
+    <TastyColumn></TastyColumn>
+</div>
+
+
+@code{
+    public List<string> cardList1 = new List<string>();
+
+    public Index()
+    {
+        cardList1.Add("Fast");
+        cardList1.Add("Healty");
+        cardList1.Add("Tasty");
+    }
+}
+

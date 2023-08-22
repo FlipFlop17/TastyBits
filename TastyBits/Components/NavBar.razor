@@ -1,30 +1,10 @@
-﻿@*<nav class="flex-col items-center 
-    justify-between 
-    bg-green-400 p-4
-    rounded-b-lg h-96">
-    <div id="brand" class="flex gap-2">
-        <div>BrandImg</div>
-        <span>Tasty Bits</span>
-    </div>
-    <div class="fa fa-bars">
-
-    </div>
-    <div id="links" class="flex gap-5 text-white">
-        <a class="hover:text-slate-700" href="#">Home</a>
-        <a class="hover:text-slate-700" href="#">About</a>
-    </div>
-    <div id="actions" class="flex gap-2">
-        <button class="w-20 rounded-lg hover:text-slate-700 text-white">Login</button>
-        <button class="h-7 w-20 rounded-lg bg-green-700 text-white hover:bg-green-600">Sign Up</button>
-    </div>
-</nav>*@
-<div class="bg-green-400">
-	<nav class="relative px-4 py-4 flex justify-between bg-green-400">
+﻿<div class="bg-green-400">
+	<nav class="relative px-4 py-4 flex justify-between bg-emerald-500">
 		<!--logo-->
         <div class="flex items-center">
 			<img alt="tastyLogo" width="45" height="45"
 			src="pics/tasty-logo.png" />
-            <p class="font-bold text-xl text-white ml-2">Tasty Bits</p>
+            <p class="font-bold text-xl text-white ml-5">Tasty Bits</p>
 		</div>
 		<div class="lg:hidden">
 			<!--burger menu-->
@@ -37,10 +17,10 @@
 			</button>
 		</div>
 		<ul class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
-			<li><a class="text-sm text-white hover:text-gray-500" href="#">Home</a></li>
-			<li><a class="text-sm text-white font-bold" href="#">About</a></li>
+			<li><NavLink class="text-lg text-white hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="#" Match="NavLinkMatch.All">Home</NavLink></li>
+			<li><NavLink class="text-lg text-white hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="about">About</NavLink></li>
 		</ul>
-		<button class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 text-sm text-gray-50 font-bold rounded-xl transition duration-200" href="#">Sign In</button>
+		<button class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 text-sm text-gray-50 font-bold rounded-xl transition duration-200 hover:text-emerald-800" href="#">Sign In</button>
 		<button class="hidden lg:inline-block py-2 px-6 bg-green-700 hover:bg-green-600 text-sm text-white font-bold rounded-xl transition duration-200" href="#">Sign up</button>
 	</nav>
 	<!--MOBILE MENU START-->
