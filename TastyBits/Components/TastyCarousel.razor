@@ -1,0 +1,31 @@
+﻿<MudCarousel Class="myStyle" 
+ShowArrows="true" ShowBullets="false" AutoCycle="true" TData="object">
+    <MudCarouselItem Class="myItem" Transition="transition">
+        <TestimonyCard Quote="There are many apps out there but this one is simple and real.
+            I don't need coconut water from the Africa's rainforest to make something. I just want some eggs.
+            That's why I like it." Author="Author"></TestimonyCard>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="transition" Class="myItem">
+        <TestimonyCard Author="2"></TestimonyCard>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="transition" Class="myItem">
+        <TestimonyCard Author="3"></TestimonyCard>
+    </MudCarouselItem>
+</MudCarousel>
+
+<style>
+    .myStyle {
+        width:500px;
+        height:300px;
+    }
+    .myItem {
+        display:flex;
+        flex:1;
+        background:rgb(12,12,211);
+        padding:10px;
+    }
+
+</style>
+@code {
+    private Transition transition = Transition.None;
+}

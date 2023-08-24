@@ -1,7 +1,11 @@
 ﻿@using TastyBits.Components;
 @page "/"
 
+<!--Hero landing section-->
 <TastyHero></TastyHero>
+
+
+<!--Card info section-->
 <div class="flex flex-col my-48">
     <div class="flex justify-center">
         <p class="text-6xl font-bold text-emerald-600 text-center">We help choose your favorites</p>
@@ -12,10 +16,16 @@
         <TastyCard CardTitle="Simplicity first" CardBodyImgPath="pics/easy.png" CardFooterContent="No ads, no flash"></TastyCard>
     </div>
 </div>
-<div class="flex gap-5 justify-center">
-    <TastyColumn ColumnCardList="cardList1"></TastyColumn>
-    @*<TastyColumn></TastyColumn>*@
+
+<!--Testimony section-->
+<div class="flex justify-center">
+    <TastyCarousel></TastyCarousel>
 </div>
+
+<!--Columns section-->
+@* <div class="flex gap-5 justify-center">
+    <TastyColumn ColumnCardList="cardList1"></TastyColumn>
+</div> *@
 
 
 @code{
