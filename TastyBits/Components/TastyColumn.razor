@@ -1,31 +1,40 @@
 ﻿
 
-<div id="colRow" class="flex flex-col bg-gray-200 border-2 drop-shadow-xl w-5/12">
-    <div id="title" class="text-emerald-700">
-        Unedited pictures
+<div id="colRow" class="flex flex-col bg-gray-100 border-2 rounded-xl drop-shadow-xl w-4/12 p-10 text-center space-y-2">
+    <div id="title" class="text-emerald-700 font-bold text-2xl">
+        @ColumnCardTitle
     </div>
-    <img src="pics/eggs-breakfest.jpg" alt="eggsimg" />
-    <div id="footer">
-        What you see is what you get
-        <ul>
-            @foreach (var item in ColumnCardList) {
-               <li> @item </li>
-            }
-        </ul>
+    <img src="@ColumnCardPictureSrc" alt="eggsimg" class="rounded" />
+    <div id="footer" class="text-xl text-gray-600">
+        @ImpactTitle
+        <div class="flex justify-center">
+            <ul>
+                @foreach (var item in TextPointWithPicture) {
+                    <li class="my-5 flex-col items-center">
+                        <img src="@item.Value" width="60" height="50" alt="imgBulleted" />
+                        @item.Key
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
     
 </div>
 @code {
     [Parameter]
-    public string ColumnCardTitle { get; set; } = "Title";
+    public string ColumnCardTitle { get; set; } = "Column Card Title";
 
     [Parameter]
-    public string ColumnCardPictureSrc { get; set; } = "/";
-    /// <summary>
-    /// list of your bulletpoints
-    /// </summary>
+    public string ImpactTitle { get; set; } = "This is what you'l get";
+
     [Parameter]
-    public List<string> ColumnCardList { get; set; } = new List<string> { "Lorem", "Lorem2", "Lorem3" };
+    public string ColumnCardPictureSrc { get; set; } = "pics/eggs-breakfest.jpg";
+
+    [Parameter]
+    public Dictionary<string,string> TextPointWithPicture { get; set; } = new Dictionary<string, string> 
+    { 
+        {"Tasty","pics/diet.png"}
+    };
 
     [Parameter]
     public  string? ColumnCardFooter { get; set; }

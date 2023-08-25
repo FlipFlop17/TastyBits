@@ -6,7 +6,7 @@
 
 
 <!--Card info section-->
-<div class="flex flex-col my-48">
+<div class="flex flex-col mt-36">
     <div class="flex justify-center">
         <p class="text-6xl font-bold text-emerald-600 text-center">We help choose your favorites</p>
     </div>
@@ -16,26 +16,45 @@
         <TastyCard CardTitle="Simplicity first" CardBodyImgPath="pics/easy.png" CardFooterContent="No ads, no flash"></TastyCard>
     </div>
 </div>
+<TastySeparator></TastySeparator>
 
 <!--Testimony section-->
-<div class="flex justify-center">
-    <TastyCarousel></TastyCarousel>
+<div class="flex">
+    <div class="flex-col border-2 p-10 rounded-xl grow bg-gradient-to-r from-emerald-500 to-emerald-400">
+        <div id="testimonyHeader" class="text-6xl text-gray-200 font-bold leading-relaxed text-center mb-5">
+            What our users have to say about us.
+        </div>
+        <div class="flex justify-center">
+            <TastyCarousel></TastyCarousel>
+        </div>
+    </div>
 </div>
+<TastySeparator></TastySeparator>
 
 <!--Columns section-->
-@* <div class="flex gap-5 justify-center">
-    <TastyColumn ColumnCardList="cardList1"></TastyColumn>
-</div> *@
+<div class="flex gap-5 justify-center">
+    <TastyColumn ColumnCardTitle="UNEDITED" ImpactTitle="What you see is what you get" TextPointWithPicture="cardList1"></TastyColumn>
+    <TastyColumn ColumnCardTitle="PRACTICAL" ImpactTitle="Take care of your meals" TextPointWithPicture="cardList2"></TastyColumn>
+</div>
 
+<!--Try It Demo-->
+<TastyTryIt></TastyTryIt>
+
+<!--FOOTER-->
+<TastyFooter></TastyFooter>
 
 @code{
-    public List<string> cardList1 = new List<string>();
-
-    public Index()
-    {
-        cardList1.Add("Fast");
-        cardList1.Add("Healty");
-        cardList1.Add("Tasty");
-    }
+    public Dictionary<string, string> cardList1 = new Dictionary<string, string>() { 
+        {"Raw","pics/raw.png"},
+        {"Realistic","pics/mirror.png"},
+        {"Unstaged","pics/spotlight.png"},
+        {"Tasty","pics/drooling.png"},
+    };
+    public Dictionary<string, string> cardList2 = new Dictionary<string, string>() {
+        {"Fast","pics/easy.png"},
+        {"Healty","pics/healthy.png"},
+        {"Nutritious","pics/diet.png"},
+        {"Convinient","pics/convenient.png"}
+    };
 }
 

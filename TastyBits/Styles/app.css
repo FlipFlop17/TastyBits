@@ -2,10 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer {
-    .mainGreen {
-        @apply bg-emerald-600;
-    }
+body {
+    overflow-x:hidden;
 }
 
 #blazor-error-ui {
