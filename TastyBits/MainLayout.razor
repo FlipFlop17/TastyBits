@@ -1,11 +1,19 @@
 ﻿
 @inherits LayoutComponentBase
 @using TastyBits.Components
+@inject IJSRuntime JSRuntime
 
 <MudThemeProvider />
 
 <NavBar></NavBar>
 
-<main class="m-32"> 
+<main class="mx-14 xl:mx-32"> 
     @Body 
 </main>
+
+@code{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+       //await JSRuntime.InvokeVoidAsync("scrollToTop"); //TODO upali kad zavrsis sa svime
+    }
+}

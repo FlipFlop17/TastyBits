@@ -1,4 +1,9 @@
-﻿<div id="separator" class="flex justify-center my-32">
-    <hr class="border-emerald-500 rounded-xl h-1 w-10/12" />
+﻿<div id="separator" class="flex justify-center my-40 @Class">
+    <hr class="border-emerald-500 rounded-xl h-1 w-6/12" />
 </div>
+
+@code{
+    [Parameter]
+    public string Class { get; set; }
+}
 

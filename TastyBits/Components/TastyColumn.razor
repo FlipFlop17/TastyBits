@@ -1,42 +1,38 @@
 ﻿
 
-<div id="colRow" class="flex flex-col bg-gray-100 border-2 rounded-xl drop-shadow-xl w-4/12 p-10 text-center space-y-2">
-    <div id="title" class="text-emerald-700 font-bold text-2xl">
-        @ColumnCardTitle
+<div class="flex justify-center">
+    <h1 id="colTitle" class="text-6xl text-emerald-900 font-bold">Crafting Tasty and Nutritious Meals</h1>
+</div>
+<div class="flex justify-center items-center gap-20 mt-28 @Class">
+    <div class="left">
+        <img src="pics/cooking.png" alt="salad" />
     </div>
-    <img src="@ColumnCardPictureSrc" alt="eggsimg" class="rounded" />
-    <div id="footer" class="text-xl text-gray-600">
-        @ImpactTitle
-        <div class="flex justify-center">
-            <ul>
-                @foreach (var item in TextPointWithPicture) {
-                    <li class="my-5 flex-col items-center">
-                        <img src="@item.Value" width="60" height="50" alt="imgBulleted" />
-                        @item.Key
-                    </li>
-                }
-            </ul>
+    <div id="right" class="max-w-3xl">
+        <div class="flex flex-col space-y-4">
+            <div id="row1">
+                <h1 class="text-4xl font-bold text-emerald-900 ">What you see is what you get</h1>
+                <p class="text-2xl p-2 text-justify leading-relaxed">
+                    We believe in showcasing the genuine appeal of our dishes, captured as they truly are,
+                    ensuring that your dining expectations are delightfully met when you take that first bite.</p>
+            </div>
+            <hr class="border-t-4 h-6" />
+            <div id="row2" >
+                <h1 class="text-4xl font-bold text-emerald-800">Take care of your meals</h1>
+                <p class="text-2xl p-2 text-justify leading-relaxed">
+                    We prioritize the significance of food in our lives by curating a selection of recipes that uphold the highest standards of quality,
+                    ensuring every dish you create becomes a memorable and satisfying culinary experience.</p>
+            </div>
+            <hr class="border-t-4 h-6" />
+            <div id="row3" >
+                <h1 class="text-4xl font-bold text-emerald-700">Take care of your health</h1>
+                <p class="text-2xl p-2 text-justify leading-relaxed">
+                    Embracing the ethos of health and fitness, our recipes are thoughtfully designed to nourish both body and soul,
+                    empowering you to indulge in deliciousness while staying on the path to vitality.</p>
+            </div>
         </div>
     </div>
-    
 </div>
 @code {
     [Parameter]
-    public string ColumnCardTitle { get; set; } = "Column Card Title";
-
-    [Parameter]
-    public string ImpactTitle { get; set; } = "This is what you'l get";
-
-    [Parameter]
-    public string ColumnCardPictureSrc { get; set; } = "pics/eggs-breakfest.jpg";
-
-    [Parameter]
-    public Dictionary<string,string> TextPointWithPicture { get; set; } = new Dictionary<string, string> 
-    { 
-        {"Tasty","pics/diet.png"}
-    };
-
-    [Parameter]
-    public  string? ColumnCardFooter { get; set; }
-
+    public string Class { get; set; }
 }

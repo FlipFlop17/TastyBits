@@ -1,27 +1,31 @@
 ﻿<div class="bg-green-400">
-	<nav class="relative px-4 py-4 flex justify-between bg-emerald-500">
+	<nav class="relative px-4 py-4 flex items-center justify-between bg-emerald-500">
 		<!--logo-->
-        <div class="flex items-center">
-			<img alt="tastyLogo" width="45" height="45"
-			src="pics/tasty-logo.png" />
-            <p class="font-bold text-xl text-white ml-5">Tasty Bits</p>
+        <div class="flex items-center xl:w-72">
+            <div class="w-36 xl:w-24">
+				<img alt="tastyLogo" class="w-full" src="pics/tasty-logo.png" />
+			</div>
+            <div>
+				@* <a class="font-bold text-6xl xl:text-xl text-white ml-5" href="#">Tasty Bits</a> *@
+				<p class="font-bold text-6xl xl:text-2xl text-white ml-5" href="#">Tasty Bits</p>
+			</div>
 		</div>
-		<div class="lg:hidden">
+		<div class="xl:hidden">
 			<!--burger menu-->
 			<button class="navbar-burger flex items-center text-green-800 p-3"
 			@onclick=ToggleMenu>
-				<svg class="block h-11 w-11 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<svg class="block h-20 w-20 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 					<title>Mobile menu</title>
 					<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
 				</svg>
 			</button>
 		</div>
-		<ul class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
-			<li><NavLink class="text-lg text-white hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="#" Match="NavLinkMatch.All">Home</NavLink></li>
-			<li><NavLink class="text-lg text-white hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="about">About</NavLink></li>
+		<ul class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 xl:flex xl:mx-auto xl:flex xl:items-center xl:w-auto xl:space-x-6">
+			<li><NavLink class="text-lg text-white xl:text-2xl hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="#" Match="NavLinkMatch.All">Home</NavLink></li>
+			<li><NavLink class="text-lg text-white xl:text-2xl hover:text-emerald-800 transition duration-200 hover:cursor-pointer" href="about">About</NavLink></li>
 		</ul>
-		<button class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 text-sm text-gray-50 font-bold rounded-xl transition duration-200 hover:text-emerald-800" href="#">Sign In</button>
-		<button class="hidden lg:inline-block py-2 px-6 bg-green-700 hover:bg-green-600 text-sm text-white font-bold rounded transition duration-200" href="#">Sign up</button>
+		<button class="hidden xl:inline-block xl:ml-auto lg:mr-3 py-2 px-6 text-xl text-gray-50 font-bold rounded-xl transition duration-200 hover:text-emerald-800" href="#">Sign In</button>
+		<button class="hidden xl:inline-block py-2 px-6 bg-green-700 hover:bg-green-600 text-xl text-white font-bold rounded transition duration-200 h-2/3" href="#">Sign up</button>
 	</nav>
 	<!--MOBILE MENU START-->
 	<div class=@MobileClass()>
