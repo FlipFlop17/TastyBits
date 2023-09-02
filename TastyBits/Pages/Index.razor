@@ -10,7 +10,7 @@
     <div class="flex justify-center">
         <p class="text-6xl font-bold text-emerald-700 text-center">We help choose your favorites</p>
     </div>
-    <div class="flex flex-col lg:flex-row gap-7 mt-24">
+    <div class="flex flex-col mx-10 lg:mx-0 lg:flex-row gap-7 mt-24">
         <TastyCard CardTitle="Log & Track known recipes" CardBodyImgPath="pics/search.png" CardFooterContent="Search whats available"></TastyCard>
         <TastyCard CardTitle="Add personal recipes" CardBodyImgPath="pics/food-heart.png" CardFooterContent="Create your own"></TastyCard>
         <TastyCard CardTitle="Simplicity first" CardBodyImgPath="pics/easy.png" CardFooterContent="No ads, no flash"></TastyCard>
@@ -20,19 +20,19 @@
 <!--Columns section-->
 <TastyColumn Class="mt-44"></TastyColumn>
 
-<TastySeparator></TastySeparator>
+<TastySeparator Class="my-32 lg:my-40"></TastySeparator>
 
 <!--Testimony section--->
 <div class="flex justify-center mx-10 relative">
-    <div class="flex w-3/4 gap-6">
-        <div id="leftTesti" class="w-3/4 flex flex-col p-5 mt-10">
-            <p class="text-6xl font-bold text-emerald-700 leading-none">Our users love what we do and how we do it.</p>
-            <p class="text-2xl mt-10 leading-relaxed">Dive in the experience of our users. Find something for yourself, organize your meals,
-                <span class="underline-offset-1 decoration-emerald-700">know what you eat every day.</span>
+    <div class="flex flex-col lg:flex-row w-3/4 items-center lg:items-start gap-6 grow">
+        <div id="leftTesti" class="w-3/4 flex flex-col p-5 mt-10 justify-center lg:justify-start">
+            <p class="text-6xl font-bold text-emerald-700 leading-none text-center lg:text-left">Our users love what we do and how we do it.</p>
+            <p class="text-4xl lg:text-2xl mt-10 lg:leading-relaxed text-justify lg:text-left">Dive in the experience of our users. Find something for yourself, organize your meals and
+                <span class="text-4xl lg:underline decoration-emerald-700 lg:text-2xl">know what you eat every day.</span>
             </p>
         </div>
-        <div class="flex flex-col justify-center">
-            <div class="bg-emerald-700 text-transparent rounded-xl h-64 w-2 opacity-50">-----</div>
+        <div class="hidden lg:flex justify-center items-center">
+            <div class="bg-emerald-700 text-transparent rounded-xl h-60 w-2 opacity-50"></div>
         </div>
         <div id="rightTesti" class="flex flex-col space-y-7 ml-3">
             <TestimonyCard Author="Someone" Quote="Best dinner ideas are here."></TestimonyCard>
@@ -43,14 +43,14 @@
 </div>
 
 <!--Try It Demo-->
-<div class="flex justify-end h-36 mt-44">
+<div class="hidden lg:flex justify-end h-36 mt-44">
     <div class="relative top-14 w-[650px] h-[550px] mr-52">
         <img src="pics/tasty-page-comp.png" alt="tastyweb" />
     </div>
 </div>
 
 <div>
-    <TastyTryIt></TastyTryIt>
+    <TastyTryIt Class="mt-32 lg:mt-0"></TastyTryIt>
     <TastyFooter></TastyFooter>
 </div>
 

@@ -1,12 +1,12 @@
 ﻿
-<div id="heroSection" class="flex flex-col text-9xl lg:text-6xl font-semibold gap-28 items-center text-gray-800 justify-center
+<div id="heroSection" class="flex flex-col gap-28 items-center text-gray-800 justify-center
 lg:flex-row
 @Class">
-    <div id="left">
+    <div id="left" class="text-9xl font-bold">
         <div>
-            Get your everyday
+            Find your everyday
         </div>
-        <div class="flex bg-emerald-500 text-gray-50 mt-5 px-6">
+        <div class="flex bg-emerald-500 text-gray-50 mt-5 px-6 py-2">
             <p>What to eat?</p>
             @* <img class="bg-red-50" src="pics/bite-transparent.png" alt="bite" width="150" height="70"  /> *@
         </div>
@@ -14,11 +14,11 @@ lg:flex-row
             answer.
         </div>
     </div>
-    <div id="right" class="w-[550px] h-[500px]">
+    <div id="right" class="w-[550px] h-[500px] float-right">
         <img src="pics/hero-img.png" alt="heroImg" />
     </div>
 </div>
 @code {
     [Parameter]
-    public string Class { get; set; }
+    public string? Class { get; set; }
 }
