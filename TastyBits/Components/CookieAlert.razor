@@ -1,0 +1,16 @@
+﻿@if (!ShowCookieAlert) {
+    <div class="cookie-alert">
+        <p>This website uses cookies to ensure you get the best experience on our website.</p>
+        <button class="cookie-accept-button" @onclick="AcceptCookies">Got it!</button>
+    </div>
+}
+
+@code {
+    private bool ShowCookieAlert = true;
+
+    private void AcceptCookies()
+    {
+        ShowCookieAlert = false;
+        // You can also set a cookie here to remember the user's choice.
+    }
+}

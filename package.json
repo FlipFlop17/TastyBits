@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "daisyui": "^3.6.3"
+    "daisyui": "^3.6.3",
+    "postcss-import": "^15.1.0"
   }
 }

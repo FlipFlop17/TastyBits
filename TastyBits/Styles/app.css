@@ -1,11 +1,8 @@
-﻿@tailwind base;
+﻿@import "TastyNavBar.css";
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-body {
-    overflow-x:hidden;
-}
 
 #blazor-error-ui {
     background: lightyellow;
