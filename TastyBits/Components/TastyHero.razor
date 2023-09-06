@@ -2,19 +2,31 @@
 <div id="heroSection" class="flex flex-col gap-28 items-center text-gray-800 justify-center
 lg:flex-row
 @Class">
-    <div id="left" class="text-9xl font-bold">
+    <div id="left" class="text-9xl text-6xl font-bold text-gray-700">
         <div>
             Find your everyday
         </div>
-        <div class="flex bg-emerald-500 text-gray-50 mt-5 px-6 py-2">
+        <div class="flex bg-emerald-500 text-gray-50 mt-5 px-6 py-2 relative z-0 rounded-xl">
             <p>What to eat?</p>
-            @* <img class="bg-red-50" src="pics/bite-transparent.png" alt="bite" width="150" height="70"  /> *@
+            <div id="bites" class="relative top-14 left-24 
+                    lg:left-24 lg:top-20
+                    xl:left-42 xl:top-20">
+                <div class="bg-white rounded-[50%] w-16 h-16 z-10 absolute -left-8
+                    lg:w-20 lg:h-12
+                    xl:w-20 xl:h-12"></div>
+                <div class="bg-white rounded-[50%] w-24 h-16 z-20 absolute top-8 -right-14
+                    lg:w-20 lg:h-12 lg:-right-9
+                    xl:w-20 xl:h-12 xl:-right-9"></div>
+                <div class="bg-white rounded-[50%] w-16 h-16 z-30 absolute -top-4
+                    lg:w-10 lg:h-20
+                    xl:w-20 xl:h-20"></div>
+            </div>
         </div>
         <div>
             answer.
         </div>
     </div>
-    <div id="right" class="w-[550px] h-[500px] float-right">
+    <div id="right" class="flex w-[550px] h-[500px]">
         <img src="pics/hero-img.png" alt="heroImg" />
     </div>
 </div>

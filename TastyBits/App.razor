@@ -1,6 +1,8 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using TastyBits.Pages.UserDashboard;
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        @* <RouteView RouteData="@routeData" DefaultLayout="@typeof(DashboardLayout)" /> *@
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>

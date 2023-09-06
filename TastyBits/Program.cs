@@ -1,4 +1,7 @@
 
+
+using Auth0.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -16,8 +19,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
+app.MapRazorPages();
+//
 app.Run();
