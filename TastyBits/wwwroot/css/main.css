@@ -569,12 +569,20 @@ video {
   --tw-backdrop-sepia: ;
 }
 
+.fixed {
+  position:fixed;
+}
+
 .absolute {
   position:absolute;
 }
 
 .relative {
   position:relative;
+}
+
+.sticky {
+  position:sticky;
 }
 
 .-left-8 {
@@ -779,14 +787,6 @@ video {
   height:24rem;
 }
 
-.h-\[500px\] {
-  height:500px;
-}
-
-.h-\[550px\] {
-  height:550px;
-}
-
 .h-screen {
   height:100vh;
 }
@@ -829,14 +829,6 @@ video {
 
 .w-64 {
   width:16rem;
-}
-
-.w-\[550px\] {
-  width:550px;
-}
-
-.w-\[650px\] {
-  width:650px;
 }
 
 .w-full {
@@ -943,10 +935,6 @@ video {
   white-space:normal;
 }
 
-.rounded {
-  border-radius:0.25rem;
-}
-
 .rounded-\[50\%\] {
   border-radius:50%;
 }
@@ -1029,6 +1017,14 @@ video {
 
 .bg-gradient-to-r {
   background-image:linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.bg-\[url\(\'\/pics\/website\.png\'\)\] {
+  background-image:url('/pics/website.png');
+}
+
+.bg-\[url\(\'\/pics\/salad-hero\.jpg\'\)\] {
+  background-image:url('/pics/salad-hero.jpg');
 }
 
 .from-emerald-300 {
@@ -1307,12 +1303,12 @@ video {
     right:-2.25rem;
   }
 
-  .lg\:left-24 {
-    left:6rem;
+  .lg\:left-72 {
+    left:18rem;
   }
 
-  .lg\:top-20 {
-    top:5rem;
+  .lg\:top-16 {
+    top:4rem;
   }
 
   .lg\:mx-0 {
@@ -1357,6 +1353,14 @@ video {
     height:10rem;
   }
 
+  .lg\:h-\[450px\] {
+    height:450px;
+  }
+
+  .lg\:h-\[500px\] {
+    height:500px;
+  }
+
   .lg\:w-1\/2 {
     width:50%;
   }
@@ -1369,10 +1373,6 @@ video {
     width:2.5rem;
   }
 
-  .lg\:w-2\/4 {
-    width:50%;
-  }
-
   .lg\:w-20 {
     width:5rem;
   }
@@ -1381,12 +1381,24 @@ video {
     width:6rem;
   }
 
+  .lg\:w-3\/4 {
+    width:75%;
+  }
+
   .lg\:w-40 {
     width:10rem;
   }
 
   .lg\:w-72 {
     width:18rem;
+  }
+
+  .lg\:w-\[450px\] {
+    width:450px;
+  }
+
+  .lg\:w-\[550px\] {
+    width:550px;
   }
 
   .lg\:grow-0 {
@@ -1439,19 +1451,14 @@ video {
     line-height:2rem;
   }
 
-  .lg\:text-xl {
-    font-size:1.25rem;
-    line-height:1.75rem;
-  }
-
   .lg\:text-4xl {
     font-size:2.25rem;
     line-height:2.5rem;
   }
 
-  .lg\:text-6xl {
-    font-size:3.75rem;
-    line-height:1;
+  .lg\:text-xl {
+    font-size:1.25rem;
+    line-height:1.75rem;
   }
 
   .lg\:font-bold {
@@ -1472,6 +1479,10 @@ video {
     right:-2.25rem;
   }
 
+  .xl\:left-72 {
+    left:18rem;
+  }
+
   .xl\:top-20 {
     top:5rem;
   }
@@ -1479,6 +1490,14 @@ video {
   .xl\:mx-32 {
     margin-left:8rem;
     margin-right:8rem;
+  }
+
+  .xl\:flex {
+    display:flex;
+  }
+
+  .xl\:h-1 {
+    height:0.25rem;
   }
 
   .xl\:h-12 {
@@ -1489,18 +1508,44 @@ video {
     height:5rem;
   }
 
+  .xl\:h-\[500px\] {
+    height:500px;
+  }
+
+  .xl\:h-\[550px\] {
+    height:550px;
+  }
+
+  .xl\:h-1\/4 {
+    height:25%;
+  }
+
+  .xl\:h-32 {
+    height:8rem;
+  }
+
+  .xl\:w-1\/4 {
+    width:25%;
+  }
+
   .xl\:w-20 {
     width:5rem;
   }
 
-  .xl\:text-4xl {
-    font-size:2.25rem;
-    line-height:2.5rem;
+  .xl\:w-\[550px\] {
+    width:550px;
   }
-}
 
-@media (min-width: 1536px) {
-  .\32xl\:text-2xl {
+  .xl\:w-\[650px\] {
+    width:650px;
+  }
+
+  .xl\:text-5xl {
+    font-size:3rem;
+    line-height:1;
+  }
+
+  .xl\:text-2xl {
     font-size:1.5rem;
     line-height:2rem;
   }
