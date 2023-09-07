@@ -1,10 +1,12 @@
 
 
 using Auth0.AspNetCore.Authentication;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 
