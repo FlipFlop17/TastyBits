@@ -4,7 +4,10 @@ using Auth0.AspNetCore.Authentication;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
+{
+    options.Conventions.AddAreaPageRoute("Identity","/Login","login");
+});
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 
@@ -21,6 +24,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.MapRazorPages();

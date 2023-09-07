@@ -1,4 +1,5 @@
 ﻿@use "../Pages/UserDashboard/Home";
+@use "../Areas/Identity/Pages/Login";
 @import "TastyNavBar.css";
 @tailwind base;
 @tailwind components;
