@@ -1,0 +1,41 @@
+﻿@page
+@model TastyBits.Areas.Identity.Pages.Account.RegisterModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "/Areas/Identity/Pages/_IdentityLayout.cshtml";
+}
+
+<div class="registerContainer">
+    <form id="registerForm" method="post">
+        <div class="loginHeader">
+            <p>TASTY REGISTER</p>
+        </div>
+        <div class="form-input">
+            <label asp-for="newUserInput.UserEmail" >Email</label>
+            <input id="registerUser" asp-for="newUserInput.UserEmail" type="text" />
+            <span asp-validation-for="newUserInput.UserEmail" class="dangerText"></span>
+        </div>
+        <div class="form-input">
+            <label for="pwd">Password</label>
+            <input asp-for="newUserInput.UserPassword" id="pwd" type="password" />
+            <span asp-validation-for="newUserInput.UserPassword" class="dangerText"></span>
+        </div>
+        <div class="form-input">
+            <label for="pwd">Confirm Password</label>
+            <input asp-for="newUserInput.ConfirmPassword" id="registerPwd" type="password" />
+            <span asp-validation-for="newUserInput.ConfirmPassword" class="dangerText"></span>
+        </div>
+        <div class="formActions">
+            <button class="mainBtn" type="submit">Register</button>
+        </div>
+        @if (Model.ResultErrors.Count>0) {
+            <span class="dangerText">@Model.ResultErrors.FirstOrDefault().Description</span>
+
+        }
+    </form>
+    <div class="loginFooter">
+        <p>Already have an account?</p>
+        <p>Login <a href="/Identity/Account/login">here</a></p>
+        <a href="/">Back to Tasty Bits</a>
+    </div>
+</div>

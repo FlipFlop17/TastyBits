@@ -1,15 +1,43 @@
-
-
-using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using Serilog;
+using TastyBits.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 {
-    options.Conventions.AddAreaPageRoute("Identity","/Login","login");
+    options.Conventions.AddAreaPageRoute("Identity","/Pages/Account/Login","login");
+    //options.Conventions.AddAreaPageRoute("Identity", "/Pages/Account/Register", "register");
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
+builder.Configuration.AddEnvironmentVariables();
+
+//DATABASE
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    string url = builder.Configuration.GetConnectionString("DefaultConnection");
+    string conString;
+    if (url == "DATABASE_URL") {
+        url = builder.Configuration["DATABASE_URL"]; //get from environment, db is online
+        conString = BuildConnectionStringFromUrl(url);
+    } else { conString = url; }
+    // log mysql connection string
+    Log.Information("url db context: " + builder.Configuration["DATABASE_URL"]);
+    options.UseNpgsql(conString);
+});
+
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddEntityFrameworkStores<AppDbContext>();
+
 
 var app = builder.Build();
 
@@ -24,9 +52,26 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.MapRazorPages();
 //
 app.Run();
+
+// Run this  update the database:
+static string BuildConnectionStringFromUrl(string databaseUrl)
+{
+    var uri = new Uri(databaseUrl);
+    string host = uri.Host;
+    int port = uri.Port;
+    string database = uri.AbsolutePath.TrimStart('/');
+    string username = uri.UserInfo.Split(':')[0];
+    string password = uri.UserInfo.Split(':')[1];
+
+    string connectionString = $"Server={host};Port={port};Database={database};User Id={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+
+    return connectionString;
+}

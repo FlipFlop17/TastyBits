@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TastyBits.Areas.Identity.Shared
+namespace TastyBits.Areas.Identity.Pages
 {
-    public class LoginLayoutModel : PageModel
+    public class IdentityLayoutModel : PageModel
     {
         public void OnGet()
         {

@@ -29,7 +29,7 @@
 	</div>
 	<div id="navAction" class="hidden lg:flex gap-3 mr-5 h-12 w-64">
 		<button class="border-2 border-emerald-300 text-gray-50 grow  text-xl rounded-xl transition duration-1000 hover:text-emerald-800" @onclick="Login">Login</button>
-		<button class="bg-emerald-400 text-gray-50 text-xl rounded-xl grow transition duration-1000 hover:bg-emerald-300">Sign up</button>
+		<button class="bg-emerald-400 text-gray-50 text-xl rounded-xl grow transition duration-1000 hover:bg-emerald-300" @onclick="Register">Sign up</button>
 	</div>
 	<!--MOBILE CLASS-->
 	<div id="navMobileLinks" class="@MobileClass() flex flex-col top-1 fixed w-3/4 bg-gray-50 h-screen p-10 rounded-xl z-10">
@@ -79,6 +79,10 @@
 	}
 	private void Login()
 	{
-		nav.NavigateTo("/Identity/login",true);
+		nav.NavigateTo("Identity/Account/login",true);
+	}
+	private void Register()
+	{
+		nav.NavigateTo("Identity/Account/register", true);
 	}
 }

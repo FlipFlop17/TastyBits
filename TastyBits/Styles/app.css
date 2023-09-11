@@ -3,6 +3,116 @@
   background: red;
 }
 
+.loginBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(311deg, #064e3b 0%, #34d399 80%);
+  background: -webkit-linear-gradient(311deg, #047857 0%, #10b981 80%);
+  background: -moz-linear-gradient(311deg, #047857 0%, #10b981 80%);
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+}
+.form-input label {
+  margin-bottom: 0.3em;
+  font-weight: 600;
+  color: rgb(102, 102, 102);
+  font-size: 1em;
+}
+.form-input input {
+  border-style: solid;
+  border-radius: 0.5em;
+  border-color: rgb(187, 184, 184);
+  height: 1.7em;
+  font-size: 1em;
+  color: rgb(109, 108, 108);
+  padding: 5px;
+}
+.form-input input:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 10px #047857;
+}
+@media only screen and (min-width: 768px) {
+  .form-input input {
+    height: 3rem;
+  }
+}
+
+.registerContainer,
+.loginContainer {
+  background: whitesmoke;
+  padding: 2em;
+  border-radius: 0.5em;
+  -webkit-box-shadow: -9px 2px 42px 3px #047857;
+  -moz-box-shadow: -9px 2px 42px 3px #047857;
+  box-shadow: -9px 2px 42px 3px #047857;
+}
+@media only screen and (min-width: 1225px) {
+  .registerContainer,
+  .loginContainer {
+    width: 450px;
+  }
+}
+.registerContainer .loginHeader,
+.loginContainer .loginHeader {
+  margin-bottom: 1em;
+  color: #059669;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 1.5rem;
+}
+.registerContainer .mainBtn,
+.loginContainer .mainBtn {
+  margin-top: 1em;
+}
+.registerContainer .formActions,
+.loginContainer .formActions {
+  display: flex;
+  justify-content: end;
+}
+.registerContainer .form-input,
+.loginContainer .form-input {
+  margin-top: 0.5em;
+}
+.registerContainer .loginFooter,
+.loginContainer .loginFooter {
+  text-align: center;
+  margin-top: 1em;
+  color: rgb(116, 116, 116);
+}
+.registerContainer .loginFooter p > a,
+.loginContainer .loginFooter p > a {
+  text-decoration: underline;
+  color: #059669;
+}
+
+.mainBtn {
+  background-color: #059669 !important;
+  height: 2.5rem;
+  width: 7em;
+  font-weight: 500;
+  color: white;
+  border: none;
+  border-radius: 0.8em;
+  transition-duration: 500ms;
+  font-size: 1rem;
+}
+.mainBtn:hover {
+  background-color: #047857 !important;
+  cursor: pointer;
+}
+
+.dangerText {
+  border-color: palevioletred;
+  color: palevioletred;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

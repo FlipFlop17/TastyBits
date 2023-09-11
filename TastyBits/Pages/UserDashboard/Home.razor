@@ -2,10 +2,16 @@
 @layout DashboardLayout;
 
 @*temp link to go back*@
-<NavLink href="/">MainPage</NavLink>
+<AuthorizeView>
+    <Authorized>
+        <NavLink href="/">MainPage</NavLink>
+        <h1>Ovo je moj sadržaj</h1>
+    </Authorized>
+    <NotAuthorized>
+        <h1 role="note">Please login in to view this page</h1>
+    </NotAuthorized>
+</AuthorizeView>
 
-
-<h1>Ovo je moj sadržaj</h1>
 
 @code {
 

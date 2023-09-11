@@ -1,0 +1,30 @@
+﻿@page
+@model TastyBits.Areas.Identity.Pages.Account.LoginModel
+
+@{
+    Layout = "/Areas/Identity/Pages/_IdentityLayout.cshtml";
+}
+
+<div class="loginContainer">
+    <form id="loginForm" method="post">
+        <div class="loginHeader">
+            <p>TASTY LOGIN</p>
+        </div>
+        <div class="form-input">
+            <label for="user">Email</label>
+            <input id="user" type="text" />
+        </div>
+        <div class="form-input">
+            <label for="pwd">Password</label>
+            <input id="pwd" type="password" />
+        </div>
+        <div class="formActions">
+            <button class="mainBtn" type="submit">Sign In</button>
+        </div>
+    </form>
+    <div class="loginFooter">
+        <p>Don't have an account?</p>
+        <p>Register <a href="/Identity/Account/register">here</a></p>
+        <a href="/">Back to Tasty Bits</a>
+    </div>
+</div>

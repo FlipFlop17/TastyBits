@@ -1,10 +1,11 @@
-﻿@use "../Pages/UserDashboard/Home";
-@use "../Areas/Identity/Pages/Login";
+﻿
+@use "../Pages/UserDashboard/Home";
+@use "../Areas/Identity/Pages/Account/Login";
 @import "TastyNavBar.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 
 #blazor-error-ui {
