@@ -1,6 +1,6 @@
 ﻿@page
 @model TastyBits.Areas.Identity.Pages.Account.LoginModel
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "/Areas/Identity/Pages/_IdentityLayout.cshtml";
 }
@@ -11,16 +11,21 @@
             <p>TASTY LOGIN</p>
         </div>
         <div class="form-input">
-            <label for="user">Email</label>
-            <input id="user" type="text" />
+            <label for="userEmail">Email</label>
+            <input asp-for="newUserInput.UserEmail" type="text" />
+            <span asp-validation-for="newUserInput.UserEmail" class="dangerText"></span>
         </div>
         <div class="form-input">
             <label for="pwd">Password</label>
-            <input id="pwd" type="password" />
+            <input asp-for="newUserInput.UserPassword" id="pwd" type="password" />
+            <span asp-validation-for="newUserInput.UserPassword" class="dangerText"></span>
         </div>
         <div class="formActions">
             <button class="mainBtn" type="submit">Sign In</button>
         </div>
+        @if (!ModelState.IsValid) {
+            <span class="dangerText">@Html.ValidationSummary(true)</span>
+        }
     </form>
     <div class="loginFooter">
         <p>Don't have an account?</p>

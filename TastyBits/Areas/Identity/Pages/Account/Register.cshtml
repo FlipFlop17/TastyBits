@@ -20,17 +20,16 @@
             <input asp-for="newUserInput.UserPassword" id="pwd" type="password" />
             <span asp-validation-for="newUserInput.UserPassword" class="dangerText"></span>
         </div>
-        <div class="form-input">
+       @*  <div class="form-input">
             <label for="pwd">Confirm Password</label>
             <input asp-for="newUserInput.ConfirmPassword" id="registerPwd" type="password" />
             <span asp-validation-for="newUserInput.ConfirmPassword" class="dangerText"></span>
-        </div>
+        </div> *@
         <div class="formActions">
             <button class="mainBtn" type="submit">Register</button>
         </div>
         @if (Model.ResultErrors.Count>0) {
             <span class="dangerText">@Model.ResultErrors.FirstOrDefault().Description</span>
-
         }
     </form>
     <div class="loginFooter">

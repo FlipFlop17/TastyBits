@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
@@ -5,6 +6,12 @@ using Serilog;
 using TastyBits.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Debug()
+    .CreateLogger();
+
+Log.Information("Hello, Tasty!");
+
 builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 {
     options.Conventions.AddAreaPageRoute("Identity","/Pages/Account/Login","login");
@@ -12,6 +19,8 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
+
+
 builder.Configuration.AddEnvironmentVariables();
 
 //DATABASE
@@ -24,7 +33,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         conString = BuildConnectionStringFromUrl(url);
     } else { conString = url; }
     // log mysql connection string
-    Log.Information("url db context: " + builder.Configuration["DATABASE_URL"]);
+    //Log.Information("url db context: " + builder.Configuration["DATABASE_URL"]);
     options.UseNpgsql(conString);
 });
 

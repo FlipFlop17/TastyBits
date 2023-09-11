@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Serilog;
 
 namespace TastyBits.Areas.Identity.Pages.Account
 {
@@ -34,7 +35,8 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     lockoutOnFailure:false);
 
                 if (result.Succeeded) {
-                    _nav.NavigateTo("/dashboard/home");
+                    Log.Debug("login success");
+                    return LocalRedirect("/dashboard/home");
                 }
 
             }

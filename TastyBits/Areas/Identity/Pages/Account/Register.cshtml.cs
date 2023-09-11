@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Serilog;
 
 namespace TastyBits.Areas.Identity.Pages.Account
 {
@@ -46,7 +47,9 @@ namespace TastyBits.Areas.Identity.Pages.Account
 
                 if (result.Succeeded) {
                     await _signInManager.SignInAsync(newUser,isPersistent: false);
-                    _nav.NavigateTo("/dashboard/home");
+                    Log.Debug("registration success!"); 
+                    //_nav.NavigateTo("/dashboard/home");
+                    return LocalRedirect("/Identity/Account/login");
                 }
 
             }

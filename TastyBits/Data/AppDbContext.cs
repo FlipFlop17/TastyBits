@@ -9,4 +9,9 @@ public class AppDbContext:IdentityDbContext
     {
             
     }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.HasDefaultSchema("TastySchema");
+        base.OnModelCreating(builder);
+    }
 }

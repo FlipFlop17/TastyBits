@@ -11,9 +11,9 @@ namespace TastyBits.Areas.Identity.Pages.Account
         [DataType(DataType.Password)]
         public string UserPassword { get; set; }
 
-        [Required]
-        //[Compare(UserPassword)]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
+        //[Required]
+        ////[Compare(UserPassword)]
+        //[DataType(DataType.Password)]
+        //public string ConfirmPassword { get; set; }
     }
 }
