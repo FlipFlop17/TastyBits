@@ -1,11 +1,13 @@
 ﻿@page "/dashboard/home";
 @layout DashboardLayout;
+@using TastyBits.Pages.UserDashboard.Components.RecipeCard
 
-@*temp link to go back*@
+
 <AuthorizeView>
     <Authorized>
-        <NavLink href="/">MainPage</NavLink>
-        <h1>Ovo je moj sadržaj</h1>
+        <div class="border-emerald-700">
+            <button class="mainBtn">Add new</button>
+        </div>
     </Authorized>
     <NotAuthorized>
         <h1 role="note">Please login in to view this page</h1>

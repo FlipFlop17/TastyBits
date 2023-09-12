@@ -1,27 +1,16 @@
 ﻿@inherits LayoutComponentBase
 @using TastyBits.Pages.UserDashboard.Components
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
 
-
-<MudLayout>
-    <MudAppBar>
-        Tasty Bits
-    </MudAppBar>
-    <MudDrawer Open=true Class="py-8">
-        <DashboardNav></DashboardNav>
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
+<div class="flex min-h-screen">
+    <DashboardNav Class="col-start-1 w-50"></DashboardNav>
+    <main class="col-start-2 grow">
+        <header class="bg-emerald-600 p-5 text-gray-50 font-medium">Tasty Bits</header>
+        <div class="p-5">
+            @Body
+        </div>
+    </main>
+</div>
 
 @code {
-    bool _drawerOpen = true;
 
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
 }

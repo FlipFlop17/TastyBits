@@ -1,12 +1,15 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity;
+@using Serilog;
 @attribute [IgnoreAntiforgeryToken]
 @inject SignInManager<IdentityUser> signInManager
+
 @functions{
-    public async Task<IActionResult> OnPost()
+    public async Task<IActionResult> OnGet()
     {
         if (signInManager.IsSignedIn(User)) {
             await signInManager.SignOutAsync();
+            Log.Information("logged out!");
         }
         return Redirect("/");
     }

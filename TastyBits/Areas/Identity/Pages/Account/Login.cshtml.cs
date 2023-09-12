@@ -14,8 +14,13 @@ namespace TastyBits.Areas.Identity.Pages.Account
         [BindProperty]
         public UserInput? newUserInput { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            //Log.Information("ulogiran: "+_signInManager.IsSignedIn(User).ToString());
+            if (_signInManager.IsSignedIn(User)) {
+                return LocalRedirect("/dashboard/home");
+            }
+            return Page();
         }
 
         public LoginModel(SignInManager<IdentityUser> signInManager, NavigationManager nav)
