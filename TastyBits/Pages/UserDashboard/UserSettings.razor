@@ -1,7 +1,16 @@
 ﻿@page "/dashboard/settings";
 @layout DashboardLayout;
 
-<h1>My settings</h1>
+<AuthorizeView>
+    <Authorized>
+        <div class="border-emerald-700">
+            My settings
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h1 role="note">Please login in to view this page</h1>
+    </NotAuthorized>
+</AuthorizeView>
 @code {
 
 }

@@ -1,0 +1,57 @@
+﻿@page "/dashboard/recipe-new";
+@layout DashboardLayout;
+@using Microsoft.AspNetCore.Components.Forms
+@using Serilog;
+@using TastyBits.Data.Repository.IRepository;
+@using TastyBits.Model;
+
+
+<EditForm Model="@newRecipe" OnSubmit="@InsertRecipe" >
+    <DataAnnotationsValidator/>
+    <div class="form-input">
+        <label>Add name</label>
+        <InputText DisplayName="Eggs" class="border-2" @bind-Value="@newRecipe.Name"></InputText>
+        <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
+    </div>
+    <div class="form-input">
+        <label>Description</label>
+        <InputText class="border-2" @bind-Value="@newRecipe.Description"></InputText>
+        <ValidationMessage  For="@(() => newRecipe.Description)"></ValidationMessage>
+    </div>
+    <div class="form-input">
+        <label>Ingridients</label>
+        <InputText class="border-2" @bind-Value="@newRecipe.Ingridients"></InputText>
+        <ValidationMessage For="@(() => newRecipe.Ingridients)"></ValidationMessage>
+    </div>
+    <button type="submit" class="mainBtn mt-5">
+        Save
+    </button>
+</EditForm>
+
+@code {
+    private Recipe newRecipe { get; set; } = new();
+
+    [Inject]
+    private IRecipeRepo repoRecipe { get; set; }
+
+    private EditContext newRecipeContext { get; set; }
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+    protected override void OnInitialized()
+    {
+        newRecipeContext = new EditContext(newRecipe);
+    }
+    public void InsertRecipe(EditContext context)
+    {
+        bool isValid = context.Validate();
+
+        Log.Information("FORM VALID: "+isValid.ToString());
+        if (isValid) {
+            repoRecipe.InsertAsync(newRecipe);
+            Log.Information($"inserted to database: {newRecipe.Id}");
+        } else {
+            // Model is not valid, handle validation errors or display them to the user
+        }
+    }
+}

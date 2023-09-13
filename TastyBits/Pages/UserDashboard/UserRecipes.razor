@@ -1,0 +1,39 @@
+﻿@page "/dashboard/allrecipes";
+@page "/dashboard/home";
+
+@layout DashboardLayout;
+@using TastyBits.Model;
+@using TastyBits.Pages.UserDashboard.Components;
+
+
+<AuthorizeView>
+    <Authorized>
+        <RecipeToolBar></RecipeToolBar>
+        <div id="recipes" class="flex mt-5 gap-10 p-2">
+            @foreach (Recipe re in _allRecipes) {
+                <RecipeCard RecipeName="@re.Name" RecipeDescription="@re.Description"></RecipeCard>
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h1 role="note">Please login in to view this page</h1>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    private List<Recipe> _allRecipes = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        Recipe newRecipe = new()
+        {
+            Name="Tortilla eggs",
+            Description="Tortilla with scrambled eggs"
+        };
+        _allRecipes.Add(newRecipe);
+        _allRecipes.Add(newRecipe);
+        _allRecipes.Add(newRecipe);
+        _allRecipes.Add(newRecipe);
+
+        return base.OnInitializedAsync();
+    }
+}

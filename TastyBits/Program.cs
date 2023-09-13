@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Serilog;
 using TastyBits.Data;
+using TastyBits.Data.Repository;
+using TastyBits.Data.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
@@ -19,7 +21,8 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-
+builder.Services.AddTransient<IRecipeRepo, RepoRecipe>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Configuration.AddEnvironmentVariables();
 

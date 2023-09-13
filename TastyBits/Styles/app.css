@@ -1,8 +1,4 @@
 ﻿@import "TastyNavBar.css";
-.nav {
-  background: red;
-}
-
 .loginBody {
   display: flex;
   justify-content: center;

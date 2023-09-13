@@ -1,0 +1,12 @@
+﻿@inject NavigationManager navMan
+
+<div class="flex border p-3 items-center rounded-xl">
+    <button @onclick="AddNewRecipe" class="mainBtn">Add new</button>
+</div>
+
+@code {
+    private void AddNewRecipe()
+    {
+        navMan.NavigateTo("/dashboard/recipe-new");
+    }
+}

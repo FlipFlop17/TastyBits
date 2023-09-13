@@ -1,0 +1,25 @@
+﻿<div class="border rounded-lg p-5 bg-gray-50">
+    <div id="recipeContent" >
+        <img src="/pics/eggs-breakfest.jpg" alt="eggs" />
+        <h1 class="text-xl font-bold text-emerald-700 p-3">@RecipeName</h1>
+        <hr />
+        <div class="p-3">
+            @RecipeDescription
+        </div>
+        <hr />
+        <div class="p-3">
+            <p>Ingridients</p>
+            <ul>
+                <li>Eggs</li>
+                <li>Tortilla</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string RecipeName { get; set; }
+    [Parameter]
+    public string RecipeDescription { get; set; }
+}
