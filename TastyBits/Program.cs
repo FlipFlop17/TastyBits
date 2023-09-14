@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Serilog;
 using TastyBits.Data;
-using TastyBits.Data.Repository;
-using TastyBits.Data.Repository.IRepository;
+using TastyBits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
@@ -21,13 +19,15 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-builder.Services.AddTransient<IRecipeRepo, RepoRecipe>();
+builder.Services.AddTransient<DbService>();
+builder.Services.AddTransient<TastyDialogService>();
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Configuration.AddEnvironmentVariables();
 
 //DATABASE
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
     string url = builder.Configuration.GetConnectionString("DefaultConnection");
     string conString;

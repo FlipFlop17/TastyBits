@@ -1,18 +1,20 @@
-﻿<div class="border rounded-lg p-5 bg-gray-50">
-    <div id="recipeContent" >
-        <img src="/pics/eggs-breakfest.jpg" alt="eggs" />
-        <h1 class="text-xl font-bold text-emerald-700 p-3">@RecipeName</h1>
+﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl">
+    <div id="recipeContent p-3" >
+        <img src="/pics/eggs-breakfest.jpg" width="400" alt="eggs" />
+        <h1 class="text-xl font-bold text-emerald-700">@RecipeName</h1>
         <hr />
         <div class="p-3">
             @RecipeDescription
         </div>
         <hr />
-        <div class="p-3">
-            <p>Ingridients</p>
-            <ul>
-                <li>Eggs</li>
-                <li>Tortilla</li>
-            </ul>
+        <div class="font-bold text-emerald-600">
+            <p>Preparation time: 5</p>
+            <p>Cooking time: 10</p>
+        </div>
+        <div id="recipeCardActions" class="flex gap-5">
+            <button class="secondaryButton">Open</button>
+            <button class="secondaryButton">Edit</button>
+            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" />
         </div>
     </div>
 </div>

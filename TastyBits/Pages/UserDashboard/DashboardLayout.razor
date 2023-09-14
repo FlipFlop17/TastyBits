@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @using TastyBits.Pages.UserDashboard.Components
 
+<MudThemeProvider />
+<MudDialogProvider CloseButton="true" CloseOnEscapeKey="true" />
+<MudSnackbarProvider />
+
 <div class="flex min-h-screen">
     <DashboardNav Class="col-start-1 w-50"></DashboardNav>
     <main id="rightDashboardLayout" class="col-start-2 grow">

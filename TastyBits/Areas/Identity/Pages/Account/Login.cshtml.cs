@@ -17,7 +17,7 @@ namespace TastyBits.Areas.Identity.Pages.Account
         public IActionResult OnGet()
         {
             //Log.Information("ulogiran: "+_signInManager.IsSignedIn(User).ToString());
-            if (_signInManager.IsSignedIn(User)) {
+            if (_signInManager.IsSignedIn(User)) { //if already singed in
                 return LocalRedirect("/dashboard/home");
             }
             return Page();

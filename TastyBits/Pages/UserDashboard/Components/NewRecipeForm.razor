@@ -2,26 +2,33 @@
 @layout DashboardLayout;
 @using Microsoft.AspNetCore.Components.Forms
 @using Serilog;
-@using TastyBits.Data.Repository.IRepository;
+@using TastyBits.Components;
 @using TastyBits.Model;
-
+@using TastyBits.Services;
+@inject IDialogService DialogService;
+@inject DbService _dbService;
 
 <EditForm Model="@newRecipe" OnSubmit="@InsertRecipe" >
     <DataAnnotationsValidator/>
     <div class="form-input">
         <label>Add name</label>
-        <InputText DisplayName="Eggs" class="border-2" @bind-Value="@newRecipe.Name"></InputText>
+        <InputText class="border-2" @bind-Value="@newRecipe.Name"></InputText>
         <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
     </div>
     <div class="form-input">
         <label>Description</label>
         <InputText class="border-2" @bind-Value="@newRecipe.Description"></InputText>
-        <ValidationMessage  For="@(() => newRecipe.Description)"></ValidationMessage>
+         <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
     </div>
     <div class="form-input">
         <label>Ingridients</label>
         <InputText class="border-2" @bind-Value="@newRecipe.Ingridients"></InputText>
-        <ValidationMessage For="@(() => newRecipe.Ingridients)"></ValidationMessage>
+        <ValidationMessage  For="@(() => newRecipe.Ingridients)"></ValidationMessage>
+    </div>
+
+    <div class="flex flex-col mt-5 border-2 p-2">
+        <label class="text-lg">Choose picture</label>
+        <InputFile ></InputFile>
     </div>
     <button type="submit" class="mainBtn mt-5">
         Save
@@ -32,7 +39,7 @@
     private Recipe newRecipe { get; set; } = new();
 
     [Inject]
-    private IRecipeRepo repoRecipe { get; set; }
+    private TastyDialogService _dialogService { get; set; }
 
     private EditContext newRecipeContext { get; set; }
     [Parameter]
@@ -42,14 +49,18 @@
     {
         newRecipeContext = new EditContext(newRecipe);
     }
-    public void InsertRecipe(EditContext context)
+    public async void InsertRecipe(EditContext context)
     {
         bool isValid = context.Validate();
 
-        Log.Information("FORM VALID: "+isValid.ToString());
+        //Log.Information("FORM VALID: "+isValid.ToString());
         if (isValid) {
-            repoRecipe.InsertAsync(newRecipe);
-            Log.Information($"inserted to database: {newRecipe.Id}");
+            bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
+            if (isOk) {
+                Log.Information($"inserted to database: {newRecipe.Id}");
+                _dialogService.ShowInfoSuccess("New recipe added!");
+                newRecipe = new();
+            }
         } else {
             // Model is not valid, handle validation errors or display them to the user
         }

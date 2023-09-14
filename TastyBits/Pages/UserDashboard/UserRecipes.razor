@@ -2,14 +2,18 @@
 @page "/dashboard/home";
 
 @layout DashboardLayout;
+@using System.Collections.ObjectModel;
+@using Microsoft.EntityFrameworkCore;
+@using TastyBits.Data;
 @using TastyBits.Model;
 @using TastyBits.Pages.UserDashboard.Components;
-
+@using TastyBits.Services;
+@inject DbService _dbService;
 
 <AuthorizeView>
     <Authorized>
         <RecipeToolBar></RecipeToolBar>
-        <div id="recipes" class="flex mt-5 gap-10 p-2">
+        <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2">
             @foreach (Recipe re in _allRecipes) {
                 <RecipeCard RecipeName="@re.Name" RecipeDescription="@re.Description"></RecipeCard>
             }
@@ -19,21 +23,13 @@
         <h1 role="note">Please login in to view this page</h1>
     </NotAuthorized>
 </AuthorizeView>
+
+
 @code {
-    private List<Recipe> _allRecipes = new();
+    private List<Recipe> _allRecipes=new List<Recipe>();
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        Recipe newRecipe = new()
-        {
-            Name="Tortilla eggs",
-            Description="Tortilla with scrambled eggs"
-        };
-        _allRecipes.Add(newRecipe);
-        _allRecipes.Add(newRecipe);
-        _allRecipes.Add(newRecipe);
-        _allRecipes.Add(newRecipe);
-
-        return base.OnInitializedAsync();
+        _allRecipes = await _dbService.GetAllRecipes();
     }
 }
