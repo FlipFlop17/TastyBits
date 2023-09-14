@@ -3,15 +3,29 @@
 @tailwind utilities;
 
 
+
+.dangerText {
+    @apply text-red-400;
+}
+.myGradient {
+    @apply bg-gradient-to-r from-emerald-400 to-emerald-700;
+}
+
+.loginWindows {
+    @apply w-96;
+}
+.customSize {
+    @apply text-sm mt-4;
+}
 .primaryButton {
     @apply bg-emerald-600 hover:bg-emerald-500 duration-1000;
     @apply p-3 text-gray-50 rounded-lg;
 }
 .input-form {
-    @apply flex flex-col
+    @apply flex flex-col;
 }
 .input-form > input {
-    @apply border-2 border-emerald-500;
+    @apply p-2 border-2 rounded-lg border-emerald-400 focus:outline-none focus:border-emerald-400 focus:shadow-md focus:shadow-emerald-300
 }
 .transBase {
     /*transition:transform 1s;*/
