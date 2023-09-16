@@ -8,13 +8,13 @@
 @using TastyBits.Model;
 @using TastyBits.Pages.UserDashboard.Components;
 @using TastyBits.Services;
-@inject DbService _dbService;
+@inject MealService _mealService;
 
 <AuthorizeView>
     <Authorized>
         <RecipeToolBar></RecipeToolBar>
         <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2">
-            @foreach (Recipe re in _allRecipes) {
+            @foreach (UserMeal re in _allRecipes) {
                 <RecipeCard RecipeName="@re.Name" RecipeDescription="@re.Description"></RecipeCard>
             }
         </div>
@@ -26,10 +26,10 @@
 
 
 @code {
-    private List<Recipe> _allRecipes=new List<Recipe>();
+    private List<UserMeal> _allRecipes = new List<UserMeal>();
 
     protected override async Task OnInitializedAsync()
     {
-        _allRecipes = await _dbService.GetAllRecipes();
+        //_allRecipes = await _dbService.GetAllRecipes();
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
+using TastyBits.Areas.Identity.Pages.Account.Models;
 
 namespace TastyBits.Areas.Identity.Pages.Account
 {
@@ -16,7 +17,7 @@ namespace TastyBits.Areas.Identity.Pages.Account
         public List<IdentityError> ResultErrors { get; set; }
 
         [BindProperty]
-        public UserInput? newUserInput {get;set;}
+        public UserRegister? newUserInput {get;set;}
 
         public string returnUrl { get;set;}
 
@@ -25,7 +26,7 @@ namespace TastyBits.Areas.Identity.Pages.Account
             _userManager = userManager;
             _nav = nav;
             _signInManager = signInManager;
-            UserInput newUserInput = new UserInput();
+            UserRegister newUserInput = new UserRegister();
             ResultErrors = new List<IdentityError>();
         }
         public void OnGet()
@@ -50,6 +51,8 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     Log.Debug("registration success!"); 
                     //_nav.NavigateTo("/dashboard/home");
                     return LocalRedirect("/Identity/Account/login");
+                }else {
+                    ModelState.AddModelError("unknown-err", "Registration invalid");
                 }
 
             }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TastyBits.Data;
+using TastyBits.Interfaces;
 using TastyBits.Model;
+using TastyBits.Model.Dto;
 
 namespace TastyBits.Services
 {
-    public class DbService
+    public class DbService : IDbService
     {
         private readonly IDbContextFactory<AppDbContext> _dbFactory;
 
@@ -15,21 +17,29 @@ namespace TastyBits.Services
             _dbFactory = dbFactory;
         }
 
-        public async Task<bool> InsertNewRecipeAsync(Recipe recipe)
+        public async Task<bool> InsertNewMealAsync(MealDto newMeal)
         {
             await using (_dbContext =await _dbFactory.CreateDbContextAsync()) {
-                _dbContext.Recipes.Add(recipe);
-                int result = await _dbContext.SaveChangesAsync();
-                if (result != null) {
+                Meals dbMeal = new Meals();
+                dbMeal.UserId=newMeal.UserId;
+                dbMeal.Name = newMeal.Name;
+                dbMeal.Description = newMeal.Description;
+                dbMeal.CookingTime = Convert.ToInt32(newMeal.CookingTime);
+                dbMeal.PrepTime=Convert.ToInt32(newMeal.PrepTime);
+
+                _dbContext.Meals.Add(dbMeal);
+                int insertedId = await _dbContext.SaveChangesAsync();
+                if (insertedId >0) {
                     return true;
                 }
                 return false;
             }
         }
-        public async Task<List<Recipe>> GetAllRecipes()
+        public async Task<List<Meals>> GetAllRecipes()
         {
             await using (_dbContext = await _dbFactory.CreateDbContextAsync()) {
-                return await _dbContext.Recipes.ToListAsync();
+                //TODO implement the creation of list UserMeal
+                return await _dbContext.Meals.ToListAsync();
             }
         }
     }

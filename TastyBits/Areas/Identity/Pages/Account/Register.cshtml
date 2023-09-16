@@ -5,36 +5,39 @@
     Layout = "/Areas/Identity/Pages/_IdentityLayout.cshtml";
 }
 
-<div class="registerContainer">
-    <form id="registerForm" method="post">
-        <div class="loginHeader">
-            <p>TASTY REGISTER</p>
-        </div>
-        <div class="form-input">
-            <label asp-for="newUserInput.UserEmail" >Email</label>
-            <input id="registerUser" asp-for="newUserInput.UserEmail" type="text" />
+<div class="loginWindows border-2 bg-gray-50 rounded-lg">
+    <div class="myGradient flex justify-center mb-5 text-gray-50
+    p-2 font-semibold">
+        <p>TASTY REGISTER</p>
+    </div>
+    <form id="registerForm" method="post" class="p-5">
+        <div class="input-form">
+            <label for="userEmail">Email</label>
+            <input asp-for="newUserInput.UserEmail" type="text" />
             <span asp-validation-for="newUserInput.UserEmail" class="dangerText"></span>
         </div>
-        <div class="form-input">
+        <div class="input-form">
             <label for="pwd">Password</label>
             <input asp-for="newUserInput.UserPassword" id="pwd" type="password" />
             <span asp-validation-for="newUserInput.UserPassword" class="dangerText"></span>
         </div>
-       @*  <div class="form-input">
-            <label for="pwd">Confirm Password</label>
+        <div class="input-form">
+            <label for="pwdConfirm">Confirm Password</label>
             <input asp-for="newUserInput.ConfirmPassword" id="registerPwd" type="password" />
             <span asp-validation-for="newUserInput.ConfirmPassword" class="dangerText"></span>
-        </div> *@
-        <div class="formActions">
-            <button class="mainBtn" type="submit">Register</button>
         </div>
-        @if (Model.ResultErrors.Count>0) {
-            <span class="dangerText">@Model.ResultErrors.FirstOrDefault().Description</span>
+        <div class="flex">
+            <button class="primaryButton mt-5 grow" type="submit">Register</button>
+        </div>
+        @if (!ModelState.IsValid && ModelState.ContainsKey("unknown-err")) {
+            <span class="dangerText">@ModelState["unknown-err"].Errors[0].ErrorMessage</span>
         }
     </form>
-    <div class="loginFooter">
+    <div class="text-center p-2">
         <p>Already have an account?</p>
-        <p>Login <a href="/Identity/Account/login">here</a></p>
-        <a href="/">Back to Tasty Bits</a>
+        <p>Login <a class="text-emerald-300 hover:text-emerald-400" href="/Identity/Account/login">here</a></p>
+        <div class="customSize hover:text-emerald-800 hover:cursor-pointer">
+            <a href="/">Back to Tasty Bits</a>
+        </div>
     </div>
 </div>

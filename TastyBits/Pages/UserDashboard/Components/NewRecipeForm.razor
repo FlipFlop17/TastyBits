@@ -1,42 +1,82 @@
 ﻿@page "/dashboard/recipe-new";
+@using Microsoft.AspNetCore.Identity;
+@using TastyBits.Model;
 @layout DashboardLayout;
 @using Microsoft.AspNetCore.Components.Forms
 @using Serilog;
 @using TastyBits.Components;
-@using TastyBits.Model;
 @using TastyBits.Services;
 @inject IDialogService DialogService;
-@inject DbService _dbService;
+@inject MealService _mealService;
+@inject UserManager<IdentityUser> _userManager;
 
 <EditForm Model="@newRecipe" OnSubmit="@InsertRecipe" >
     <DataAnnotationsValidator/>
-    <div class="form-input">
+    <div class="input-form">
         <label>Add name</label>
         <InputText class="border-2" @bind-Value="@newRecipe.Name"></InputText>
         <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
     </div>
-    <div class="form-input">
+    <div class="input-form">
         <label>Description</label>
         <InputText class="border-2" @bind-Value="@newRecipe.Description"></InputText>
          <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
     </div>
-    <div class="form-input">
+    <div class="input-form">
         <label>Ingridients</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.Ingridients"></InputText>
-        <ValidationMessage  For="@(() => newRecipe.Ingridients)"></ValidationMessage>
+        <table class="w-full border-collapse text-left">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 border-b-2 border-gray-300">Num</th>
+                    <th class="flex gap-5 p-2 border-b-2 border-gray-300">
+                        <p>Ingredient</p>
+                        <button type="button" @onclick="OpenNewIngridient">
+                            <i class="fa-solid fa-circle-plus text-emerald-600"></i>
+                            </button>
+                        </th>
+                    <th class="p-2 border-b-2 border-gray-300">Quantity</th>
+                </tr>
+            </thead>
+            @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
+                <tr>
+                    <td class="p-2 border-b border-gray-200 w-10">
+                        <input type="text" @bind="item.Num" />
+                    </td>
+                    <td class="p-2 border-b border-gray-200">
+                        <input type="text" @bind="item.Name" />
+                    </td>
+                    <td class="p-2 border-b border-gray-200">
+                        <input type="text" @bind="item.Quantity" />
+                    </td>
+                </tr>
+            }
+        </table>
     </div>
-
+    <div class="input-form">
+        <label>Prep time</label>
+        <InputText class="border-2" @bind-Value="@newRecipe.PrepTime"></InputText>
+        <ValidationMessage For="@(() => newRecipe.PrepTime)"></ValidationMessage>
+    </div>
+    <div class="input-form">
+        <label>Cooking time</label>
+        <InputText class="border-2" @bind-Value="@newRecipe.CookingTime"></InputText>
+        <ValidationMessage For="@(() => newRecipe.CookingTime)"></ValidationMessage>
+    </div>
     <div class="flex flex-col mt-5 border-2 p-2">
         <label class="text-lg">Choose picture</label>
-        <InputFile ></InputFile>
+        <InputFile></InputFile>
     </div>
-    <button type="submit" class="mainBtn mt-5">
+    <button type="submit" class="primaryButton w-20 mt-5">
         Save
     </button>
+@*     @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
+        <div>@item.Name</div>
+        <div>@item.Quantity</div>
+    } *@
 </EditForm>
 
 @code {
-    private Recipe newRecipe { get; set; } = new();
+    private UserMeal newRecipe { get; set; } = new();
 
     [Inject]
     private TastyDialogService _dialogService { get; set; }
@@ -45,24 +85,40 @@
     [Parameter]
     public EventCallback OnSubmit { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authState { get; set; }
+
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
     }
-    public async void InsertRecipe(EditContext context)
+    public async Task InsertRecipe(EditContext context)
     {
         bool isValid = context.Validate();
-
+        bool isOk = false;
         //Log.Information("FORM VALID: "+isValid.ToString());
         if (isValid) {
-            bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
+            //TODO convert recipeentry to recipe data
+            //bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
+            ClaimsPrincipal user = (await authState).User;
+            newRecipe.UserId = (await _userManager.GetUserAsync(user)).Id;
+
+            isOk=await _mealService.AddNewMealAsync(newRecipe);
             if (isOk) {
-                Log.Information($"inserted to database: {newRecipe.Id}");
+                Log.Information($"new meal inserted to database");
                 _dialogService.ShowInfoSuccess("New recipe added!");
                 newRecipe = new();
+                StateHasChanged();
             }
         } else {
             // Model is not valid, handle validation errors or display them to the user
         }
+    }
+    private void OpenNewIngridient()
+    {
+        UserMeal.Ingridient newIngridients = new();
+        newIngridients.Num = newRecipe.Ingredients.Count + 1;
+        newRecipe.Ingredients.Add(newIngridients);
+        StateHasChanged();
     }
 }

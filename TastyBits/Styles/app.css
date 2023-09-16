@@ -5,12 +5,14 @@
 
 
 .dangerText {
-    @apply text-red-400;
+    @apply text-red-400 mt-3;
 }
 .myGradient {
     @apply bg-gradient-to-r from-emerald-400 to-emerald-700;
 }
-
+.secondaryButton {
+    @apply bg-emerald-500 p-2 rounded-lg text-gray-50;
+}
 .loginWindows {
     @apply w-96;
 }
@@ -22,7 +24,7 @@
     @apply p-3 text-gray-50 rounded-lg;
 }
 .input-form {
-    @apply flex flex-col;
+    @apply flex flex-col mt-5;
 }
 .input-form > input {
     @apply p-2 border-2 rounded-lg border-emerald-400 focus:outline-none focus:border-emerald-400 focus:shadow-md focus:shadow-emerald-300

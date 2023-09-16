@@ -1,17 +1,17 @@
 ﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl">
     <div id="recipeContent p-3" >
         <img src="/pics/eggs-breakfest.jpg" width="400" alt="eggs" />
-        <h1 class="text-xl font-bold text-emerald-700">@RecipeName</h1>
+        <h1 class="text-xl font-bold text-emerald-700 mt-2">@RecipeName</h1>
         <hr />
         <div class="p-3">
             @RecipeDescription
         </div>
         <hr />
-        <div class="font-bold text-emerald-600">
-            <p>Preparation time: 5</p>
-            <p>Cooking time: 10</p>
+        <div class="font-bold text-emerald-600 space-y-3 mt-3">
+            <p>Preparation time (min): 5</p>
+            <p>Cooking time (min): 10</p>
         </div>
-        <div id="recipeCardActions" class="flex gap-5">
+        <div id="recipeCardActions" class="flex gap-2 justify-end">
             <button class="secondaryButton">Open</button>
             <button class="secondaryButton">Edit</button>
             <MudIconButton Icon="@Icons.Material.Filled.MoreVert" />

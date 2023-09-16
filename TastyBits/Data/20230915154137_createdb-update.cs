@@ -5,7 +5,7 @@
 namespace TastyBits.Data
 {
     /// <inheritdoc />
-    public partial class updaterecipestable : Migration
+    public partial class createdbupdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

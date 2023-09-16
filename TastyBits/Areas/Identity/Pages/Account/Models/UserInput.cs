@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TastyBits.Areas.Identity.Pages.Account
+namespace TastyBits.Areas.Identity.Pages.Account.Models
 {
     public class UserInput
     {
@@ -10,10 +10,5 @@ namespace TastyBits.Areas.Identity.Pages.Account
         [Required]
         [DataType(DataType.Password)]
         public string UserPassword { get; set; }
-
-        //[Required]
-        ////[Compare(UserPassword)]
-        //[DataType(DataType.Password)]
-        //public string ConfirmPassword { get; set; }
     }
 }

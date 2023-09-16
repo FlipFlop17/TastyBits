@@ -3,14 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Serilog;
 using TastyBits.Data;
+using TastyBits.Interfaces;
 using TastyBits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Debug()
     .CreateLogger();
-
-Log.Information("Hello, Tasty!");
 
 builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 {
@@ -19,8 +18,9 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-builder.Services.AddTransient<DbService>();
+builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<TastyDialogService>();
+builder.Services.AddTransient<MealService>();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

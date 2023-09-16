@@ -24,13 +24,13 @@
         <div class="flex" >
             <button class="primaryButton mt-5 grow" type="submit">Sign In</button>
         </div>
-        @if (!ModelState.IsValid) {
-            <span class="dangerText">@Html.ValidationSummary(true)</span>
+        @if (!ModelState.IsValid && ModelState.ContainsKey("unknown-err")) {
+            <span class="dangerText mt-2">@ModelState["unknown-err"].Errors[0].ErrorMessage</span>
         }
     </form>
     <div class="text-center p-2">
         <p>Don't have an account?</p>
-        <p>Register <a class="text-emerald-400 hover:text-emerald-800" href="/Identity/Account/register">here</a></p>
+        <p>Register <a class="text-emerald-300 hover:text-emerald-400" href="/Identity/Account/register">here</a></p>
         <div class="customSize hover:text-emerald-800 hover:cursor-pointer">
             <a href="/">Back to Tasty Bits</a>
            </div>

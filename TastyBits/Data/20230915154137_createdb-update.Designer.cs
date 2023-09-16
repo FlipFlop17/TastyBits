@@ -12,8 +12,8 @@ using TastyBits.Data;
 namespace TastyBits.Data
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230913101745_update-recipes-table")]
-    partial class updaterecipestable
+    [Migration("20230915154137_createdb-update")]
+    partial class createdbupdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -222,7 +222,7 @@ namespace TastyBits.Data
                     b.ToTable("AspNetUserTokens", "TastySchema");
                 });
 
-            modelBuilder.Entity("TastyBits.Model.Recipe", b =>
+            modelBuilder.Entity("TastyBits.Model.Dto.Ingredients", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -230,11 +230,27 @@ namespace TastyBits.Data
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Ingridients")
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingredients", "TastySchema");
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.Meals", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CookingTime")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -242,15 +258,68 @@ namespace TastyBits.Data
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("ValidFrom")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("PrepTime")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset?>("ValidUntil")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("ValidUntil")
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes", "TastySchema");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Meals", "TastySchema");
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.RecipeImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ImageId"));
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<int>("MealId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("MealId");
+
+                    b.ToTable("RecipeImage", "TastySchema");
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.RecipeIngredients", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Quantity")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("RecipeIngredients", "TastySchema");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -302,6 +371,39 @@ namespace TastyBits.Data
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.Meals", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.RecipeImage", b =>
+                {
+                    b.HasOne("TastyBits.Model.Dto.Meals", "Meals")
+                        .WithMany()
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meals");
+                });
+
+            modelBuilder.Entity("TastyBits.Model.Dto.RecipeIngredients", b =>
+                {
+                    b.HasOne("TastyBits.Model.Dto.Ingredients", "Ingredients")
+                        .WithMany()
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
+using TastyBits.Areas.Identity.Pages.Account.Models;
 
 namespace TastyBits.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly NavigationManager _nav;
         private readonly SignInManager<IdentityUser> _signInManager;
 
         [BindProperty]
-        public UserInput? newUserInput { get; set; }
+        public UserLogin? newUserInput { get; set; }
 
         public IActionResult OnGet()
         {
@@ -23,11 +23,10 @@ namespace TastyBits.Areas.Identity.Pages.Account
             return Page();
         }
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, NavigationManager nav)
+        public LoginModel(SignInManager<IdentityUser> signInManager)
         {
-            _nav = nav;
             _signInManager = signInManager;
-            UserInput newUserInput = new UserInput();
+            UserLogin newUserInput = new UserLogin();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -42,6 +41,8 @@ namespace TastyBits.Areas.Identity.Pages.Account
                 if (result.Succeeded) {
                     Log.Debug("login success");
                     return LocalRedirect("/dashboard/home");
+                }else {
+                    ModelState.AddModelError("unknown-err", "Incorrect login attempt");
                 }
 
             }
