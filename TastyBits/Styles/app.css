@@ -26,6 +26,9 @@
 .input-form {
     @apply flex flex-col mt-5;
 }
+.input-form > label {
+    @apply font-medium;
+}
 .input-form > input {
     @apply p-2 border-2 rounded-lg border-emerald-400 focus:outline-none focus:border-emerald-400 focus:shadow-md focus:shadow-emerald-300
 }

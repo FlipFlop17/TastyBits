@@ -23,34 +23,37 @@
          <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
     </div>
     <div class="input-form">
-        <label>Ingridients</label>
-        <table class="w-full border-collapse text-left">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="p-2 border-b-2 border-gray-300">Num</th>
-                    <th class="flex gap-5 p-2 border-b-2 border-gray-300">
-                        <p>Ingredient</p>
-                        <button type="button" @onclick="OpenNewIngridient">
-                            <i class="fa-solid fa-circle-plus text-emerald-600"></i>
+        <label>Whats your meal made of?</label>
+        <div id="ingridientsTable" class="w-3/4 h-60 overflow-y-scroll">
+            <table class="border-collapse text-left mt-2">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="p-2 border-b-2 border-gray-300 "></th>
+                        <th class="p-2 border-b-2 border-gray-300">Ingredient</th>
+                        <th class="p-2 border-b-2 border-gray-300">Quantity</th>
+                    </tr>
+                </thead>
+                @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
+                    <tr>
+                        <td class="p-2 border-b border-gray-200 flex gap-2 items-center">
+                            @* <p>@item.Num</p> *@
+                            <button type="button" @onclick="OpenNewIngridient">
+                                <i class="fa-solid fa-circle-plus text-emerald-600 w-5 h-5 hover:text-emerald-500 duration-500"></i>
                             </button>
-                        </th>
-                    <th class="p-2 border-b-2 border-gray-300">Quantity</th>
-                </tr>
-            </thead>
-            @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
-                <tr>
-                    <td class="p-2 border-b border-gray-200 w-10">
-                        <input type="text" @bind="item.Num" />
-                    </td>
-                    <td class="p-2 border-b border-gray-200">
-                        <input type="text" @bind="item.Name" />
-                    </td>
-                    <td class="p-2 border-b border-gray-200">
-                        <input type="text" @bind="item.Quantity" />
-                    </td>
-                </tr>
-            }
-        </table>
+                            <button type="button" @onclick=@( ()=> DeleteIngridient(item))>
+                                <i class="fa-solid fa-trash-can text-red-400 w-5 h-5 hover:text-red-300 duration-500"></i>
+                            </button>
+                        </td>
+                        <td class="border-b border-gray-200 p-2">
+                            <input class="p-1 border-solid border-emerald-300 border-2 rounded-lg focus:outline-none" type="text" @bind="item.Name" />
+                        </td>
+                        <td class="p-2 border-b border-gray-200">
+                            <input class="p-1 border-solid border-emerald-300 border-2 rounded-lg focus:outline-none" type="text" @bind="item.Quantity" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
     <div class="input-form">
         <label>Prep time</label>
@@ -76,7 +79,7 @@
 </EditForm>
 
 @code {
-    private UserMeal newRecipe { get; set; } = new();
+    private UserMeal newRecipe { get; set; } = new UserMeal();
 
     [Inject]
     private TastyDialogService _dialogService { get; set; }
@@ -91,6 +94,8 @@
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
+        OpenNewIngridient(); // init first row
+
     }
     public async Task InsertRecipe(EditContext context)
     {
@@ -120,5 +125,12 @@
         newIngridients.Num = newRecipe.Ingredients.Count + 1;
         newRecipe.Ingredients.Add(newIngridients);
         StateHasChanged();
+    }
+
+    private void DeleteIngridient(UserMeal.Ingridient ing)
+    {
+        if (newRecipe.Ingredients.Count!=1) {
+            newRecipe.Ingredients.Remove(ing);
+        }
     }
 }
