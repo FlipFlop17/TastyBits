@@ -24,7 +24,7 @@
     @apply p-3 text-gray-50 rounded-lg;
 }
 .input-form {
-    @apply flex flex-col mt-5;
+    @apply flex flex-col lg:hover:mt-2 xl:mt-5 2xl:mt-5;
 }
 .input-form > input {
     @apply p-2 border-2 rounded-lg border-emerald-400 focus:outline-none focus:border-emerald-400 focus:shadow-md focus:shadow-emerald-300

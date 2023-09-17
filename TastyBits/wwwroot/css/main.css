@@ -1341,9 +1341,26 @@ video {
 }
 
 .input-form {
-  margin-top: 1.25rem;
   display: flex;
   flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .input-form:hover {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .input-form {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .input-form {
+    margin-top: 1.25rem;
+  }
 }
 
 .input-form > input {
