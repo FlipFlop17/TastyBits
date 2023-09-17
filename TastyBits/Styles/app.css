@@ -24,7 +24,7 @@
     @apply p-3 text-gray-50 rounded-lg;
 }
 .input-form {
-    @apply flex flex-col mt-5;
+    @apply flex flex-col lg:hover:mt-2 xl:mt-5 2xl:mt-5;
 }
 .input-form > label {
     @apply font-medium;
