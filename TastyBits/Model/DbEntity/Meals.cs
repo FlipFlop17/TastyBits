@@ -21,9 +21,9 @@ namespace TastyBits.Model.Dto
 
         public string Description { get; set; }
 
-        public int PrepTime { get; set; }
+        public string PrepTime { get; set; }
 
-        public int CookingTime { get; set; }
+        public string CookingTime { get; set; }
 
         public DateTime ValidFrom { get; set; } = DateTime.Now;
         public DateTime? ValidUntil { get; set; }

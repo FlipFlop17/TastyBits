@@ -27,7 +27,7 @@
         <div id="ingridientsTable" class="flex w-3/5 h-60 overflow-y-scroll">
             <table class="border-collapse text-left mt-2 grow">
                 <thead>
-                    <tr class="bg-amber-400 bg-opacity-60 sticky top-0 z-10">
+                    <tr class="bg-amber-200 sticky top-0 z-10">
                         <th class="p-2 border-b-2 border-b-emerald-700"></th>
                         <th class="p-2 border-b-2 border-b-emerald-700">Ingredient</th>
                         <th class="p-2 border-b-2 border-b-emerald-700">
@@ -119,6 +119,7 @@
                 Log.Information($"new meal inserted to database");
                 _dialogService.ShowInfoSuccess("New recipe added!");
                 newRecipe = new();
+                OpenNewIngridient();
                 StateHasChanged();
             }
         } else {

@@ -24,10 +24,11 @@ namespace TastyBits.Services
                 dbMeal.UserId=newMeal.UserId;
                 dbMeal.Name = newMeal.Name;
                 dbMeal.Description = newMeal.Description;
-                dbMeal.CookingTime = Convert.ToInt32(newMeal.CookingTime);
-                dbMeal.PrepTime=Convert.ToInt32(newMeal.PrepTime);
+                dbMeal.CookingTime = newMeal.CookingTime;
+                dbMeal.PrepTime=newMeal.PrepTime;
 
                 _dbContext.Meals.Add(dbMeal);
+                //TODO add in table recipeingridients and in ingridients
                 int insertedId = await _dbContext.SaveChangesAsync();
                 if (insertedId >0) {
                     return true;
