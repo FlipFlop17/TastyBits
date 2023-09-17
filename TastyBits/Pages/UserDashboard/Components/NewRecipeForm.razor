@@ -10,7 +10,7 @@
 @inject MealService _mealService;
 @inject UserManager<IdentityUser> _userManager;
 
-<EditForm Model="@newRecipe" OnSubmit="@InsertRecipe" >
+<EditForm class="w-1/2" Model="@newRecipe" OnSubmit="@InsertRecipe" >
     <DataAnnotationsValidator/>
     <div class="input-form">
         <label>Add name</label>
@@ -22,27 +22,33 @@
         <InputText class="border-2" @bind-Value="@newRecipe.Description"></InputText>
          <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
     </div>
-    <div class="input-form">
-        <label>Whats your meal made of?</label>
-        <div id="ingridientsTable" class="w-3/4 h-60 overflow-y-scroll">
-            <table class="border-collapse text-left mt-2">
+    <div class="mt-5" >
+        <label class="font-medium">Whats your meal made of?</label>
+        <div id="ingridientsTable" class="flex w-3/5 h-60 overflow-y-scroll">
+            <table class="border-collapse text-left mt-2 grow">
                 <thead>
-                    <tr class="bg-gray-100">
-                        <th class="p-2 border-b-2 border-gray-300 "></th>
-                        <th class="p-2 border-b-2 border-gray-300">Ingredient</th>
-                        <th class="p-2 border-b-2 border-gray-300">Quantity</th>
+                    <tr class="bg-amber-400 bg-opacity-60 sticky top-0 z-10">
+                        <th class="p-2 border-b-2 border-b-emerald-700"></th>
+                        <th class="p-2 border-b-2 border-b-emerald-700">Ingredient</th>
+                        <th class="p-2 border-b-2 border-b-emerald-700">
+                            <MudBadge Icon="@Icons.Material.Outlined.Info" Color="Color.Transparent" title="Any kind of amount. Pinch, kg, fistful etc.">
+                                Quantity
+                            </MudBadge>
+                        </th>
                     </tr>
                 </thead>
                 @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
                     <tr>
-                        <td class="p-2 border-b border-gray-200 flex gap-2 items-center">
+                        <td class="p-2 border-b border-gray-200">
                             @* <p>@item.Num</p> *@
-                            <button type="button" @onclick="OpenNewIngridient">
-                                <i class="fa-solid fa-circle-plus text-emerald-600 w-5 h-5 hover:text-emerald-500 duration-500"></i>
-                            </button>
-                            <button type="button" @onclick=@( ()=> DeleteIngridient(item))>
-                                <i class="fa-solid fa-trash-can text-red-400 w-5 h-5 hover:text-red-300 duration-500"></i>
-                            </button>
+                            <div class="flex gap-3">
+                                <button title="Add ingridient" type="button" @onclick="OpenNewIngridient">
+                                    <i class="fa-solid fa-add text-emerald-500 hover:text-emerald-400-300 duration-500"></i>
+                                </button>
+                                <button title="Delete ingridient" type="button" @onclick=@( ()=> DeleteIngridient(item)) >
+                                    <i class="fa-solid fa-trash-can text-red-400 hover:text-red-300 duration-500"></i>
+                                </button>
+                            </div>
                         </td>
                         <td class="border-b border-gray-200 p-2">
                             <input class="p-1 border-solid border-emerald-300 border-2 rounded-lg focus:outline-none" type="text" @bind="item.Name" />
@@ -80,7 +86,7 @@
 
 @code {
     private UserMeal newRecipe { get; set; } = new UserMeal();
-
+    private string BadgeToolTip { get; set; } = "Any type of content";
     [Inject]
     private TastyDialogService _dialogService { get; set; }
 

@@ -546,6 +546,10 @@ video {
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .-left-8 {
   left: -2rem;
 }
@@ -560,6 +564,10 @@ video {
 
 .left-24 {
   left: 6rem;
+}
+
+.top-0 {
+  top: 0px;
 }
 
 .top-1 {
@@ -756,10 +764,6 @@ video {
   height: 9rem;
 }
 
-.h-5 {
-  height: 1.25rem;
-}
-
 .h-6 {
   height: 1.5rem;
 }
@@ -774,14 +778,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-52 {
-  height: 13rem;
-}
-
-.h-40 {
-  height: 10rem;
 }
 
 .min-h-screen {
@@ -816,16 +812,16 @@ video {
   width: 75%;
 }
 
+.w-3\/5 {
+  width: 60%;
+}
+
 .w-36 {
   width: 9rem;
 }
 
 .w-4\/12 {
   width: 33.333333%;
-}
-
-.w-5 {
-  width: 1.25rem;
 }
 
 .w-6\/12 {
@@ -1022,9 +1018,9 @@ video {
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 
-.border-gray-300 {
+.border-b-emerald-700 {
   --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  border-bottom-color: rgb(4 120 87 / var(--tw-border-opacity));
 }
 
 .bg-amber-400 {
@@ -1057,11 +1053,6 @@ video {
   background-color: rgb(4 120 87 / var(--tw-bg-opacity));
 }
 
-.bg-gray-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-}
-
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
@@ -1075,6 +1066,10 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-opacity-60 {
+  --tw-bg-opacity: 0.6;
 }
 
 .bg-gradient-to-r {
@@ -1095,6 +1090,10 @@ video {
   fill: currentColor;
 }
 
+.p-1 {
+  padding: 0.25rem;
+}
+
 .p-10 {
   padding: 2.5rem;
 }
@@ -1109,10 +1108,6 @@ video {
 
 .p-5 {
   padding: 1.25rem;
-}
-
-.p-1 {
-  padding: 0.25rem;
 }
 
 .px-32 {
@@ -1208,6 +1203,11 @@ video {
 
 .leading-relaxed {
   line-height: 1.625;
+}
+
+.text-emerald-500 {
+  --tw-text-opacity: 1;
+  color: rgb(16 185 129 / var(--tw-text-opacity));
 }
 
 .text-emerald-600 {
@@ -1318,6 +1318,10 @@ video {
   transition-duration: 500ms;
 }
 
+#ingridientsTable {
+  scrollbar-color:red ;
+}
+
 .dangerText {
   margin-top: 0.75rem;
   --tw-text-opacity: 1;
@@ -1372,6 +1376,24 @@ video {
 .input-form {
   display: flex;
   flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .input-form:hover {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .input-form {
+    margin-top: 1.25rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .input-form {
+    margin-top: 1.25rem;
+  }
 }
 
 .input-form > label {
@@ -1449,11 +1471,6 @@ video {
 .hover\:bg-emerald-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(5 150 105 / var(--tw-bg-opacity));
-}
-
-.hover\:text-emerald-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(16 185 129 / var(--tw-text-opacity));
 }
 
 .hover\:text-emerald-800:hover {
