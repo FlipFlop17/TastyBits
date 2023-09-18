@@ -5,7 +5,7 @@ namespace TastyBits.Interfaces
 {
     public interface IDbService
     {
-        public Task<bool> InsertNewMealAsync(MealDto newMeal);
+        public Task<TaskResult> InsertNewMealAsync(MealDto newMeal);
         public Task<List<Meals>> GetAllRecipes();
     }
 }

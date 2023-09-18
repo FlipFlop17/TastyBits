@@ -62,6 +62,11 @@
         </div>
     </div>
     <div class="input-form">
+        <label>Servings</label>
+        <InputText class="border-2" @bind-Value="@newRecipe.ServingAmount"></InputText>
+        <ValidationMessage For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
+    </div>
+    <div class="input-form">
         <label>Prep time</label>
         <InputText class="border-2" @bind-Value="@newRecipe.PrepTime"></InputText>
         <ValidationMessage For="@(() => newRecipe.PrepTime)"></ValidationMessage>
@@ -71,9 +76,23 @@
         <InputText class="border-2" @bind-Value="@newRecipe.CookingTime"></InputText>
         <ValidationMessage For="@(() => newRecipe.CookingTime)"></ValidationMessage>
     </div>
-    <div class="flex flex-col mt-5 border-2 p-2">
-        <label class="text-lg">Choose picture</label>
-        <InputFile></InputFile>
+    <p class="font-medium mt-5">Show us how your food looks like with some images</p>
+    <div class="mb-8">
+        <input type="file" name="file" id="file" class="sr-only" />
+        <label for="file"
+               class="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center">
+            <div>
+                <span class="mb-2 block text-xl font-semibold text-[#07074D]">
+                    Drop files here
+                </span>
+                <span class="mb-2 block text-base font-medium text-[#6B7280]">
+                    Or
+                </span>
+                <span class="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]">
+                    Browse
+                </span>
+            </div>
+        </label>
     </div>
     <button type="submit" class="primaryButton w-20 mt-5">
         Save
@@ -114,13 +133,14 @@
             ClaimsPrincipal user = (await authState).User;
             newRecipe.UserId = (await _userManager.GetUserAsync(user)).Id;
 
-            isOk=await _mealService.AddNewMealAsync(newRecipe);
-            if (isOk) {
+            TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
+            if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
                 _dialogService.ShowInfoSuccess("New recipe added!");
                 newRecipe = new();
-                OpenNewIngridient();
                 StateHasChanged();
+            } else {
+                Log.Information(result.ErrorDesc);
             }
         } else {
             // Model is not valid, handle validation errors or display them to the user
@@ -139,5 +159,10 @@
         if (newRecipe.Ingredients.Count!=1) {
             newRecipe.Ingredients.Remove(ing);
         }
+    }
+
+    private void UploadImages()
+    {
+        
     }
 }

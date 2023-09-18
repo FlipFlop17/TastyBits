@@ -13,6 +13,6 @@ namespace TastyBits.Model.Dto
 
         [ForeignKey("MealId")]
         public virtual Meals Meals { get; set; }
-        public byte[] ImageData { get; set; }
+        public string ImageData { get; set; }
     }
 }

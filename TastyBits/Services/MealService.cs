@@ -22,22 +22,23 @@ namespace TastyBits.Services
         /// Takes properties from UserMeal class (input form) and adds them to the appropriate tables to database
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> AddNewMealAsync(UserMeal meal)
+        public async Task<TaskResult> AddNewMealAsync(UserMeal meal)
         {
             //pass Dto so you have all data for insertion
-            MealDto dbMeal=new MealDto();
-            dbMeal.Ingredients = new();
-            dbMeal.Name = meal.Name;
+            MealDto dtoMeal=new MealDto();
+            dtoMeal.Ingredients = new();
+            dtoMeal.Name = meal.Name;
             foreach (UserMeal.Ingridient item in meal.Ingredients) {
-                dbMeal.Ingredients.Add(item.Name, item.Quantity);
+                dtoMeal.Ingredients.Add(item.Name, item.Quantity);
             }
-            dbMeal.Description = meal.Description;
-            dbMeal.CookingTime = meal.CookingTime;
-            dbMeal.PrepTime = meal.PrepTime;
-            dbMeal.Images = meal.Images;
-            dbMeal.UserId = meal.UserId;
-            await _databaseService.InsertNewMealAsync(dbMeal);
-            return true;
+            dtoMeal.Description = meal.Description;
+            dtoMeal.CookingTime = meal.CookingTime;
+            dtoMeal.PrepTime = meal.PrepTime;
+            foreach (var item in meal.Images) {
+                dtoMeal.Images.Add(item);
+            }
+            dtoMeal.UserId = meal.UserId;
+            return await _databaseService.InsertNewMealAsync(dtoMeal);
         }
 
         /// <summary>

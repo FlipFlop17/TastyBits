@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TastyBits.Data;
 using TastyBits.Interfaces;
 using TastyBits.Model;
@@ -17,23 +18,41 @@ namespace TastyBits.Services
             _dbFactory = dbFactory;
         }
 
-        public async Task<bool> InsertNewMealAsync(MealDto newMeal)
+        public async Task<TaskResult> InsertNewMealAsync(MealDto newMealDto)
         {
+            TaskResult result=new TaskResult();
             await using (_dbContext =await _dbFactory.CreateDbContextAsync()) {
                 Meals dbMeal = new Meals();
-                dbMeal.UserId=newMeal.UserId;
-                dbMeal.Name = newMeal.Name;
-                dbMeal.Description = newMeal.Description;
-                dbMeal.CookingTime = newMeal.CookingTime;
-                dbMeal.PrepTime=newMeal.PrepTime;
-
+                dbMeal.UserId=newMealDto.UserId;
+                dbMeal.Name = newMealDto.Name;
+                dbMeal.Description = newMealDto.Description;
+                dbMeal.CookingTime = newMealDto.CookingTime;
+                dbMeal.PrepTime=newMealDto.PrepTime;
+                dbMeal.ServingsAmount= newMealDto.ServingsAmount;
+                
                 _dbContext.Meals.Add(dbMeal);
                 //TODO add in table recipeingridients and in ingridients
-                int insertedId = await _dbContext.SaveChangesAsync();
-                if (insertedId >0) {
-                    return true;
+                int insertedMealId = await _dbContext.SaveChangesAsync();
+                if (insertedMealId >0) {
+                    Log.Information($"inserted id: {insertedMealId} meal");
+                    //insert to other tables
+                    foreach (var item in newMealDto.Ingredients) {
+                        _dbContext.Ingredients.Add(new Ingredients() { Name = item.Key });
+                        int ingredientId = await _dbContext.SaveChangesAsync();
+                        if (ingredientId > 0) {
+                            Log.Information($"inserted ingredient id: {ingredientId}");
+                            _dbContext.RecipeIngredients.Add(new RecipeIngredients() { IngredientId=ingredientId,Quantity=item.Value});
+                            _= await _dbContext.SaveChangesAsync();
+                        }
+                    }
+                    foreach (var item in newMealDto.Images) {
+                        _dbContext.RecipeImage.Add(new RecipeImage() { ImageData = item, MealId = insertedMealId });
+                    }
+                } else {
+                    result.HasError=true;
+                    result.ErrorDesc = "Save to Meals table no success";
                 }
-                return false;
+                return result;
             }
         }
         public async Task<List<Meals>> GetAllRecipes()

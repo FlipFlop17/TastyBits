@@ -25,6 +25,7 @@ namespace TastyBits.Model.Dto
 
         public string CookingTime { get; set; }
 
+        public string ServingsAmount { get; set; }
         public DateTime ValidFrom { get; set; } = DateTime.Now;
         public DateTime? ValidUntil { get; set; }
 

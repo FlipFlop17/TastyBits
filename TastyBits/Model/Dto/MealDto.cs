@@ -8,6 +8,7 @@
         public Dictionary<string, string> Ingredients { get; set; }
         public string CookingTime { get; set; }
         public string PrepTime { get; set; }
-        public List<byte> Images { get; set; }
+        public List<string> Images { get; set; }=new List<string>();
+        public string ServingsAmount { get; set; }
     }
 }
