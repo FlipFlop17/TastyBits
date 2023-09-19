@@ -34,6 +34,7 @@ namespace TastyBits.Services
             dtoMeal.Description = meal.Description;
             dtoMeal.CookingTime = meal.CookingTime;
             dtoMeal.PrepTime = meal.PrepTime;
+            dtoMeal.ServingsAmount = meal.ServingAmount;
             foreach (var item in meal.Images) {
                 dtoMeal.Images.Add(item);
             }

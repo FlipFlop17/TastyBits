@@ -13,6 +13,9 @@
 .secondaryButton {
     @apply bg-emerald-500 p-2 rounded-lg text-gray-50;
 }
+.primaryOutline {
+    @apply border-solid border-2 border-emerald-600 bg-transparent p-2 rounded-lg text-emerald-800 hover:bg-emerald-400 duration-1000 hover:text-white;
+}
 .loginWindows {
     @apply w-96;
 }
@@ -24,7 +27,7 @@
     @apply p-3 text-gray-50 rounded-lg;
 }
 .input-form {
-    @apply flex flex-col lg:hover:mt-2 xl:mt-5 2xl:mt-5;
+    @apply flex flex-col lg:mt-2 xl:mt-5 2xl:mt-5;
 }
 .input-form > label {
     @apply font-medium;

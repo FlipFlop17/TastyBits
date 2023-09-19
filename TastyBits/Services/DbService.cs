@@ -48,6 +48,7 @@ namespace TastyBits.Services
                     foreach (var item in newMealDto.Images) {
                         _dbContext.RecipeImage.Add(new RecipeImage() { ImageData = item, MealId = insertedMealId });
                     }
+                    await _dbContext.SaveChangesAsync();
                 } else {
                     result.HasError=true;
                     result.ErrorDesc = "Save to Meals table no success";
@@ -58,7 +59,6 @@ namespace TastyBits.Services
         public async Task<List<Meals>> GetAllRecipes()
         {
             await using (_dbContext = await _dbFactory.CreateDbContextAsync()) {
-                //TODO implement the creation of list UserMeal
                 return await _dbContext.Meals.ToListAsync();
             }
         }

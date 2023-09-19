@@ -30,6 +30,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //_allRecipes = await _dbService.GetAllRecipes();
+        _allRecipes = await _mealService.GetAllUserMealsAsync();
     }
 }

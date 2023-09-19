@@ -8,7 +8,7 @@ namespace TastyBits.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public ObservableCollection<Ingridient> Ingredients { get; set; } =new ObservableCollection<Ingridient>();
-        public List<string> Images { get;set; }
+        public List<string> Images { get; set; } = new();
         public string CookingTime { get; set; }
         public string PrepTime { get; set; }
         public string ServingAmount { get; set; }   
