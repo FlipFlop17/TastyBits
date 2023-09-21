@@ -9,13 +9,25 @@
 @using TastyBits.Pages.UserDashboard.Components;
 @using TastyBits.Services;
 @inject MealService _mealService;
+@inject TastyDialogService _tastyDialog;
+@inject NavigationManager navMan
 
 <AuthorizeView>
     <Authorized>
         <RecipeToolBar></RecipeToolBar>
         <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2">
+            <div @onclick=@AddNewMeal>
+                <AddNewMeal></AddNewMeal>
+            </div>
             @foreach (UserMeal re in _allRecipes) {
-                <RecipeCard RecipeName="@re.Name" RecipeDescription="@re.Description"></RecipeCard>
+                <RecipeCard RecipeName="@re.Name" 
+                RecipeDescription="@re.Description" 
+                RecipeImage="@re.Images.FirstOrDefault()"
+                CookingTime="@re.CookingTime"
+                PrepTime="@re.PrepTime"
+                OnOpenButtonClick="@( ()=>OpenSelectedMeal(re) )"
+                >
+            </RecipeCard>
             }
         </div>
     </Authorized>
@@ -31,5 +43,13 @@
     protected override async Task OnInitializedAsync()
     {
         _allRecipes = await _mealService.GetAllUserMealsAsync();
+    }
+    private void AddNewMeal()
+    {
+        navMan.NavigateTo("/dashboard/recipe-new");
+    }
+    private void OpenSelectedMeal(UserMeal selectedMeal)
+    {
+        _tastyDialog.ShowMealDialog(selectedMeal);
     }
 }

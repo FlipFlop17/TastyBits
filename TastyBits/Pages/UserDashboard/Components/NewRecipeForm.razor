@@ -134,15 +134,17 @@
             //bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
             ClaimsPrincipal user = (await authState).User;
             newRecipe.UserId = (await _userManager.GetUserAsync(user)).Id;
-            ConvertImagesToBytes(_imageFiles);
+            await ConvertImagesToBytes(_imageFiles);
             TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
                 _dialogService.ShowInfoSuccess("New recipe added!");
-                newRecipe = new();
+                newRecipe = new UserMeal();
+                _imageFiles.Clear();
                 StateHasChanged();
             } else {
                 Log.Information(result.ErrorDesc);
+                _dialogService.ShowInfoError(result.ErrorDesc);
             }
         } else {
             // Model is not valid, handle validation errors or display them to the user

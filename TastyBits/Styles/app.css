@@ -24,7 +24,7 @@
 }
 .primaryButton {
     @apply bg-emerald-600 hover:bg-emerald-500 duration-1000;
-    @apply p-3 text-gray-50 rounded-lg;
+    @apply p-3 text-gray-50 rounded-lg font-medium;
 }
 .input-form {
     @apply flex flex-col lg:mt-2 xl:mt-5 2xl:mt-5;

@@ -1,6 +1,10 @@
-﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl">
+﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
     <div id="recipeContent p-3" >
-        <img src="/pics/eggs-breakfest.jpg" width="400" alt="eggs" />
+        @if (!string.IsNullOrEmpty(RecipeImage)) {
+            <img src="data:image/jpeg;base64,@RecipeImage" alt="Recipe Image" />
+        } else {
+            <img src="/pics/eggs-breakfest.jpg" width="400" alt="eggs" />
+        }
         <h1 class="text-xl font-bold text-emerald-700 mt-2">@RecipeName</h1>
         <hr />
         <div class="p-3">
@@ -8,12 +12,11 @@
         </div>
         <hr />
         <div class="font-bold text-emerald-600 space-y-3 mt-3">
-            <p>Preparation time (min): 5</p>
-            <p>Cooking time (min): 10</p>
+            <p>Preparation time (min): @PrepTime</p>
+            <p>Cooking time (min): @CookingTime</p>
         </div>
         <div id="recipeCardActions" class="flex gap-2 justify-end">
-            <button class="secondaryButton">Open</button>
-            <button class="secondaryButton">Edit</button>
+            <button class="secondaryButton" @onclick="OnOpenButtonClick">Open</button>
             <MudIconButton Icon="@Icons.Material.Filled.MoreVert" />
         </div>
     </div>
@@ -24,4 +27,13 @@
     public string RecipeName { get; set; }
     [Parameter]
     public string RecipeDescription { get; set; }
+    [Parameter]
+    public string RecipeImage { get; set; }
+    [Parameter]
+    public string PrepTime { get; set; }
+    [Parameter]
+    public string CookingTime { get; set; }
+
+    [Parameter]
+    public EventCallback OnOpenButtonClick { get; set; }
 }

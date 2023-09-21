@@ -1,0 +1,28 @@
+﻿@using TastyBits.Model;
+@using TastyBits.Services;
+@inject ISnackbar _snackBar;
+@inject MealService _mealService;
+
+<MudDialog>
+    <TitleContent>
+        @Meal.Name
+    </TitleContent>
+    <DialogContent>
+        <h1>@Meal.Description</h1>
+        <NewRecipeForm></NewRecipeForm>
+    </DialogContent>
+    <DialogActions>
+        <button class="primaryButton">Save</button>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public UserMeal Meal { get; set; }
+
+    public async Task InsertNewMeal()
+    {
+    }
+}

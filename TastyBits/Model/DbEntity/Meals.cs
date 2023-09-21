@@ -29,5 +29,6 @@ namespace TastyBits.Model.Dto
         public DateTime ValidFrom { get; set; } = DateTime.Now;
         public DateTime? ValidUntil { get; set; }
 
+        public virtual ICollection<RecipeImage> RecipeImages { get; set; }
     }
 }

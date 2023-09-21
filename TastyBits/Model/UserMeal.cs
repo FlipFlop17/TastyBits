@@ -4,6 +4,7 @@ namespace TastyBits.Model
 {
     public class UserMeal
     {
+        public string MealId { get; set; }
         public string UserId { get; set; }  
         public string Name { get; set; }
         public string Description { get; set; }

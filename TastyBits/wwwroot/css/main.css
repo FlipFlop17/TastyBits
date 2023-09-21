@@ -848,6 +848,10 @@ video {
   width: 16rem;
 }
 
+.w-\[27rem\] {
+  width: 27rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1410,6 +1414,7 @@ video {
 .primaryButton {
   border-radius: 0.5rem;
   padding: 0.75rem;
+  font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(249 250 251 / var(--tw-text-opacity));
 }

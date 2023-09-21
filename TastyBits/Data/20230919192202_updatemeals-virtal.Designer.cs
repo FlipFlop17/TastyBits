@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TastyBits.Data;
@@ -11,9 +12,11 @@ using TastyBits.Data;
 namespace TastyBits.Data
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230919192202_updatemeals-virtal")]
+    partial class updatemealsvirtal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,7 +301,8 @@ namespace TastyBits.Data
 
                     b.HasKey("ImageId");
 
-                    b.HasIndex("MealId");
+                    b.HasIndex("MealId")
+                        .IsUnique();
 
                     b.ToTable("RecipeImage", "TastySchema");
                 });
@@ -390,8 +394,8 @@ namespace TastyBits.Data
             modelBuilder.Entity("TastyBits.Model.Dto.RecipeImage", b =>
                 {
                     b.HasOne("TastyBits.Model.Dto.Meals", "Meals")
-                        .WithMany("RecipeImages")
-                        .HasForeignKey("MealId")
+                        .WithOne("RecipeImage")
+                        .HasForeignKey("TastyBits.Model.Dto.RecipeImage", "MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -411,7 +415,8 @@ namespace TastyBits.Data
 
             modelBuilder.Entity("TastyBits.Model.Dto.Meals", b =>
                 {
-                    b.Navigation("RecipeImages");
+                    b.Navigation("RecipeImage")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

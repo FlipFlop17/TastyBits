@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using TastyBits.Data;
 using TastyBits.Interfaces;
 using TastyBits.Model;
@@ -12,10 +13,12 @@ namespace TastyBits.Services
     public class MealService
     {
         private readonly IDbService _databaseService;
+        private readonly TastyDialogService _tastyDialogService;
 
-        public MealService(IDbService databaseService)
+        public MealService(IDbService databaseService,TastyDialogService dialogService)
         {
             _databaseService = databaseService;
+            _tastyDialogService = dialogService;
         }
 
         /// <summary>
@@ -51,10 +54,21 @@ namespace TastyBits.Services
             List<UserMeal> mealList = new List<UserMeal>();
             var mealTable = await _databaseService.GetAllRecipes();
             //pass out the dto and the remap it to the UserMeal ??
-            foreach (var item in mealTable) {
+            foreach (Meals item in mealTable) {
                 UserMeal newMeal = new UserMeal();
+                newMeal.MealId=Convert.ToString(item.Id);
                 newMeal.Name = item.Name;
                 newMeal.Description = item.Description;
+                newMeal.CookingTime= item.CookingTime;
+                newMeal.PrepTime = item.PrepTime;
+                if (item.RecipeImages.Count>0) {
+                    foreach (var image in item.RecipeImages) {
+                        newMeal.Images.Add(image.ImageData.ToString());
+                    }
+                }else {
+                    //TODO add a placeholder image
+                    //newMeal.Images.Add("");
+                }
                 mealList.Add(newMeal);
             }
             return mealList;
