@@ -11,99 +11,106 @@
 @inject MealService _mealService;
 @inject UserManager<IdentityUser> _userManager;
 
-<EditForm class="w-1/2" Model="@newRecipe" OnSubmit="@InsertRecipe" >
-    <DataAnnotationsValidator/>
-    <div class="input-form">
-        <label>Add name</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.Name"></InputText>
-        <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
+<div class="w-2/6">
+    <div class="">
+        <img class="rounded-lg"  src="/pics/add-meal-salad-croped.jpg" alt="addMealpic" />
     </div>
-    <div class="input-form">
-        <label>Description</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.Description"></InputText>
-         <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
-    </div>
-    <div class="mt-5" >
-        <label class="font-medium">Whats your meal made of?</label>
-        <div id="ingridientsTable" class="flex w-3/5 h-60 overflow-y-scroll">
-            <table class="border-collapse text-left mt-2 grow">
-                <thead>
-                    <tr class="bg-amber-200 sticky top-0 z-10">
-                        <th class="p-2 border-b-2 border-b-emerald-700"></th>
-                        <th class="p-2 border-b-2 border-b-emerald-700">Ingredient</th>
-                        <th class="p-2 border-b-2 border-b-emerald-700">
-                            <MudBadge Icon="@Icons.Material.Outlined.Info" Color="Color.Transparent" title="Any kind of amount. Pinch, kg, fistful etc.">
-                                Quantity
-                            </MudBadge>
-                        </th>
-                    </tr>
-                </thead>
-                @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
-                    <tr>
-                        <td class="p-2 border-b border-gray-200">
-                            @* <p>@item.Num</p> *@
-                            <div class="flex gap-3">
-                                <button title="Add ingridient" type="button" @onclick="OpenNewIngridient">
-                                    <i class="fa-solid fa-add text-emerald-500 hover:text-emerald-400-300 duration-500"></i>
-                                </button>
-                                <button title="Delete ingridient" type="button" @onclick=@( ()=> DeleteIngridient(item)) >
-                                    <i class="fa-solid fa-trash-can text-red-400 hover:text-red-300 duration-500"></i>
-                                </button>
-                            </div>
-                        </td>
-                        <td class="border-b border-gray-200 p-2">
-                            <input class="p-1 border-solid border-emerald-300 border-2 rounded-lg focus:outline-none" type="text" @bind="item.Name" />
-                        </td>
-                        <td class="p-2 border-b border-gray-200">
-                            <input class="p-1 border-solid border-emerald-300 border-2 rounded-lg focus:outline-none" type="text" @bind="item.Quantity" />
-                        </td>
-                    </tr>
-                }
-            </table>
+    <EditForm  Model="@newRecipe" OnSubmit="@InsertRecipe">
+        <DataAnnotationsValidator />
+        <div class="input-form">
+            <label>How are we calling this meal?</label>
+            <InputText placeholder="eg. Egg Omlet" @bind-Value="@newRecipe.Name"></InputText>
+            <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
         </div>
-    </div>
-    <div class="input-form">
-        <label>Servings</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.ServingAmount"></InputText>
-        <ValidationMessage For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
-    </div>
-    <div class="input-form">
-        <label>Prep time</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.PrepTime"></InputText>
-        <ValidationMessage For="@(() => newRecipe.PrepTime)"></ValidationMessage>
-    </div>
-    <div class="input-form">
-        <label>Cooking time</label>
-        <InputText class="border-2" @bind-Value="@newRecipe.CookingTime"></InputText>
-        <ValidationMessage For="@(() => newRecipe.CookingTime)"></ValidationMessage>
-    </div>
-    <p class="font-medium mt-5">Show us how your food looks like with some images</p>
-    <label for="inputImage" class="border-2 w-2/3 border-dashed border-emerald-400 hover:cursor-pointer p-4 mt-2">
-        @foreach (var imageF in _imageFiles) {
-            <div class="flex gap-2">
-                <p>@imageF.Name</p>
-                <button type="button" @onclick="@(() => RemoveUploadedImage(imageF))">
-                    <i class="fa fa-remove text-red-400"></i>
-                </button>
+        <div class="input-form">
+            <label>Describe it</label>
+            <InputText placeholder="eg. scrambled eggs inside a tortilla" @bind-Value="@newRecipe.Description"></InputText>
+            <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
+        </div>
+        <div class="input-form">
+            <label>For how many persons is this recipe?</label>
+            <InputText placeholder="eg. two people"  @bind-Value="@newRecipe.ServingAmount"></InputText>
+            <ValidationMessage For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
+        </div>
+        <div class="input-form">
+            <label>How much time to prepare?</label>
+            <InputText placeholder="eg. 5-10 minutes"  @bind-Value="@newRecipe.PrepTime"></InputText>
+            <ValidationMessage For="@(() => newRecipe.PrepTime)"></ValidationMessage>
+        </div>
+        <div class="input-form">
+            <label>How much time to cook it?</label>
+            <InputText placeholder="eg. 5 minutes"  @bind-Value="@newRecipe.CookingTime"></InputText>
+            <ValidationMessage For="@(() => newRecipe.CookingTime)"></ValidationMessage>
+        </div>
+        <div class="mt-5">
+            <label class="font-medium">Whats your meal made of?</label>
+            <div id="ingridientsTable" class="flex h-60 overflow-y-scroll">
+                <table class="border-collapse text-center mt-2 grow">
+                    <thead>
+                        <tr class="bg-emerald-50 sticky top-0 z-10">
+                            <th class="p-2 border-b-2 "></th>
+                            <th class="p-2 border-b-2 ">Ingredient</th>
+                            <th class="p-2 border-b-2 ">
+                                <MudBadge Icon="@Icons.Material.Outlined.Info" Color="Color.Transparent" title="Any kind of amount. Pinch, kg, fistful etc.">
+                                    Quantity
+                                </MudBadge>
+                            </th>
+                        </tr>
+                    </thead>
+                    @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
+                        <tr>
+                            <td class="p-2 border-b border-gray-200">
+                                @* <p>@item.Num</p> *@
+                                <div class="flex gap-3">
+                                    <button title="Add ingridient" type="button" @onclick="OpenNewIngridient">
+                                        <i class="fa-solid fa-add text-emerald-500 hover:text-emerald-400-300 duration-500"></i>
+                                    </button>
+                                    <button title="Delete ingridient" type="button" @onclick=@( ()=> DeleteIngridient(item))>
+                                        <i class="fa-solid fa-trash-can text-red-400 hover:text-red-300 duration-500"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="border-b border-gray-200 p-2">
+                                <input class="p-1 border-solid border-gray-300 border-2 rounded-lg focus:border-emerald-200 focus:outline-none" type="text" @bind="item.Name" />
+                            </td>
+                            <td class="p-2 border-b border-gray-200">
+                                <input class="p-1 border-solid border-gray-300 border-2 rounded-lg focus:border-emerald-200 focus:outline-none" type="text" @bind="item.Quantity" />
+                            </td>
+                        </tr>
+                    }
+                </table>
             </div>
-        }
-        <div>
-            <p>Browse files</p>
         </div>
-    </label>
-    <InputFile id="inputImage" class="sr-only" OnChange="UploadImages">
+        <p class="font-medium mt-5">Show us how your food looks like with some images</p>
+        <label for="inputImage" class="border-2 w-2/3 rounded-lg border-dashed border-emerald-400 p-4 mt-2
+hover:cursor-pointer hover:bg-emerald-50 duration-200">
+            @foreach (var imageF in _imageFiles) {
+                <div class="flex gap-2">
+                    <p>@imageF.Name</p>
+                    <button type="button" @onclick="@(() => RemoveUploadedImage(imageF))">
+                        <i class="fa fa-remove text-red-400"></i>
+                    </button>
+                </div>
+            }
+            <div>
+                <p>Browse files</p>
+            </div>
+        </label>
+        <InputFile id="inputImage" class="sr-only" OnChange="UploadImages">
 
-    </InputFile>
-    <div id="formActions" class="flex justify-end">
-        <button type="submit" class="primaryButton w-20 mt-5 font-bold">
-            Save
-        </button>
-    </div>
-@*     @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
+        </InputFile>
+        <div id="formActions" class="flex justify-end">
+            <button type="submit" class="primaryButton w-20 mt-5 font-bold">
+                Save
+            </button>
+        </div>
+        @*     @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
         <div>@item.Name</div>
         <div>@item.Quantity</div>
-    } *@
-</EditForm>
+        } *@
+    </EditForm>
+</div>
+
 
 @code {
     private UserMeal newRecipe { get; set; } = new UserMeal();
@@ -121,7 +128,7 @@
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
-        OpenNewIngridient(); // init first row
+        InitIngredientRows(); // init first row
 
     }
     public async Task InsertRecipe(EditContext context)
@@ -157,7 +164,20 @@
         newRecipe.Ingredients.Add(newIngridients);
         StateHasChanged();
     }
+    private void InitIngredientRows()
+    {
+        UserMeal.Ingridient newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients.Num = 4;
 
+        StateHasChanged();
+    }
     private void DeleteIngridient(UserMeal.Ingridient ing)
     {
         if (newRecipe.Ingredients.Count!=1) {

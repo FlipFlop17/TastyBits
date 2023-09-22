@@ -14,10 +14,14 @@
 
 <AuthorizeView>
     <Authorized>
-        <RecipeToolBar></RecipeToolBar>
-        <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2">
-            <div @onclick=@AddNewMeal>
-                <AddNewMeal></AddNewMeal>
+        <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2 ">
+            <div @onclick=@AddNewMeal class="flex justify-center items-center border-dashed border-emerald-200 border-2 rounded-lg w-[27rem]
+                    hover:cursor-pointer hover:bg-emerald-50
+                    hover:border-emerald-300 duration-300">
+                <div class="text-center text-emerald-500 opacity-60">
+                    <i class="fa fa-add h-10 w-10"></i>
+                    <p class="font-medium text-lg">Add New</p>
+                </div>
             </div>
             @foreach (UserMeal re in _allRecipes) {
                 <RecipeCard RecipeName="@re.Name" 

@@ -41,5 +41,9 @@ namespace TastyBits.Services
             };
             _mudDialog.Show<MealDialog>(title:"Meal", parameters:dParameters,options: dOptions);
         }
+        public void ShowAddNewMealDialog()
+        {
+
+        }
     }
 }
