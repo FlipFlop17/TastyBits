@@ -1,9 +1,9 @@
 ﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
-    <div id="recipeContent p-3" >
+    <div id="recipeContent p-3">
         @if (!string.IsNullOrEmpty(RecipeImage)) {
-            <img src="data:image/jpeg;base64,@RecipeImage" alt="Recipe Image" />
+            <img src="data:image/jpeg;base64,@RecipeImage" width="400" height="300" alt="Recipe Image" />
         } else {
-            <img src="/pics/eggs-breakfest.jpg" width="400" alt="eggs" />
+            <img src="/pics/eggs-breakfest.jpg" width="400" height="300" alt="eggs" />
         }
         <h1 class="text-xl font-bold text-emerald-700 mt-2">@RecipeName</h1>
         <hr />
@@ -12,8 +12,8 @@
         </div>
         <hr />
         <div class="font-bold text-emerald-600 space-y-3 mt-3">
-            <p>Preparation time (min): @PrepTime</p>
-            <p>Cooking time (min): @CookingTime</p>
+            <p>Preparation time: @PrepTime</p>
+            <p>Cooking time: @CookingTime</p>
         </div>
         <div id="recipeCardActions" class="flex gap-2 justify-end">
             <button class="secondaryButton" @onclick="OnOpenButtonClick">Open</button>

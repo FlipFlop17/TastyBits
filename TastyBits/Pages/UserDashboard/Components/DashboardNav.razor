@@ -1,5 +1,6 @@
 ﻿@using Serilog;
 
+
 <div id="dashboardNavigation" class="bg-emerald-50 @Class">
 	<div class="flex items-center ml-3 lg:w-72">
 		<div class="w-36 lg:w-24">
@@ -13,17 +14,17 @@
 	</div>
 	<nav class="flex flex-col">
 		<NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="dashboard/allrecipes">
-            <div>
+			<div>
 				<i class="fa-solid fa-carrot"></i>
 				Recipes
 			</div>
-        </NavLink>
-		<NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="dashboard/settings">
-			<div>
-				<i class="fa-solid fa-gear"></i>
-				Settings
-			</div>
-			</NavLink>
+		</NavLink>
+		@* <NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="dashboard/settings">
+		<div>
+		<i class="fa-solid fa-gear"></i>
+		Settings
+		</div>
+		</NavLink> *@
 		<NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="Identity/Account/logout">
 			<div>
 				<i class="fa-solid fa-right-from-bracket"></i>
@@ -35,10 +36,8 @@
 
 
 @code {
-	
+
 
 	[Parameter]
 	public string Class { get; set; }
-
-
 }

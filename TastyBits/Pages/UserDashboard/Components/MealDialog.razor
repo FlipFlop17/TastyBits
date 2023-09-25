@@ -1,9 +1,12 @@
-﻿@using TastyBits.Model;
+﻿@page "/dashboard/meal"
+@layout DashboardLayout;
+@using Serilog;
+@using TastyBits.Model;
 @using TastyBits.Services;
 @inject ISnackbar _snackBar;
 @inject MealService _mealService;
 
-<MudDialog>
+@* <MudDialog>
     <TitleContent>
         @Meal.Name
     </TitleContent>
@@ -13,7 +16,84 @@
     <DialogActions>
         <button class="primaryButton">Save</button>
     </DialogActions>
-</MudDialog>
+</MudDialog> *@
+
+<div id="mealInfo">
+    <MudCarousel TData="object" AutoCycle="true" EnableSwipeGesture="true" ShowArrows="true" ShowBullets="false"
+        Class="h-72">
+        @* @foreach (var img in Meal.Images) {
+        <MudCarouselItem>
+        <img src="data:image/jpeg;base64,@img" alt="Recipe Image" />
+        </MudCarouselItem>
+        } *@
+        <MudCarouselItem Transition="Transition.Slide">
+            <div class="flex justify-center">
+                <img src="/pics/add-meal.jpg" />
+            </div>
+        </MudCarouselItem>
+    </MudCarousel>
+    <div id="actionBar" class="flex mt-7 justify-end">
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+            <MudMenuItem>
+                <button @onclick="@EnableEditMeal">
+                    <div class="flex items-center gap-2 text-emerald-600">
+                        <i class="fa fa-edit"></i>
+                        <p>Edit</p>
+                    </div>
+                </button>
+            </MudMenuItem>
+            <MudMenuItem>
+                <button>
+                    <div class="flex items-center gap-2 text-red-400">
+                        <i class="fa fa-trash"></i>
+                        <p>Delete</p>
+                    </div>
+                </button>
+            </MudMenuItem>
+        </MudMenu>
+    </div>
+    <div class="p-1 text-red-300 text-lg" hidden="@isFieldDisabled">
+        <button @onclick="@CancelEdit">
+            <div class="flex gap-2 items-center">
+                <i class="fa fa-cancel"></i>
+                <p>Cancel</p>
+            </div>
+        </button>
+    </div>
+    <div id="mealInfoData" class="mt-7 flex flex-col space-y-3">
+        <div class="flex items-center gap-2">
+            <label class="text-2xl">
+                🍲
+            </label>
+            <InputText class="inputFieldEdit !bg-transparent !text-4xl" disabled="@isFieldDisabled" @bind-Value="@Meal.Name"></InputText>
+        </div>
+        <div class="flex flex-col space-y-3">
+            <label class="font-medium text-xl">📜 Description</label>
+            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.Description"></InputText>
+        </div>
+        <div class="flex flex-col space-y-3">
+            <label class="font-medium text-xl">🍽️ Servings</label>
+            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.ServingAmount"></InputText>
+        </div>
+        <div class="flex flex-col space-y-3">
+            <label class="font-medium text-xl">👨‍🍳 Cooking time</label>
+            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.CookingTime"></InputText>
+        </div>
+        <div class="flex flex-col space-y-3">
+            <label class="font-medium text-xl">🔪 Preping time</label>
+            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.PrepTime"></InputText>
+        </div>
+    </div>
+    <div id="actionBar" class="mt-5 flex justify-end">
+        <button class="primaryOutline flex items-center gap-2" disabled="@isFieldDisabled" @onclick="@SaveEdits">
+            <i class="fa fa-save"></i>
+            <p>Save</p>
+        </button>
+    </div>
+</div>
+
+
+
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
@@ -21,7 +101,42 @@
     [Parameter]
     public UserMeal Meal { get; set; }
 
-    public async Task InsertNewMeal()
+    private Dictionary<string, object> _extraAttributes { get; set; }
+    private bool isFieldDisabled { get; set; } = true;
+
+    protected override void OnInitialized()
     {
+        base.OnInitialized();
+        if (Meal==null) {
+            Meal = new()
+            {
+                Name="Egg Omelete",
+                Description="Eggs scrambled with spinach and cheese in a tortilla",
+                CookingTime="5 minutes",
+                PrepTime="5 min",
+                ServingAmount="1"
+            };
+        }
+        _extraAttributes = new();
+        //_extraAttributes.Add("disabled", "true");
+    }
+
+    private void SaveEdits()
+    {
+        Log.Information("saving edits");
+    }
+    private void EnableEditMeal()
+    {
+        isFieldDisabled = false;
+        StateHasChanged();
+    }
+    private void CancelEdit()
+    {
+        isFieldDisabled = true;
+        StateHasChanged();
+    }
+    private void DeleteMeal()
+    {
+        
     }
 }

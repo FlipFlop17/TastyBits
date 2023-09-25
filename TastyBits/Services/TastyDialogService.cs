@@ -43,7 +43,16 @@ namespace TastyBits.Services
         }
         public void ShowAddNewMealDialog()
         {
-
+            var dOptions = new DialogOptions()
+            {
+                FullWidth = true,CloseOnEscapeKey = true,CloseButton = true
+                
+            };
+            //var dParameters = new DialogParameters<MealDialog>
+            //{
+            //    { x => x.Meal,selectedMeal }
+            //};
+            _mudDialog.Show<NewRecipeDialog>(title: "Add your new meal",options:dOptions);
         }
     }
 }
