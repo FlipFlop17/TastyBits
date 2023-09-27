@@ -4,5 +4,6 @@
     {
         public bool HasError { get; set; }
         public string ErrorDesc { get; set; }
+        public object Result { get; set; }
     }
 }

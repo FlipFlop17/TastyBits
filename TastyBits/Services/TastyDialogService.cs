@@ -29,7 +29,7 @@ namespace TastyBits.Services
             };
             _mudDialog.Show<Dialog>("Error!", parameters: dParameters);
         }
-        public void ShowMealDialog(UserMeal selectedMeal)
+        public async Task<IDialogReference> ShowMealDialog(UserMeal selectedMeal)
         {
             var dOptions = new DialogOptions()
             {
@@ -39,20 +39,17 @@ namespace TastyBits.Services
             {
                 { x => x.Meal,selectedMeal }
             };
-            _mudDialog.Show<MealDialog>(title:"Meal", parameters:dParameters,options: dOptions);
+            return await _mudDialog.ShowAsync<MealDialog>(title:"Meal", parameters:dParameters,options: dOptions);
         }
-        public void ShowAddNewMealDialog()
+        public async Task<IDialogReference> ShowAddNewMealDialog()
         {
             var dOptions = new DialogOptions()
             {
-                FullWidth = true,CloseOnEscapeKey = true,CloseButton = true
-                
+                FullWidth = true,CloseOnEscapeKey = false,CloseButton = false
             };
-            //var dParameters = new DialogParameters<MealDialog>
-            //{
-            //    { x => x.Meal,selectedMeal }
-            //};
-            _mudDialog.Show<NewRecipeDialog>(title: "Add your new meal",options:dOptions);
+
+            var newMealDialog= await _mudDialog.ShowAsync<NewRecipeDialog>(title: "Add your new meal",options:dOptions);
+            return newMealDialog;
         }
     }
 }

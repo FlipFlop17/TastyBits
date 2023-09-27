@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MudBlazor;
 using TastyBits.Data;
 using TastyBits.Interfaces;
@@ -10,12 +11,12 @@ namespace TastyBits.Services
     /// <summary>
     /// Maps the database service results to the appropriate property names of UserMeal class
     /// </summary>
-    public class MealService
+    public class MealServiceMediator
     {
         private readonly IDbService _databaseService;
         private readonly TastyDialogService _tastyDialogService;
 
-        public MealService(IDbService databaseService,TastyDialogService dialogService)
+        public MealServiceMediator(IDbService databaseService,TastyDialogService dialogService)
         {
             _databaseService = databaseService;
             _tastyDialogService = dialogService;
@@ -32,7 +33,9 @@ namespace TastyBits.Services
             dtoMeal.Ingredients = new();
             dtoMeal.Name = meal.Name;
             foreach (UserMeal.Ingridient item in meal.Ingredients) {
-                dtoMeal.Ingredients.Add(item.Name, item.Quantity);
+                if (item.Name != null && item.Name.Length>0) {
+                    dtoMeal.Ingredients.Add(item.Name, item.Quantity);
+                }
             }
             dtoMeal.Description = meal.Description;
             dtoMeal.CookingTime = meal.CookingTime;
@@ -49,14 +52,14 @@ namespace TastyBits.Services
         /// Gets all users recipes and transforms the property data to UserMeal class
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UserMeal>> GetAllUserMealsAsync()
+        public async Task<List<UserMeal>> GetAllUserMealsAsync(string userId)
         {
             List<UserMeal> mealList = new List<UserMeal>();
-            var mealTable = await _databaseService.GetAllRecipes();
+            var mealTable = await _databaseService.GetAllUserRecipesAsync(userId);
             //pass out the dto and the remap it to the UserMeal ??
             foreach (Meals item in mealTable) {
                 UserMeal newMeal = new UserMeal();
-                newMeal.MealId=Convert.ToString(item.Id);
+                newMeal.MealId=(item.Id);
                 newMeal.Name = item.Name;
                 newMeal.Description = item.Description;
                 newMeal.CookingTime= item.CookingTime;
@@ -72,6 +75,15 @@ namespace TastyBits.Services
                 mealList.Add(newMeal);
             }
             return mealList;
+        }
+
+        public async Task<TaskResult> DeleteMealFromDatabaseAsync(UserMeal meal)
+        {
+            MealDto dtoMeal = new MealDto();
+            dtoMeal.MealId = meal.MealId;
+
+            var deleteResults = await _databaseService.UpdateMealValidUntil(dtoMeal);
+            return deleteResults;
         }
     }
 }

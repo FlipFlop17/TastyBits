@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using TastyBits.Data;
 using TastyBits.Interfaces;
@@ -10,12 +11,14 @@ namespace TastyBits.Services
     public class DbService : IDbService
     {
         private readonly IDbContextFactory<AppDbContext> _dbFactory;
+        private readonly UserManager<IdentityUser> _userManager;
 
         private AppDbContext _dbContext { get; set; }
 
-        public DbService(IDbContextFactory<AppDbContext> dbFactory)
+        public DbService(IDbContextFactory<AppDbContext> dbFactory,UserManager<IdentityUser> _userManager)
         {
             _dbFactory = dbFactory;
+            this._userManager = _userManager;
         }
 
         public async Task<TaskResult> InsertNewMealAsync(MealDto newMealDto)
@@ -38,7 +41,7 @@ namespace TastyBits.Services
                     int insertedRows;
                     insertedRows = await _dbContext.SaveChangesAsync();
                     if (insertedRows > 0) {
-                        Log.Information($"inserted id: {insertedRows} meal");
+                        Log.Information($"inserted rows: {insertedRows} meal");
                         //insert to other tables
                         foreach (var item in newMealDto.Ingredients) {
                             var ingred=new Ingredients() { Name=item.Key};
@@ -71,16 +74,33 @@ namespace TastyBits.Services
                 return result;
             }
         }
-        public async Task<List<Meals>> GetAllRecipes()
+        public async Task<List<Meals>> GetAllUserRecipesAsync(string userId)
         {
+            await using (_dbContext = await _dbFactory.CreateDbContextAsync()) {
+                var result = _dbContext.Meals.Where(m=>m.ValidUntil==null & m.UserId== userId).Include(m=>m.RecipeImages).ToList();
+                return result;
+            }
+        }
+
+        public async Task<TaskResult> UpdateMealValidUntil(MealDto mealToDelete)
+        {
+            TaskResult actionResult = new();
+            
             await using (_dbContext = await _dbFactory.CreateDbContextAsync()) {
                 //dodaj joinove na ostale tablice i spremi sve u neki DTO za prikaz po ekranima
                 //string sql = "select * from Meals m inner join  RecipeImage ri on ri.MealId=m.Id";
                 //var result = _dbContext.Meals.FromSqlInterpolated($"{sql}").ToList();
 
-                var result = _dbContext.Meals.Include(m=>m.RecipeImages).ToList();
+                var result = _dbContext.Meals.SingleOrDefault(m => m.Id == mealToDelete.MealId);
+                if (result !=null) {
+                    result.ValidUntil=DateTime.Now;
+                    _dbContext.SaveChanges();
+                } else {
+                    actionResult.HasError = true;
+                    actionResult.ErrorDesc = "unknown error while deleting record from database";
+                }
 
-                return result;
+                return actionResult;
             }
         }
     }

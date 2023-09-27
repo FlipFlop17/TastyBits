@@ -1,10 +1,12 @@
 ﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
-    <div id="recipeContent p-3">
-        @if (!string.IsNullOrEmpty(RecipeImage)) {
-            <img src="data:image/jpeg;base64,@RecipeImage" width="400" height="300" alt="Recipe Image" />
-        } else {
-            <img src="/pics/eggs-breakfest.jpg" width="400" height="300" alt="eggs" />
-        }
+    <div id="recipeContent">
+        <div id="recipeImage" class="w-auto h-56 overflow-hidden">
+            @if (!string.IsNullOrEmpty(RecipeImage)) {
+                <img class="rounded-lg object-fill w-full h-full" src="data:image/jpeg;base64,@RecipeImage" alt="Recipe Image" />
+            } else {
+                <img class="rounded-lg object-fill w-full h-full" src="/pics/picture-not-available.jpg" alt="eggs" />
+            }
+        </div>
         <h1 class="text-xl font-bold text-emerald-700 mt-2">@RecipeName</h1>
         <hr />
         <div class="p-3">
@@ -16,8 +18,12 @@
             <p>Cooking time: @CookingTime</p>
         </div>
         <div id="recipeCardActions" class="flex gap-2 justify-end">
-            <button class="secondaryButton" @onclick="OnOpenButtonClick">Open</button>
-            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" />
+            <button class="primaryOutline" @onclick="OnOpenButtonClick">
+                <div class="flex items-center gap-2" >
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    @* <p>Open</p> *@
+                </div>
+            </button>
         </div>
     </div>
 </div>

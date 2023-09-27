@@ -14,7 +14,8 @@
     @apply bg-emerald-500 p-2 rounded-lg text-gray-50;
 }
 .primaryOutline {
-    @apply border-solid border-2 border-emerald-600 bg-transparent p-2 rounded-lg text-emerald-800 hover:bg-emerald-400 duration-500 hover:text-white hover:cursor-pointer;
+    @apply border-solid border-[1.5px] border-emerald-600 bg-transparent p-2 rounded-lg text-emerald-800 hover:bg-emerald-400 duration-500 hover:text-white hover:cursor-pointer;
+    @apply disabled:bg-gray-400:hover:bg-gray-400 ;
 }
 .loginWindows {
     @apply w-96;

@@ -4,16 +4,28 @@
 @layout DashboardLayout;
 @using System.Collections.ObjectModel;
 @using Microsoft.EntityFrameworkCore;
+@using Serilog;
 @using TastyBits.Data;
 @using TastyBits.Model;
 @using TastyBits.Pages.UserDashboard.Components;
 @using TastyBits.Services;
-@inject MealService _mealService;
+@inject MealServiceMediator _mealService;
 @inject TastyDialogService _tastyDialog;
-@inject NavigationManager navMan
+@inject ISnackbar _snackBar;
+@inject LoggedUserService _loggedUserService;
+@inject NavigationManager navManager;
 
 <AuthorizeView>
     <Authorized>
+        <div id="recipeToolbar" class="flex p-2 bg-gray-50 rounded-lg focus:outline-none">
+            <button @onclick="@( ()=>StateHasChanged() )"> Steta</button>
+            <select>
+                <option>Vege</option>
+                <option>Meat</option>
+                <option>Dessert</option>
+                <option>Breakfest</option>
+            </select>
+        </div>
         <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2 ">
             <div @onclick=@AddNewMeal class="flex justify-center items-center border-dashed border-emerald-200 border-2 rounded-lg w-[27rem]
                     hover:cursor-pointer hover:bg-emerald-50
@@ -46,14 +58,31 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _allRecipes = await _mealService.GetAllUserMealsAsync();
+
     }
-    private void AddNewMeal()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _tastyDialog.ShowAddNewMealDialog();
+        if (_loggedUserService.UserStore != null & firstRender) {
+            await LoadUserRecipes();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
-    private void OpenSelectedMeal(UserMeal selectedMeal)
+
+    private async Task AddNewMeal()
     {
-        _tastyDialog.ShowMealDialog(selectedMeal);
+        var newDialog=await _tastyDialog.ShowAddNewMealDialog();
+        var result = await newDialog.Result;
+        await LoadUserRecipes();
+    }
+    private async Task OpenSelectedMeal(UserMeal selectedMeal)
+    {
+        var newDialog = await _tastyDialog.ShowMealDialog(selectedMeal);
+        var result = await newDialog.Result;
+        await LoadUserRecipes();
+    }
+    private async Task LoadUserRecipes()
+    {
+        _allRecipes = await _mealService.GetAllUserMealsAsync(_loggedUserService.UserStore.Id);
+        StateHasChanged();
     }
 }

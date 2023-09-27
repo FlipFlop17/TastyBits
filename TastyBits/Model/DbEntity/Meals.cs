@@ -26,6 +26,11 @@ namespace TastyBits.Model.Dto
         public string CookingTime { get; set; }
 
         public string ServingsAmount { get; set; }
+        //public bool IsDesert { get; set; }
+        //public bool IsLunch { get; set; }
+        //public bool IsBreakfest { get; set; }
+        //public bool IsVegan { get; set; }
+        //public bool IsVegetarian { get; set; }
         public DateTime ValidFrom { get; set; } = DateTime.Now;
         public DateTime? ValidUntil { get; set; }
 

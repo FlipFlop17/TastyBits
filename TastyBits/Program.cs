@@ -17,10 +17,14 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
     //options.Conventions.AddAreaPageRoute("Identity", "/Pages/Account/Register", "register");
 });
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = "Bottom-Center";
+});
 builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<TastyDialogService>();
-builder.Services.AddTransient<MealService>();
+builder.Services.AddTransient<MealServiceMediator>();
+builder.Services.AddScoped<LoggedUserService>();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

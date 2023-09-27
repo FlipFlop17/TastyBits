@@ -4,17 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
 using TastyBits.Areas.Identity.Pages.Account.Models;
+using TastyBits.Services;
 
 namespace TastyBits.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly LoggedUserService _loggedUserService;
 
         [BindProperty]
         public UserLogin? newUserInput { get; set; }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
             //Log.Information("ulogiran: "+_signInManager.IsSignedIn(User).ToString());
             if (_signInManager.IsSignedIn(User)) { //if already singed in
@@ -23,9 +25,10 @@ namespace TastyBits.Areas.Identity.Pages.Account
             return Page();
         }
 
-        public LoginModel(SignInManager<IdentityUser> signInManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager,LoggedUserService loggedUserService)
         {
             _signInManager = signInManager;
+            _loggedUserService = loggedUserService;
             UserLogin newUserInput = new UserLogin();
         }
 
@@ -47,6 +50,12 @@ namespace TastyBits.Areas.Identity.Pages.Account
 
             }
             return Page();
+        }
+
+        private async Task StoreLoggedUser()
+        {
+            await _loggedUserService.GetUserDataAsync();
+            Log.Information("user stored");
         }
     }
 }

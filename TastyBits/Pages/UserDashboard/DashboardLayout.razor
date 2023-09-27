@@ -1,7 +1,9 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Identity;
 @using TastyBits.Pages.UserDashboard.Components
-@inject UserManager<IdentityUser> UserManager;
+@using TastyBits.Services;
+@inject LoggedUserService loggedUser;
+
 
 <MudThemeProvider Theme="MyCustomTheme"/>
 <MudDialogProvider CloseButton="true" />
@@ -45,16 +47,11 @@
         open = !open;
     }
 
-    [CascadingParameter]
-    private Task<AuthenticationState> authState { get; set; }
     private string userEmail { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ClaimsPrincipal user = (await authState).User;
-        if (user.Identity.IsAuthenticated) {
-            userEmail = (await UserManager.GetUserAsync(user)).Email;
-        }
-
+        var user = await loggedUser.GetUserDataAsync();
+        userEmail = user.Email;
     }
 }

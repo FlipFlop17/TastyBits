@@ -7,8 +7,9 @@
 @using TastyBits.Components;
 @using TastyBits.Services;
 @inject IDialogService DialogService;
-@inject MealService _mealService;
-@inject UserManager<IdentityUser> _userManager;
+@inject MealServiceMediator _mealService;
+@inject LoggedUserService _loggedUserService;
+@inject ISnackbar _snackBar;
 
 <MudDialog>
     <DialogContent>
@@ -21,27 +22,27 @@
                 <div class="input-form">
                     <label>How are we calling this meal?</label>
                     <InputText placeholder="eg. Egg Omlet" @bind-Value="@newRecipe.Name"></InputText>
-                    <ValidationMessage For="@(()=>newRecipe.Name)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(()=>newRecipe.Name)"></ValidationMessage>
                 </div>
                 <div class="input-form">
                     <label>Describe it</label>
                     <InputText placeholder="eg. scrambled eggs inside a tortilla" @bind-Value="@newRecipe.Description"></InputText>
-                    <ValidationMessage For="@(() => newRecipe.Description)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(() => newRecipe.Description)"></ValidationMessage>
                 </div>
                 <div class="input-form">
                     <label>For how many persons is this recipe?</label>
                     <InputText placeholder="eg. two people" @bind-Value="@newRecipe.ServingAmount"></InputText>
-                    <ValidationMessage For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
                 </div>
                 <div class="input-form">
                     <label>How much time to prepare?</label>
                     <InputText placeholder="eg. 5-10 minutes" @bind-Value="@newRecipe.PrepTime"></InputText>
-                    <ValidationMessage For="@(() => newRecipe.PrepTime)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(() => newRecipe.PrepTime)"></ValidationMessage>
                 </div>
                 <div class="input-form">
                     <label>How much time to cook it?</label>
                     <InputText placeholder="eg. 5 minutes" @bind-Value="@newRecipe.CookingTime"></InputText>
-                    <ValidationMessage For="@(() => newRecipe.CookingTime)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(() => newRecipe.CookingTime)"></ValidationMessage>
                 </div>
                 <div class="mt-5">
                     <label class="font-medium">Whats your meal made of?</label>
@@ -102,9 +103,24 @@
 
                     </InputFile>
                 </div>
-                <div id="formActions" class="flex justify-end">
-                    <button type="submit" class="primaryButton w-20 mt-5 font-bold">
-                        Save
+                <div id="formActions" class="flex justify-end gap-3 mt-5">
+                    <button type="button" class="primaryOutline" @onclick="DialogClosing">
+                        <div class ="flex gap-2 items-center">
+                            <i class="fa fa-close"></i>
+                            <p>Close</p>
+                        </div>
+                    </button>
+                    <button type="submit" class="primaryButton font-bold">
+                        <div class="flex gap-2 items-center">
+                            @if (_isLoading) {
+                                 <MudProgressCircular Indeterminate="true" Size="Size.Small" Color="Color.Primary"></MudProgressCircular> 
+                            } else {
+                                <span>
+                                    <i class="fa fa-save"></i>
+                                </span>
+                            } 
+                            <p>Save</p>
+                        </div>
                     </button>
                 </div>
                 @*     @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
@@ -119,6 +135,9 @@
 
 
 @code {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    private bool _isLoading { get; set; } = false;
     private UserMeal newRecipe { get; set; } = new UserMeal();
     private ObservableCollection<IBrowserFile> _imageFiles { get; set; } = new ObservableCollection<IBrowserFile>();
     [Inject]
@@ -145,16 +164,19 @@
         if (isValid) {
             //TODO convert recipeentry to recipe data
             //bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
-            ClaimsPrincipal user = (await authState).User;
-            newRecipe.UserId = (await _userManager.GetUserAsync(user)).Id;
+            _isLoading = true;
+            //ClaimsPrincipal user = (await authState).User;
+            newRecipe.UserId = _loggedUserService.UserStore.Id;
             await ConvertImagesToBytes(_imageFiles);
             TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
-                _dialogService.ShowInfoSuccess("New recipe added!");
+                await Task.Delay(2000);
+                _isLoading = false;
                 newRecipe = new UserMeal();
                 _imageFiles.Clear();
-                StateHasChanged();
+                InitIngredientRows();
+                _snackBar.Add("New recipe added", Severity.Success);
             } else {
                 Log.Information(result.ErrorDesc);
                 _dialogService.ShowInfoError(result.ErrorDesc);
@@ -163,6 +185,7 @@
             // Model is not valid, handle validation errors or display them to the user
         }
     }
+
     private void OpenNewIngridient()
     {
         UserMeal.Ingridient newIngridients = new();
@@ -174,13 +197,13 @@
     {
         UserMeal.Ingridient newIngridients = new();
         newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
-        newIngridients.Num = 4;
+        // newIngridients = new();
+        // newRecipe.Ingredients.Add(newIngridients);
+        // newIngridients = new();
+        // newRecipe.Ingredients.Add(newIngridients);
+        // newIngridients = new();
+        // newRecipe.Ingredients.Add(newIngridients);
+        newIngridients.Num = 1;
 
         StateHasChanged();
     }
@@ -219,6 +242,6 @@
 
     private void DialogClosing()
     {
-        Log.Information("im being closed");
+        MudDialog.Close();
     }
 }
