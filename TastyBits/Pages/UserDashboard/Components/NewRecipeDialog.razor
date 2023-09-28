@@ -83,8 +83,16 @@
                         </table>
                     </div>
                 </div>
+                <p class="font-medium mt-5">Select what time of day this meals is best suited for ?</p>
+                <MudChipSet @bind-SelectedChips="_selectedChips" MultiSelection="true" Filter="true">
+                    <MudChip Text="Breakfast"></MudChip>
+                    <MudChip Text="Lunch" Default="true"></MudChip>
+                    <MudChip Text="Dinner"></MudChip>
+                    <MudChip Text="Snack"></MudChip>
+                    <MudChip Text="Desert"></MudChip>
+                </MudChipSet>
                 <p class="font-medium mt-5">Show us how your food looks like with some images</p>
-                <div class="flex">
+                <div id="uploadMealImages" class="flex">
                     <label for="inputImage" class="grow border-2 rounded-lg border-dashed border-emerald-400 p-4 mt-2
                         hover:cursor-pointer hover:bg-emerald-50 duration-200">
                         @foreach (var imageF in _imageFiles) {
@@ -150,6 +158,7 @@
     [CascadingParameter]
     private Task<AuthenticationState> authState { get; set; }
 
+    private MudChip[] _selectedChips;
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
@@ -171,11 +180,12 @@
             TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
-                await Task.Delay(2000);
+                await Task.Delay(500);
                 _isLoading = false;
                 newRecipe = new UserMeal();
                 _imageFiles.Clear();
                 InitIngredientRows();
+                _snackBar.Configuration.PositionClass = "Bottom-Center";
                 _snackBar.Add("New recipe added", Severity.Success);
             } else {
                 Log.Information(result.ErrorDesc);
@@ -197,12 +207,12 @@
     {
         UserMeal.Ingridient newIngridients = new();
         newRecipe.Ingredients.Add(newIngridients);
-        // newIngridients = new();
-        // newRecipe.Ingredients.Add(newIngridients);
-        // newIngridients = new();
-        // newRecipe.Ingredients.Add(newIngridients);
-        // newIngridients = new();
-        // newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
+        newIngridients = new();
+        newRecipe.Ingredients.Add(newIngridients);
         newIngridients.Num = 1;
 
         StateHasChanged();

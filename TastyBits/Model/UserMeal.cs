@@ -17,6 +17,7 @@ namespace TastyBits.Model
         public string PrepTime { get; set; }
         public string ServingAmount { get; set; }   
         public string Calories { get; set; }
+        public Dictionary<string,bool> TimeOfDayMeal { get; set; }
         public class Ingridient
         {
             public int Num { get; set; }

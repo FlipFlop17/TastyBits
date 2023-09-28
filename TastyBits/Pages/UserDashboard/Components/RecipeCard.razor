@@ -1,6 +1,6 @@
 ﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
     <div id="recipeContent">
-        <div id="recipeImage" class="w-auto h-56 overflow-hidden">
+        <div id="recipeImage" class="w-auto h-56 overflow-hidden hover:cursor-pointer" @onclick="OnOpenButtonClick">
             @if (!string.IsNullOrEmpty(RecipeImage)) {
                 <img class="rounded-lg object-fill w-full h-full" src="data:image/jpeg;base64,@RecipeImage" alt="Recipe Image" />
             } else {

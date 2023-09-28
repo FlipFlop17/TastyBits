@@ -17,16 +17,21 @@
 
 <AuthorizeView>
     <Authorized>
-        <div id="recipeToolbar" class="flex p-2 bg-gray-50 rounded-lg focus:outline-none">
-            <button @onclick="@( ()=>StateHasChanged() )"> Steta</button>
-            <select>
-                <option>Vege</option>
-                <option>Meat</option>
-                <option>Dessert</option>
-                <option>Breakfest</option>
-            </select>
+        <div id="recipeToolbar" class="flex p-2 gap-3 bg-gray-50 rounded-lg focus:outline-none">
+            <MudSelect T="string" Label="Ingridients" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Meat")" />
+                <MudSelectItem T="string" Value="@("Vegetarian")" />
+                <MudSelectItem T="string" Value="@("Vegan")" />
+                <MudSelectItem T="string" Value="@("Whatever")" />
+            </MudSelect>
+            <MudSelect T="string" Label="Time of day" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Breakfast")" />
+                <MudSelectItem T="string" Value="@("Lunch")" />
+                <MudSelectItem T="string" Value="@("Dinner")" />
+                <MudSelectItem T="string" Value="@("Snack")" />
+            </MudSelect>
         </div>
-        <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2 ">
+        <div id="recipes" class="flex flex-wrap mt-5 gap-10 p-2 justify-center ">
             <div @onclick=@AddNewMeal class="flex justify-center items-center border-dashed border-emerald-200 border-2 rounded-lg w-[27rem]
                     hover:cursor-pointer hover:bg-emerald-50
                     hover:border-emerald-300 duration-300">

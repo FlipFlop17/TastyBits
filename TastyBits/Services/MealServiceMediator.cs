@@ -1,15 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using MudBlazor;
-using TastyBits.Data;
-using TastyBits.Interfaces;
+﻿using TastyBits.Interfaces;
 using TastyBits.Model;
 using TastyBits.Model.Dto;
 
 namespace TastyBits.Services
 {
     /// <summary>
-    /// Maps the database service results to the appropriate property names of UserMeal class
+    /// Maps the database service results to the appropriate property names of UserMeal class for display
+    /// ...and the other way around
     /// </summary>
     public class MealServiceMediator
     {
@@ -37,6 +34,8 @@ namespace TastyBits.Services
                     dtoMeal.Ingredients.Add(item.Name, item.Quantity);
                 }
             }
+            //TODO MAP isLunch,breakfast etc.
+            //TODO add help link inside dashboard
             dtoMeal.Description = meal.Description;
             dtoMeal.CookingTime = meal.CookingTime;
             dtoMeal.PrepTime = meal.PrepTime;
