@@ -8,5 +8,6 @@ namespace TastyBits.Interfaces
         public Task<TaskResult> InsertNewMealAsync(MealDto newMeal);
         public Task<List<Meals>> GetAllUserRecipesAsync(string userId);
         public Task<TaskResult> UpdateMealValidUntil(MealDto newMeal);
+        public Task<TaskResult> GetIngridient(string ingridient);
     }
 }

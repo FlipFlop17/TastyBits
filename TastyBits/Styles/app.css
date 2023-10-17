@@ -14,8 +14,7 @@
     @apply bg-emerald-500 p-2 rounded-lg text-gray-50;
 }
 .primaryOutline {
-    @apply border-solid border-[1.5px] border-emerald-600 bg-transparent p-2 rounded-lg text-emerald-800 hover:bg-emerald-400 duration-500 hover:text-white hover:cursor-pointer;
-    @apply disabled:bg-gray-400:hover:bg-gray-400 ;
+    @apply border-solid border-[1.5px] border-emerald-600 bg-transparent p-2 rounded-lg text-emerald-800 hover:bg-emerald-400 duration-500 hover:cursor-pointer;
 }
 .loginWindows {
     @apply w-96;
@@ -24,7 +23,7 @@
     @apply text-sm mt-4;
 }
 .primaryButton {
-    @apply bg-emerald-600 hover:bg-emerald-500 duration-1000;
+    @apply bg-emerald-600 hover:bg-emerald-400 duration-1000;
     @apply p-3 text-gray-50 rounded-lg font-medium;
 }
 .input-form {
@@ -33,8 +32,9 @@
 .input-form > label {
     @apply font-medium;
 }
+
 .input-form > input {
-    @apply p-2 border-2 rounded-lg border-gray-300  focus:outline-none focus:border-emerald-400 focus:shadow-sm focus:shadow-emerald-300
+    @apply p-2 border-2 rounded-lg border-gray-300  focus:outline-none focus:border-emerald-400 focus:shadow-sm focus:shadow-emerald-300;
 }
 .transBase {
     /*transition:transform 1s;*/

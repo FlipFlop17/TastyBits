@@ -1,21 +1,23 @@
-﻿<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
+﻿@using TastyBits.Model;
+<div class="border-solid border-2 rounded-lg p-5 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl w-[27rem]">
     <div id="recipeContent">
         <div id="recipeImage" class="w-auto h-56 overflow-hidden hover:cursor-pointer" @onclick="OnOpenButtonClick">
-            @if (!string.IsNullOrEmpty(RecipeImage)) {
-                <img class="rounded-lg object-fill w-full h-full" src="data:image/jpeg;base64,@RecipeImage" alt="Recipe Image" />
+            @if (Meal.Images.Count>0) {
+                <img class="rounded-lg object-fill w-full h-full" src="data:image/jpeg;base64,@Meal.Images.FirstOrDefault()" alt="Recipe Image" />
             } else {
                 <img class="rounded-lg object-fill w-full h-full" src="/pics/picture-not-available.jpg" alt="eggs" />
             }
         </div>
-        <h1 class="text-xl font-bold text-emerald-700 mt-2">@RecipeName</h1>
+        <h1 class="text-xl font-bold text-emerald-700 mt-2">@Meal.Name</h1>
         <hr />
         <div class="p-3">
-            @RecipeDescription
+            @Meal.Description
         </div>
         <hr />
         <div class="font-bold text-emerald-600 space-y-3 mt-3">
-            <p>Preparation time: @PrepTime</p>
-            <p>Cooking time: @CookingTime</p>
+            <p>Preparation time: @Meal.PrepTime</p>
+            <p>Cooking time: @Meal.CookingTime</p>
+            <p>Calories: @Meal.TotalCalories</p>
         </div>
         <div id="recipeCardActions" class="flex gap-2 justify-end">
             <button class="primaryOutline" @onclick="OnOpenButtonClick">
@@ -30,16 +32,7 @@
 
 @code {
     [Parameter]
-    public string RecipeName { get; set; }
-    [Parameter]
-    public string RecipeDescription { get; set; }
-    [Parameter]
-    public string RecipeImage { get; set; }
-    [Parameter]
-    public string PrepTime { get; set; }
-    [Parameter]
-    public string CookingTime { get; set; }
-
+    public UserMeal Meal { get; set; }
     [Parameter]
     public EventCallback OnOpenButtonClick { get; set; }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TastyBits.Data;
@@ -11,9 +12,11 @@ using TastyBits.Data;
 namespace TastyBits.Data
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231001190418_updateMealsNulls2")]
+    partial class updateMealsNulls2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,11 +363,11 @@ namespace TastyBits.Data
                     b.Property<int>("MealId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Quantity")
+                    b.Property<double>("Quantity_g")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("QuantityUnit")
-                        .HasColumnType("text");
+                    b.Property<double>("Quantity_x")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 

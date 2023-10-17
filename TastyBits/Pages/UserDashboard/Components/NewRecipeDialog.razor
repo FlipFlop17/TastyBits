@@ -6,10 +6,11 @@
 @using Serilog;
 @using TastyBits.Components;
 @using TastyBits.Services;
-@inject IDialogService DialogService;
+
 @inject MealServiceMediator _mealService;
 @inject LoggedUserService _loggedUserService;
 @inject ISnackbar _snackBar;
+@inject CalorieApiService _calorieApi;
 
 <MudDialog>
     <DialogContent>
@@ -29,69 +30,48 @@
                     <InputText placeholder="eg. scrambled eggs inside a tortilla" @bind-Value="@newRecipe.Description"></InputText>
                     <ValidationMessage class="dangerText" For="@(() => newRecipe.Description)"></ValidationMessage>
                 </div>
-                <div class="input-form">
-                    <label>For how many persons is this recipe?</label>
-                    <InputText placeholder="eg. two people" @bind-Value="@newRecipe.ServingAmount"></InputText>
-                    <ValidationMessage class="dangerText" For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
-                </div>
-                <div class="input-form">
-                    <label>How much time to prepare?</label>
-                    <InputText placeholder="eg. 5-10 minutes" @bind-Value="@newRecipe.PrepTime"></InputText>
-                    <ValidationMessage class="dangerText" For="@(() => newRecipe.PrepTime)"></ValidationMessage>
-                </div>
-                <div class="input-form">
-                    <label>How much time to cook it?</label>
-                    <InputText placeholder="eg. 5 minutes" @bind-Value="@newRecipe.CookingTime"></InputText>
-                    <ValidationMessage class="dangerText" For="@(() => newRecipe.CookingTime)"></ValidationMessage>
-                </div>
-                <div class="mt-5">
-                    <label class="font-medium">Whats your meal made of?</label>
-                    <div id="ingridientsTable" class="flex h-60 overflow-y-scroll">
-                        <table class="border-collapse text-center mt-2 grow">
-                            <thead>
-                                <tr class="bg-emerald-50 sticky top-0 z-10">
-                                    <th class="p-2 border-b-2 "></th>
-                                    <th class="p-2 border-b-2 ">Ingredient</th>
-                                    <th class="p-2 border-b-2 ">
-                                        <MudBadge Icon="@Icons.Material.Outlined.Info" Color="Color.Transparent" title="Any kind of amount. Pinch, kg, fistful etc.">
-                                            Quantity
-                                        </MudBadge>
-                                    </th>
-                                </tr>
-                            </thead>
-                            @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
-                                <tr>
-                                    <td class="p-2 border-b border-gray-200">
-                                        @* <p>@item.Num</p> *@
-                                        <div class="flex gap-3">
-                                            <button title="Add ingridient" type="button" @onclick="OpenNewIngridient">
-                                                <i class="fa-solid fa-add text-emerald-500 hover:text-emerald-400-300 duration-500"></i>
-                                            </button>
-                                            <button title="Delete ingridient" type="button" @onclick=@( ()=> DeleteIngridient(item))>
-                                                <i class="fa-solid fa-trash-can text-red-400 hover:text-red-300 duration-500"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td class="border-b border-gray-200 p-2">
-                                        <input class="p-1 border-solid border-gray-300 border-2 rounded-lg focus:border-emerald-200 focus:outline-none" type="text" @bind="item.Name" />
-                                    </td>
-                                    <td class="p-2 border-b border-gray-200">
-                                        <input class="p-1 border-solid border-gray-300 border-2 rounded-lg focus:border-emerald-200 focus:outline-none" type="text" @bind="item.Quantity" />
-                                    </td>
-                                </tr>
-                            }
-                        </table>
+                <div class="flex gap-3">
+                    <div class="input-form">
+                        <label>Servings ?</label>
+                        <InputText placeholder="eg. two people" @bind-Value="@newRecipe.ServingAmount"></InputText>
+                        <ValidationMessage class="dangerText" For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
+                    </div>
+                    <div class="input-form">
+                        <label>Time to prepare ?</label>
+                        <InputText placeholder="eg. 5-10 minutes" @bind-Value="@newRecipe.PrepTime"></InputText>
+                        <ValidationMessage class="dangerText" For="@(() => newRecipe.PrepTime)"></ValidationMessage>
+                    </div>
+                    <div class="input-form">
+                        <label>Time to cook it ?</label>
+                        <InputText placeholder="eg. 5 minutes" @bind-Value="@newRecipe.CookingTime"></InputText>
+                        <ValidationMessage class="dangerText" For="@(() => newRecipe.CookingTime)"></ValidationMessage>
                     </div>
                 </div>
                 <p class="font-medium mt-5">Select what time of day this meals is best suited for ?</p>
-                <MudChipSet @bind-SelectedChips="_selectedChips" MultiSelection="true" Filter="true">
-                    <MudChip Text="Breakfast"></MudChip>
-                    <MudChip Text="Lunch" Default="true"></MudChip>
-                    <MudChip Text="Dinner"></MudChip>
-                    <MudChip Text="Snack"></MudChip>
-                    <MudChip Text="Desert"></MudChip>
+                <MudChipSet @bind-SelectedChips="_selectedChips"  MultiSelection="true" Filter="true">
+                    @foreach (TimeOfDayMeal tItem in Enum.GetValues(typeof(TimeOfDayMeal))) {
+                        <MudChip SelectedColor="Color.Success" Value="tItem">@tItem.ToString()</MudChip>
+                    }
                 </MudChipSet>
-                <p class="font-medium mt-5">Show us how your food looks like with some images</p>
+                <ValidationMessage class="dangerText" For="@(() => newRecipe.TimeOfDayMeal)"></ValidationMessage>
+                <div id="mealInstructions" class="input-form">
+                    <label>Instructions on how to prepare this meal</label>
+                    <InputTextArea class="p-2 border-2 rounded-lg border-gray-300  focus:outline-none focus:border-emerald-400 focus:shadow-sm focus:shadow-emerald-300" @bind-Value="newRecipe.Instructions" placeholder="Start with chopping the onions ..."></InputTextArea>
+                </div>
+                <div class="mt-5">
+                    <IngredientTable isAddingNewRecipe="true" UserMealObject="newRecipe"></IngredientTable>
+                </div>
+                <div class="mt-5 p-1 bg-amber-200 rounded-lg text-center">
+
+                    <p class="text-sm text-gray-500 mb-2 mt-2 p-1 flex items-center">
+                        <span class="">
+                            <i class="fa-solid fa-circle-info text-blue-400 h-5 mr-2"></i>
+                        </span>
+                        We can calculate your meal macros if you enter your ingredients in in english.
+                     </p>
+                </div>
+
+                <p class="font-medium mt-5">And finally show us how your food looks like with some images</p>
                 <div id="uploadMealImages" class="flex">
                     <label for="inputImage" class="grow border-2 rounded-lg border-dashed border-emerald-400 p-4 mt-2
                         hover:cursor-pointer hover:bg-emerald-50 duration-200">
@@ -145,8 +125,10 @@
 @code {
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
+
     private bool _isLoading { get; set; } = false;
     private UserMeal newRecipe { get; set; } = new UserMeal();
+    private QuantityUnit _selectedQUnit { get; set; }
     private ObservableCollection<IBrowserFile> _imageFiles { get; set; } = new ObservableCollection<IBrowserFile>();
     [Inject]
     private TastyDialogService _dialogService { get; set; }
@@ -159,33 +141,37 @@
     private Task<AuthenticationState> authState { get; set; }
 
     private MudChip[] _selectedChips;
+
+    private async Task GetCals()
+    {
+        await _calorieApi.GetCalorieAsync("rice");
+    }
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
         InitIngredientRows(); // init first row
 
     }
+
     public async Task InsertRecipe(EditContext context)
     {
+        ConvertMealTypes();
         bool isValid = context.Validate();
         bool isOk = false;
         //Log.Information("FORM VALID: "+isValid.ToString());
         if (isValid) {
-            //TODO convert recipeentry to recipe data
             //bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
             _isLoading = true;
-            //ClaimsPrincipal user = (await authState).User;
             newRecipe.UserId = _loggedUserService.UserStore.Id;
             await ConvertImagesToBytes(_imageFiles);
             TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
+
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
                 await Task.Delay(500);
-                _isLoading = false;
                 newRecipe = new UserMeal();
                 _imageFiles.Clear();
                 InitIngredientRows();
-                _snackBar.Configuration.PositionClass = "Bottom-Center";
                 _snackBar.Add("New recipe added", Severity.Success);
             } else {
                 Log.Information(result.ErrorDesc);
@@ -194,34 +180,16 @@
         } else {
             // Model is not valid, handle validation errors or display them to the user
         }
+        _isLoading = false;
     }
 
-    private void OpenNewIngridient()
-    {
-        UserMeal.Ingridient newIngridients = new();
-        newIngridients.Num = newRecipe.Ingredients.Count + 1;
-        newRecipe.Ingredients.Add(newIngridients);
-        StateHasChanged();
-    }
     private void InitIngredientRows()
     {
         UserMeal.Ingridient newIngridients = new();
         newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
-        newIngridients = new();
-        newRecipe.Ingredients.Add(newIngridients);
         newIngridients.Num = 1;
 
         StateHasChanged();
-    }
-    private void DeleteIngridient(UserMeal.Ingridient ing)
-    {
-        if (newRecipe.Ingredients.Count!=1) {
-            newRecipe.Ingredients.Remove(ing);
-        }
     }
 
     private async Task UploadImages(InputFileChangeEventArgs inputFiles)
@@ -243,6 +211,17 @@
             // Convert the byte array to a Base64-encoded string
             string base64Image = Convert.ToBase64String(imageBytes);
             newRecipe.Images.Add(base64Image);
+        }
+    }
+    private void ConvertMealTypes()
+    {
+        if(_selectedChips !=null) {
+            newRecipe.TimeOfDayMeal = new();
+            foreach (var item in _selectedChips) {
+                newRecipe.TimeOfDayMeal.Add(
+                    (TimeOfDayMeal)Enum.Parse(typeof(TimeOfDayMeal), item.Value.ToString())
+                );
+            }
         }
     }
     private void RemoveUploadedImage(IBrowserFile img)

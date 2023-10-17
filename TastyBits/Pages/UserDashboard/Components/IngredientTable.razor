@@ -1,0 +1,84 @@
+﻿@using TastyBits.Model;
+<div id="ingridientsTable" class="flex h-60 overflow-y-scroll">
+    <table class="border-collapse text-center mt-2 grow">
+        <thead>
+            <tr class="@(isAddingNewRecipe ? "bg-emerald-100":"bg-amber-200") sticky top-0 z-10 border-b-2">
+                @* <th class="p-2 "></th> *@
+                <th></th>
+                <th class="p-2">Ingredient</th>
+                <th class="p-2">Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (UserMeal.Ingridient item in UserMealObject.Ingredients) {
+                <tr class="">
+                    <td class="p-2 border-b border-gray-200">
+                        <div class="flex gap-3">
+                            <button title="Add ingridient" type="button" @onclick="OpenNewIngridient">
+                                <i class="fa-solid fa-add text-emerald-500 hover:text-emerald-300 duration-500"></i>
+                            </button>
+                            <button title="Delete ingridient" type="button" @onclick=@( ()=> DeleteIngridient(item))>
+                                <i class="fa-solid fa-trash-can text-red-400 hover:text-red-300 duration-500"></i>
+                            </button>
+                        </div>
+                    </td> 
+                    <td class="border-b border-b-gray-200 p-2">
+                        @if (isAddingNewRecipe) {
+                            <input placeholder="onion" class="p-1 border-b-2 focus:outline-none focus:border-emerald-200" type="text"
+                            @bind="item.Name" />
+                        }else {
+                            <input class="inputFieldEdit" type="text" disabled="@isFieldsDisabled"
+                            @bind="item.Name" />
+                        }
+                    </td>
+                    <td class="p-2 border-b border-gray-200">
+                        @if (isAddingNewRecipe) {
+                            <input placeholder="50" class="p-1 text-center border-b-2 focus:outline-none focus:border-emerald-200" type="text"
+                            @bind="item.Quantity" />
+                        }else {
+                            <input class="inputFieldEdit text-center" type="text" disabled="@isFieldsDisabled"
+                            @bind="item.Quantity" />
+                        }
+                    </td>
+                    <td class="p-2">
+                        <InputSelect  TValue="QuantityUnit" @bind-Value="item.QuantityUnit">
+                            @foreach (QuantityUnit qItem in Enum.GetValues(typeof(QuantityUnit))) {
+                                <option value="@qItem">@qItem.ToString()</option>
+                            }
+                        </InputSelect>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@code {
+    [Parameter]
+    public UserMeal UserMealObject { get; set; }
+
+    /// <summary>
+    /// When the component is used inside dialog for adding new recipe
+    /// </summary>
+    [Parameter]
+    public bool isAddingNewRecipe { get; set; }
+
+    /// <summary>
+    /// For the meal info the fields are primarly disabled-enabled on edit
+    /// </summary>
+    [Parameter]
+    public bool isFieldsDisabled { get; set; }
+    private void OpenNewIngridient()
+    {
+        UserMeal.Ingridient newIngridients = new();
+        newIngridients.Num = UserMealObject.Ingredients.Count + 1;
+        UserMealObject.Ingredients.Add(newIngridients);
+        StateHasChanged();
+    }
+    private void DeleteIngridient(UserMeal.Ingridient ing)
+    {
+        if (UserMealObject.Ingredients.Count != 1) {
+            UserMealObject.Ingredients.Remove(ing);
+        }
+    }
+}

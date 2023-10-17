@@ -22,6 +22,7 @@ builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<TastyDialogService>();
 builder.Services.AddTransient<MealServiceMediator>();
 builder.Services.AddScoped<LoggedUserService>();
+builder.Services.AddScoped<CalorieApiService>() ;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

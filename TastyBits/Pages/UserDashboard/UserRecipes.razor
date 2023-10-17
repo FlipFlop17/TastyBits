@@ -17,7 +17,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <div id="recipeToolbar" class="flex p-2 gap-3 bg-gray-50 rounded-lg focus:outline-none">
+        <div id="recipeToolbar" class="flex p-2 gap-3 rounded-lg focus:outline-none">
             <MudSelect T="string" Label="Ingridients" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                 <MudSelectItem T="string" Value="@("Meat")" />
                 <MudSelectItem T="string" Value="@("Vegetarian")" />
@@ -40,13 +40,9 @@
                     <p class="font-medium text-lg">Add New</p>
                 </div>
             </div>
-            @foreach (UserMeal re in _allRecipes) {
-                <RecipeCard RecipeName="@re.Name" 
-                RecipeDescription="@re.Description" 
-                RecipeImage="@re.Images.FirstOrDefault()"
-                CookingTime="@re.CookingTime"
-                PrepTime="@re.PrepTime"
-                OnOpenButtonClick="@( ()=>OpenSelectedMeal(re) )"
+            @foreach (UserMeal meal in _allRecipes) {
+                <RecipeCard Meal="meal"
+                OnOpenButtonClick="@( ()=>OpenSelectedMeal(meal) )"
                 >
             </RecipeCard>
             }

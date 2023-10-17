@@ -19,13 +19,13 @@ namespace TastyBits.Model.Dto
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string PrepTime { get; set; }
+        public string? PrepTime { get; set; }
 
-        public string CookingTime { get; set; }
+        public string? CookingTime { get; set; }
 
-        public string ServingsAmount { get; set; }
+        public string? ServingsAmount { get; set; }
         public bool IsDesert { get; set; }
         public bool IsSnack { get; set; }
         public bool IsLunch { get; set; }
@@ -36,7 +36,8 @@ namespace TastyBits.Model.Dto
 
         public DateTime ValidFrom { get; set; } = DateTime.Now;
         public DateTime? ValidUntil { get; set; }
-
-        public virtual ICollection<RecipeImage> RecipeImages { get; set; }
+        public string? Instructions { get; set; }
+        public virtual ICollection<RecipeImage>? RecipeImages { get; set; }
+        public virtual ICollection<RecipeIngredients>? RecipeIngridients { get; set; }
     }
 }
