@@ -1,4 +1,5 @@
-﻿@using TastyBits.Model;
+﻿@using Domain.Models;
+
 <div id="ingridientsTable" class="flex h-60 overflow-y-scroll">
     <table class="border-collapse text-center mt-2 grow">
         <thead>
@@ -42,7 +43,7 @@
                         }
                     </td>
                     <td class="p-2">
-                        <InputSelect  TValue="QuantityUnit" @bind-Value="item.QuantityUnit">
+                        <InputSelect class=" @(!isAddingNewRecipe ? "border-solid border p-3 rounded-lg outline-none":"outline-none")" TValue="QuantityUnit" @bind-Value="item.QuantityUnit">
                             @foreach (QuantityUnit qItem in Enum.GetValues(typeof(QuantityUnit))) {
                                 <option value="@qItem">@qItem.ToString()</option>
                             }

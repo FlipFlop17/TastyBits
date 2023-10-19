@@ -1,9 +1,10 @@
+using Application.ReturnModels;
+using Application.Services;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using TastyBits.Model;
 using TastyBits.Services;
 
 namespace Tests
@@ -43,8 +44,6 @@ namespace Tests
             var result = await service.GetCalorieAsync("rice");
 
             // Assert
-            Debug.Print("cals1: "+result.CaloriesPer100.ToString());
-            Console.WriteLine("cals2: "+result.CaloriesPer100);
             Assert.AreEqual(expected, result);
         }
     }

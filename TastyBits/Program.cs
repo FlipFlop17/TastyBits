@@ -1,15 +1,33 @@
+using Application.Services;
+using Application.UseCases;
+using Domain.Interfaces;
+using Infrastructure.Data.Context;
+using Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Serilog;
-using TastyBits.Data;
-using TastyBits.Interfaces;
+using Serilog.Debugging;
 using TastyBits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-Log.Logger = new LoggerConfiguration()
+
+var mySerilog =  new LoggerConfiguration()
+    .MinimumLevel.Information()
     .WriteTo.Debug()
+    .Enrich.FromLogContext()
     .CreateLogger();
+
+builder.Services.AddLogging(loggB =>
+{
+    //loggB.AddFilter("Microsoft", LogLevel.Warning);
+    //loggB.AddFilter("MudBlazor", LogLevel.Information);
+    loggB.ClearProviders();
+    loggB.AddSerilog(mySerilog,dispose: true);
+});
+
+//TODO dotnet ef --startup-project .\TastyBits\TastyBits.csproj --project .\Infrastructure\Infrastructure.csproj migrations add refreshFolder
+
 
 builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 {
@@ -18,9 +36,11 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options=>
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-builder.Services.AddTransient<IDbService, DbService>();
+builder.Services.AddScoped<CreateMealUseCase>();
+builder.Services.AddScoped<DeleteMealUseCase>();
+builder.Services.AddScoped<GetUserMealsById>();
+builder.Services.AddScoped<IMealsRepository, MealsRepository>();
 builder.Services.AddTransient<TastyDialogService>();
-builder.Services.AddTransient<MealServiceMediator>();
 builder.Services.AddScoped<LoggedUserService>();
 builder.Services.AddScoped<CalorieApiService>() ;
 

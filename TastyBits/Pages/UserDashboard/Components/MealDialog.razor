@@ -1,11 +1,13 @@
 ﻿@page "/dashboard/meal"
 @layout DashboardLayout;
+@using Application.UseCases;
+@using Infrastructure.Data;
 @using Serilog;
-@using TastyBits.Model;
+@using Domain.Models;
 @using TastyBits.Services;
 @inject ISnackbar _snackBar;
-@inject MealServiceMediator _mealService;
 @using TastyBits.Components;
+@inject DeleteMealUseCase deleteMealUseCase;
 
 <MudDialog>
     @* <TitleContent>
@@ -87,7 +89,7 @@
                                 <button class="primaryButton !bg-red-400" @onclick="DeleteMeal">
                                     <div class="flex items-center gap-3">
                                         @if (_isLoading) {
-                                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Primary"></MudProgressCircular>
+                                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Secondary"></MudProgressCircular>
                                         }
                                         <p>Delete</p>
                                     </div>
@@ -195,7 +197,8 @@
     private async Task<bool> DeleteMeal()
     {
         _isLoading = true;
-        var result= await _mealService.DeleteMealFromDatabaseAsync(Meal);
+        var result= await deleteMealUseCase.DeleteMealAsync(Meal.MealId);
+        
         await Task.Delay(500);
         if (!result.HasError) {
             _snackBar.Add("Recipe deleted",Severity.Success);

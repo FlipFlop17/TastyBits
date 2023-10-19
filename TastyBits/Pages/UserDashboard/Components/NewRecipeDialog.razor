@@ -1,16 +1,19 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿@using Application.ReturnModels;
+@using Application.UseCases;
+@using Domain.Interfaces;
+@using Domain.Models;
+@using Domain.ReturnModels;
+@using Microsoft.AspNetCore.Identity;
 @using System.Collections.ObjectModel;
-@using TastyBits.Model;
 @layout DashboardLayout;
 @using Microsoft.AspNetCore.Components.Forms
 @using Serilog;
 @using TastyBits.Components;
 @using TastyBits.Services;
-
-@inject MealServiceMediator _mealService;
+@using Application.Helpers;
+@inject CreateMealUseCase _createMeal;
 @inject LoggedUserService _loggedUserService;
 @inject ISnackbar _snackBar;
-@inject CalorieApiService _calorieApi;
 
 <MudDialog>
     <DialogContent>
@@ -142,10 +145,6 @@
 
     private MudChip[] _selectedChips;
 
-    private async Task GetCals()
-    {
-        await _calorieApi.GetCalorieAsync("rice");
-    }
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
@@ -155,17 +154,16 @@
 
     public async Task InsertRecipe(EditContext context)
     {
-        ConvertMealTypes();
-        bool isValid = context.Validate();
-        bool isOk = false;
+        newRecipe.TimeOfDayMeal = TastyFunctions.ConvertMealTypes(_selectedChips);
+        bool isFormValid = context.Validate();
         //Log.Information("FORM VALID: "+isValid.ToString());
-        if (isValid) {
-            //bool isOk = await _dbService.InsertNewRecipeAsync(newRecipe);
+
+        if (isFormValid) {
             _isLoading = true;
             newRecipe.UserId = _loggedUserService.UserStore.Id;
-            await ConvertImagesToBytes(_imageFiles);
-            TaskResult result =await _mealService.AddNewMealAsync(newRecipe);
-
+            newRecipe.Images=await TastyFunctions.ConvertImageToBytesAsync(_imageFiles);
+            //insert into database
+            TaskResult result = await _createMeal.InsertNewMealAsync(newRecipe);
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
                 await Task.Delay(500);
@@ -199,31 +197,6 @@
         }
     }
 
-    private async Task ConvertImagesToBytes(ObservableCollection<IBrowserFile> slike)
-    {
-        foreach (var imageFile in slike) {
-            var imageStream = imageFile.OpenReadStream(imageFile.Size);
-            byte[] imageBytes;
-            using (var memoryStream = new MemoryStream()) {
-                await imageStream.CopyToAsync(memoryStream);
-                imageBytes = memoryStream.ToArray();
-            }
-            // Convert the byte array to a Base64-encoded string
-            string base64Image = Convert.ToBase64String(imageBytes);
-            newRecipe.Images.Add(base64Image);
-        }
-    }
-    private void ConvertMealTypes()
-    {
-        if(_selectedChips !=null) {
-            newRecipe.TimeOfDayMeal = new();
-            foreach (var item in _selectedChips) {
-                newRecipe.TimeOfDayMeal.Add(
-                    (TimeOfDayMeal)Enum.Parse(typeof(TimeOfDayMeal), item.Value.ToString())
-                );
-            }
-        }
-    }
     private void RemoveUploadedImage(IBrowserFile img)
     {
         _imageFiles.Remove(img);

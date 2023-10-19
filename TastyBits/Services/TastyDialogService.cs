@@ -1,6 +1,6 @@
-﻿using MudBlazor;
+﻿using Domain.Models;
+using MudBlazor;
 using TastyBits.Components;
-using TastyBits.Model;
 using TastyBits.Pages.UserDashboard.Components;
 
 namespace TastyBits.Services

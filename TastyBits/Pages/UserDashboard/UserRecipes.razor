@@ -3,17 +3,18 @@
 
 @layout DashboardLayout;
 @using System.Collections.ObjectModel;
+@using Application.UseCases;
+@using Domain.Models;
+@using Infrastructure.Data;
 @using Microsoft.EntityFrameworkCore;
 @using Serilog;
-@using TastyBits.Data;
-@using TastyBits.Model;
 @using TastyBits.Pages.UserDashboard.Components;
 @using TastyBits.Services;
-@inject MealServiceMediator _mealService;
 @inject TastyDialogService _tastyDialog;
 @inject ISnackbar _snackBar;
 @inject LoggedUserService _loggedUserService;
 @inject NavigationManager navManager;
+@inject GetUserMealsById _userMealsUseCase;
 
 <AuthorizeView>
     <Authorized>
@@ -83,7 +84,7 @@
     }
     private async Task LoadUserRecipes()
     {
-        _allRecipes = await _mealService.GetAllUserMealsAsync(_loggedUserService.UserStore.Id);
+        _allRecipes = await _userMealsUseCase.GetUserMeals(_loggedUserService.UserStore.Id);
         StateHasChanged();
     }
 }
