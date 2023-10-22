@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Infrastructure.Data.Context;
+using Microsoft.VisualBasic;
 
 namespace Application.Helpers
 {
@@ -8,6 +9,7 @@ namespace Application.Helpers
         public static MealsDataEntity ConvertUserMealToMealsEntity(UserMeal incomingMeal)
         {
             MealsDataEntity mealDto = new MealsDataEntity();
+            mealDto.Id = incomingMeal.MealId;
             mealDto.Name = incomingMeal.Name;
             mealDto.Description = incomingMeal.Description;
             mealDto.CookingTime = incomingMeal.CookingTime;
@@ -39,6 +41,20 @@ namespace Application.Helpers
                 }
             }
 
+            //map images
+            mealDto.RecipeImages = new List<MealImageDataEntity>();
+            foreach (var item in incomingMeal.Images) {
+                var img = ConvertMealImageToImageEntity(item,incomingMeal.MealId);
+                mealDto.RecipeImages.Add(img);
+            }
+
+            //map ingredients
+            mealDto.RecipeIngridients = new List<MealIngredientsDataEntity>();
+            foreach(var item in incomingMeal.Ingredients) {
+                var ing = ConvertMealIngredientToMealIngEntity(item, incomingMeal.MealId);
+                mealDto.RecipeIngridients.Add(ing);
+            }
+
             return mealDto;
         }
         public static MealImageDataEntity ConvertMealImageToImageEntity(string imgBytes,int mealId)
@@ -51,7 +67,7 @@ namespace Application.Helpers
         public static MealIngredientsDataEntity ConvertMealIngredientToMealIngEntity(UserMeal.Ingridient ingredient,int mealId)
         {
             MealIngredientsDataEntity mealIngredient= new MealIngredientsDataEntity();
-            mealIngredient.IngredientId = ingredient.Id;
+            mealIngredient.Id = ingredient.Id;
             mealIngredient.MealId = mealId;
             mealIngredient.Quantity= ingredient.Quantity;
             mealIngredient.QuantityUnit = Convert.ToString(ingredient.QuantityUnit);
@@ -69,6 +85,8 @@ namespace Application.Helpers
         public static UserMeal ConvertUserMealDataEntityToUserMealModel(MealsDataEntity mealData)
         {
             UserMeal userMeal = new UserMeal();
+            userMeal.MealId = mealData.Id;
+            userMeal.UserId=mealData.UserId;
             userMeal.TimeOfDayMeal = new();
             userMeal.Name = mealData.Name;
             userMeal.Description = mealData.Description;

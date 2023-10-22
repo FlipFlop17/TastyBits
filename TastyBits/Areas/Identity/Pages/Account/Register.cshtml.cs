@@ -41,7 +41,7 @@ namespace TastyBits.Areas.Identity.Pages.Account
                 IdentityUser newUser = new IdentityUser()
                 {
                     UserName=newUserInput.UserEmail,
-                    Email=newUserInput.UserEmail
+                    Email=newUserInput.UserEmail,
                 };
                 var result = await _userManager.CreateAsync(newUser, newUserInput.UserPassword);
                 ResultErrors=result.Errors.ToList();

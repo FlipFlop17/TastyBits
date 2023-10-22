@@ -38,6 +38,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 builder.Services.AddScoped<CreateMealUseCase>();
 builder.Services.AddScoped<DeleteMealUseCase>();
+builder.Services.AddScoped<UpdateMealUseCase>();
 builder.Services.AddScoped<GetUserMealsById>();
 builder.Services.AddScoped<IMealsRepository, MealsRepository>();
 builder.Services.AddTransient<TastyDialogService>();

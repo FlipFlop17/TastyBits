@@ -87,4 +87,12 @@
         _allRecipes = await _userMealsUseCase.GetUserMeals(_loggedUserService.UserStore.Id);
         StateHasChanged();
     }
+
+    private void FilterSelected()
+    {
+        //TODO filter selected meals
+    }
+
+    //TODO proaj prilagodit za mobile view
+    //TODO dodaj role za tasty app, odnosno dodaj da se može demo verzija rokat
 }

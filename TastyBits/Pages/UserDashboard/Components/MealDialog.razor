@@ -8,6 +8,7 @@
 @inject ISnackbar _snackBar;
 @using TastyBits.Components;
 @inject DeleteMealUseCase deleteMealUseCase;
+@inject UpdateMealUseCase updateMealUseCase;
 
 <MudDialog>
     @* <TitleContent>
@@ -142,7 +143,7 @@
 
     </DialogContent>
     <DialogActions>
-        <button class="primaryOutline flex items-center gap-2" disabled="@isFieldDisabled" @onclick="@SaveEdits">
+        <button class="primaryOutline flex items-center gap-2" disabled="@isFieldDisabled" @onclick="@SaveEditsAsync">
             <div class="flex items-center gap-3">
                 @if (_isLoading) {
                     <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Primary"></MudProgressCircular>
@@ -180,9 +181,12 @@
     {
         isToogledPopOver = !isToogledPopOver;
     }
-    private void SaveEdits()
+
+    private async Task<bool> SaveEditsAsync()
     {
-        Log.Information("saving edits");
+        //TODO testiraj editing logic
+        var result=await updateMealUseCase.UpdateMeal(Meal);
+        return result.StatusCode==System.Net.HttpStatusCode.OK;
     }
     private void EnableEditMeal()
     {
