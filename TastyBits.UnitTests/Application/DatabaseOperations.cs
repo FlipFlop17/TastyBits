@@ -38,7 +38,7 @@ namespace TastyBits.UnitTests.Application
             UserMeal myMeal = GetUserMealTestData();
 
             TaskResult insertResult=await createMeal.InsertNewMealAsync(myMeal);
-            _outputLog.WriteLine($"my output {insertResult.ErrorDesc}");
+            _outputLog.WriteLine($"my output {insertResult.ErrorDesc} ");
             Assert.True(insertResult.HasError==false);
         }
 
