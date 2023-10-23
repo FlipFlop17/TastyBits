@@ -1,13 +1,14 @@
 ﻿using Application.Helpers;
-using Azure.Core;
+using Application.ReturnModels;
+using Application.Services;
 using Domain.Interfaces;
 using Domain.Models;
 using Domain.ReturnModels;
 using Infrastructure.Data.Context;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using System.Drawing.Text;
+using static MudBlazor.CategoryTypes;
 
 namespace Infrastructure.Data.Repositories
 {
@@ -15,62 +16,59 @@ namespace Infrastructure.Data.Repositories
     {
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly ILogger _logger;
+        private readonly CalorieApiService _calorieApiService;
+
+        public event EventHandler<RepositoryEventArgs> RepositoryChanged;
 
         private AppDbContext _dbContext { get; set; }
 
-        public MealsRepository(IDbContextFactory<AppDbContext> dbContextFactory,ILogger<MealsRepository> logger)
+        public MealsRepository(IDbContextFactory<AppDbContext> dbContextFactory,ILogger<MealsRepository> logger,CalorieApiService calorieApiService)
         {
             _dbContextFactory = dbContextFactory;
             _logger = logger;
+            _calorieApiService = calorieApiService;
         }
 
         public async Task<TaskResult> AddMeal(UserMeal newMeal)
         {
             TaskResult result = new();
-            MealsDataEntity newMealDto=TastyMapper.ConvertUserMealToMealsEntity(newMeal);
+
             await using (_dbContext=await _dbContextFactory.CreateDbContextAsync()) {
 
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try {
-                    _dbContext.MealsTable.Add(newMealDto);
-                    int insertedRows = await _dbContext.SaveChangesAsync();
-                    if (insertedRows>0) {
-                        //meal inserted-insert ingredients used
-                        foreach (UserMeal.Ingridient row in newMeal.Ingredients) {
+                    //add ingredient to the base table of ingredients
+                    foreach (UserMeal.Ingridient row in newMeal.Ingredients) {
+                        IngredientsDataEntity ingr = new();
+                        var ingredientAlreadyInDb = await GetIngredientAsync(row.Name, _dbContext);
+                        //only add ingredients that are not already in the database
+                        if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) { //
+                            //add to the ingredients list
+                            CalorieNinjaApiResultModel apiResult=await _calorieApiService.GetCalorieAsync(ingr.Name);
+                            //TODO api not fetching,check
+                            if (apiResult.Items.Count == 1) {
+                                row.CaloriesPer100g = apiResult.Items.First().CaloriesPer100;
+                            }
+                            ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(row);
+                            _dbContext.IngredientsTable.Add(ingr);
+                            _logger.LogInformation("ing added");
+                            await _dbContext.SaveChangesAsync();
+                            //assign the ingredient primary key to the list of new meal ingredients
+                            row.IngredientId = ingr.Id;
+                        }else {
+                            row.IngredientId = (ingredientAlreadyInDb.Result as IngredientsDataEntity).Id;
+                        }
+                    }
+                    MealsDataEntity newMealDto = TastyMapper.ConvertUserMealToMealsEntity(newMeal);
+                    _dbContext.MealsTable.AddRange(newMealDto);
 
-                            int rowsInserted=0;
-                            IngredientsDataEntity ingr=new();
-                            var ingredientAlreadyInDb = await GetIngredientAsync(row.Name,_dbContext);
-                            //only add ingredients that are not already in the database
-                            if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) { //
-                                //add to the ingredients list
-                                ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(row);
-                                _dbContext.IngredientsTable.Add(ingr);
-                                rowsInserted = await _dbContext.SaveChangesAsync();
-                            }
-                            //insert to mealingredients table
-                            if(rowsInserted>0) {
-                                row.Id = ingr.Id;
-                                MealIngredientsDataEntity mealIngr = TastyMapper.ConvertMealIngredientToMealIngEntity(row, newMealDto.Id);
-                                _dbContext.RecipeIngredientsTable.Add(mealIngr);
-                            }
-                        }
-                        _dbContext.SaveChanges();
-                        // add images to database
-                        foreach (var item in newMeal.Images) {
-                            MealImageDataEntity imageDataEntity= new MealImageDataEntity();
-                            imageDataEntity = TastyMapper.ConvertMealImageToImageEntity(item, newMealDto.Id);
-                            var imageAlreadyInDb = await GetImageAsync(imageDataEntity.ImageData,_dbContext);
-                            //only add an image if it does not already exists
-                            if(imageAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) {
-                                _dbContext.RecipeImageTable.Add(imageDataEntity);
-                            }
-                        }
-                        await _dbContext.SaveChangesAsync();
+                    int insertedRows = await _dbContext.SaveChangesAsync();
+                    if (insertedRows > 0) {
                         await transaction.CommitAsync();
                         result.StatusCode = System.Net.HttpStatusCode.OK;
                         _logger.LogInformation("meal successfuly inserted");
+                        RepoChanged(ChangeType.Add);
                     }
                 }
                 catch (Exception e) {
@@ -99,6 +97,7 @@ namespace Infrastructure.Data.Repositories
                         _dbContext.SaveChanges();
                         actionResult.StatusCode = System.Net.HttpStatusCode.OK;
                         _logger.LogInformation("meal deleted from database");
+                        RepoChanged(ChangeType.Delete);
                     } else {
                         actionResult.HasError = true;
                         actionResult.ErrorDesc = "unknown error while deleting record from database";
@@ -123,7 +122,7 @@ namespace Infrastructure.Data.Repositories
             await using (_dbContext = await _dbContextFactory.CreateDbContextAsync()) {
                 var result = _dbContext.MealsTable
                     .Where(m => m.ValidUntil == null & m.UserId == userId)
-                    .Include(r=> r.RecipeIngridients)
+                    .Include(r=> r.RecipeIngridients.Where(ing=> ing.ValidUntil==null))
                         .ThenInclude(i => i.Ingredients)
                     .Include(m => m.RecipeImages).ToList();
                 foreach (var item in result) {
@@ -137,21 +136,40 @@ namespace Infrastructure.Data.Repositories
         public async Task<TaskResult> UpdateMeal(UserMeal newUpdatedMeal)
         {
             TaskResult result = new();
+            IDbContextTransaction transaction=null;
             try {
-                    await using (_dbContext = await _dbContextFactory.CreateDbContextAsync()) {
+                await using (_dbContext = await _dbContextFactory.CreateDbContextAsync()) {
 
-                        var mealEntity = TastyMapper.ConvertUserMealToMealsEntity(newUpdatedMeal);
-                        _dbContext.MealsTable.Attach(mealEntity);    
-                        _dbContext.MealsTable.Update(mealEntity);
-                        await _dbContext.SaveChangesAsync();
+                    transaction = await _dbContext.Database.BeginTransactionAsync();
+                    //add any new ingredients to the base ingredient table
+                    foreach (var item in newUpdatedMeal.Ingredients) {
+                        IngredientsDataEntity ingr = new();
+                        //check if the ingredient exists in the database, if not then add it
+                        var ingredientAlreadyInDb = await GetIngredientAsync(item.Name, _dbContext);
+                        if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) {
+                            ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(item);
+                            _dbContext.IngredientsTable.Add(ingr);
+                            await _dbContext.SaveChangesAsync();
+                            item.IngredientId=ingr.Id;
+                        }else {
+                            item.IngredientId= (ingredientAlreadyInDb.Result as IngredientsDataEntity).Id;
+                        }
                     }
+                    var mealEntity = TastyMapper.ConvertUserMealToMealsEntity(newUpdatedMeal);
+                    _dbContext.MealsTable.UpdateRange(mealEntity);
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
                     result.StatusCode = System.Net.HttpStatusCode.OK;
+                    RepoChanged(ChangeType.Update);
                 }
+            }
             catch (Exception e) {
                 result.HasError = true;
                 result.ErrorDesc= $"Unexpected error while updating meal {e}";
                 _logger.LogError("update meal in db: "+e.ToString());
+                await transaction.RollbackAsync();
             }
+            transaction.Dispose();
             return result;
         }
 
@@ -159,7 +177,7 @@ namespace Infrastructure.Data.Repositories
         /// Searches the database for the ingredient with the provided name
         /// </summary>
         /// <returns>TaskResult</returns>
-        public async Task<TaskResult> GetIngredientAsync(string ingredientName,AppDbContext context=null)
+        public async Task<TaskResult> GetIngredientAsync(string ingredientName,AppDbContext context=null,int ingredientId=0)
         {
             TaskResult result = new();
 
@@ -174,8 +192,15 @@ namespace Infrastructure.Data.Repositories
             TaskResult GetData(AppDbContext dbCx)
             {
                 TaskResult result = new();
-                var queryResult = dbCx.IngredientsTable
+                IngredientsDataEntity queryResult;
+                if (ingredientId>0) {
+                    queryResult = dbCx.IngredientsTable
+                        .Where(ing => ing.Id.Equals(ingredientId)).FirstOrDefault();
+                } else {
+                    queryResult = dbCx.IngredientsTable
                         .Where(ing => ing.Name.ToLower().Equals(ingredientName.ToLower())).FirstOrDefault();
+                }
+                
 
                 if (queryResult != null) {
                     result.Result = queryResult;
@@ -219,6 +244,11 @@ namespace Infrastructure.Data.Repositories
                 return result;
             } 
             return result;
+        }
+        
+        private void RepoChanged(ChangeType changeType)
+        {
+            RepositoryChanged?.Invoke(this, new RepositoryEventArgs() { ChangeType = changeType });
         }
     }
 }

@@ -184,9 +184,17 @@
 
     private async Task<bool> SaveEditsAsync()
     {
-        //TODO testiraj editing logic
+        _isLoading = true;
         var result=await updateMealUseCase.UpdateMeal(Meal);
-        return result.StatusCode==System.Net.HttpStatusCode.OK;
+        await Task.Delay(500);
+
+        if (!result.HasError) {
+            _snackBar.Add("Recipe updated", Severity.Success);
+            _isLoading = false;
+            return true;
+        }
+        _isLoading = false;
+        return false;
     }
     private void EnableEditMeal()
     {

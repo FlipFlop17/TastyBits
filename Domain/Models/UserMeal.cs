@@ -40,6 +40,7 @@ namespace Domain.Models
         public class Ingridient
         {
             public int Id { get; set; }
+            public int IngredientId { get; set; }
             /// <summary>
             /// Order number for sorting
             /// </summary>
@@ -48,6 +49,7 @@ namespace Domain.Models
             public double Quantity { get; set; }
             public double CaloriesPer100g { get; set; }
             public QuantityUnit QuantityUnit { get; set; }
+            public bool IsDeleted { get; set; }
         }
         /// <summary>
         /// Instructions on how to prepare a meal

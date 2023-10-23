@@ -1,25 +1,20 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
     public class GetUserMealsById
     {
-        private readonly IMealsRepository _mealsRepo;
+        private readonly ICache _mealsCacheRepository;
 
-        public GetUserMealsById(IMealsRepository mealsRepo)
+        public GetUserMealsById(ICache mealsCacheRepository)
         {
-            _mealsRepo = mealsRepo;
+            _mealsCacheRepository = mealsCacheRepository;
         }
 
         public async Task<List<UserMeal>> GetUserMeals(string userId)
         {
-            return await _mealsRepo.GetUserMealById(userId);
+            return await _mealsCacheRepository.GetUserMealById(userId);
         }
     }
 }

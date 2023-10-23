@@ -9,5 +9,7 @@ namespace Domain.Interfaces
         Task<TaskResult> AddMeal(UserMeal newMeal);
         Task<TaskResult> UpdateMeal(UserMeal newUpdatedMeal);
         Task<TaskResult> DeleteMeal(int mealId);
+        event EventHandler<RepositoryEventArgs> RepositoryChanged;
+
     }
 }

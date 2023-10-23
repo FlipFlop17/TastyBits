@@ -20,5 +20,8 @@ namespace Infrastructure.Data.Context
 
         [ForeignKey("MealId")]
         public virtual MealsDataEntity Meals { get; set; }
+
+        public DateTime ValidFrom { get; set; } = DateTime.Now;
+        public DateTime? ValidUntil { get; set; }
     }
 }

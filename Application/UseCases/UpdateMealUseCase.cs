@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Domain.Interfaces;
 using Domain.Models;
 using Domain.ReturnModels;
 
@@ -6,16 +7,16 @@ namespace Application.UseCases
 {
     public class UpdateMealUseCase
     {
-        private readonly IMealsRepository _mealRepository;
+        private readonly ICache _mealsCacheRepository;
 
-        public UpdateMealUseCase(IMealsRepository mealRepository)
+        public UpdateMealUseCase(ICache mealsCacheRepository)
         {
-            _mealRepository = mealRepository;
+            _mealsCacheRepository = mealsCacheRepository;
         }
 
         public async Task<TaskResult> UpdateMeal(UserMeal userMeal)
         {
-            return await _mealRepository.UpdateMeal(userMeal);
+            return await _mealsCacheRepository.UpdateMeal(userMeal);
         }
     }
 }

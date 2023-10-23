@@ -6,6 +6,8 @@ namespace Application.Helpers
 {
     public class TastyMapper
     {
+
+
         public static MealsDataEntity ConvertUserMealToMealsEntity(UserMeal incomingMeal)
         {
             MealsDataEntity mealDto = new MealsDataEntity();
@@ -68,14 +70,18 @@ namespace Application.Helpers
         {
             MealIngredientsDataEntity mealIngredient= new MealIngredientsDataEntity();
             mealIngredient.Id = ingredient.Id;
+            mealIngredient.IngredientId = ingredient.IngredientId;
             mealIngredient.MealId = mealId;
             mealIngredient.Quantity= ingredient.Quantity;
             mealIngredient.QuantityUnit = Convert.ToString(ingredient.QuantityUnit);
+            if(ingredient.IsDeleted)
+                mealIngredient.ValidUntil= DateTime.Now;
             return mealIngredient;
         }
         public static IngredientsDataEntity ConvertIngredientsToIngredientsDataEntity(UserMeal.Ingridient ingredient)
         {
             IngredientsDataEntity ingredientEntity = new IngredientsDataEntity();
+            ingredientEntity.Id = ingredient.IngredientId;
             ingredientEntity.Name = ingredient.Name;
             ingredientEntity.CaloriesPer100Gram = ingredient.CaloriesPer100g;
             //TODO add other mappings like sugar, proetin etc.
@@ -118,6 +124,7 @@ namespace Application.Helpers
         {
             UserMeal.Ingridient userIngre=new UserMeal.Ingridient();
             userIngre.Id = ingredientDO.Id;
+            userIngre.IngredientId = ingredientDO.IngredientId;
             userIngre.Quantity = ingredientDO.Quantity;
             QuantityUnit res;
             Enum.TryParse(ingredientDO.QuantityUnit,out res);

@@ -1,13 +1,15 @@
+using Application.Interfaces;
 using Application.Services;
 using Application.UseCases;
 using Domain.Interfaces;
 using Infrastructure.Data.Context;
 using Infrastructure.Data.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using MudBlazor.Services;
 using Serilog;
-using Serilog.Debugging;
 using TastyBits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +46,17 @@ builder.Services.AddScoped<IMealsRepository, MealsRepository>();
 builder.Services.AddTransient<TastyDialogService>();
 builder.Services.AddScoped<LoggedUserService>();
 builder.Services.AddScoped<CalorieApiService>() ;
+builder.Services.AddScoped<ICache, TastyCacheService>();
+builder.Services.AddDistributedMemoryCache(opt =>
+{
+    opt.ExpirationScanFrequency = TimeSpan.FromMinutes(2);
+});
 
+builder.Services.Configure<DistributedCacheEntryOptions>(options =>
+{
+    options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+    options.SlidingExpiration=TimeSpan.FromMinutes(1);  
+});
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Configuration.AddEnvironmentVariables();

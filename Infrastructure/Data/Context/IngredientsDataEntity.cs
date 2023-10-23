@@ -9,7 +9,7 @@ namespace Infrastructure.Data.Context
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         public double CaloriesPer100Gram { get; set; }
         public double Fat_g { get; set; }
         public double Proteing_g { get; set; }

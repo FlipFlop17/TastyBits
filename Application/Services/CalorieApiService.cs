@@ -16,11 +16,11 @@ namespace Application.Services
             apiKey = config.GetRequiredSection("CalorieNinjasApiKey").Value;
         }
 
-        public async Task<CalorieNinjaApiResultModel> GetCalorieAsync(string itemWithCalories)
+        public async Task<CalorieNinjaApiResultModel> GetCalorieAsync(string ingredientName)
         {
             InitClient();
             CalorieNinjaApiResultModel ninjaResult = new CalorieNinjaApiResultModel();
-            HttpResponseMessage response = await httpClient.GetAsync(url + itemWithCalories);
+            HttpResponseMessage response = await httpClient.GetAsync(url + ingredientName);
             if (response.IsSuccessStatusCode) {
                 string resBody = await response.Content.ReadAsStringAsync();
                 ninjaResult = JsonConvert.DeserializeObject<CalorieNinjaApiResultModel>(resBody);

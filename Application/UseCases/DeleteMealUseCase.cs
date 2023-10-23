@@ -1,21 +1,22 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Domain.Interfaces;
 using Domain.ReturnModels;
 
 namespace Application.UseCases
 {
     public class DeleteMealUseCase
     {
-        private readonly IMealsRepository _mealsRepository;
+        private readonly ICache _mealsCacheRepository;
 
-        public DeleteMealUseCase(IMealsRepository mealsRepository)
+        public DeleteMealUseCase(ICache mealsCacheRepository)
         {
-            _mealsRepository = mealsRepository;
+            this._mealsCacheRepository = mealsCacheRepository;
         }
 
         public async Task<TaskResult> DeleteMealAsync(int mealId)
         {
             TaskResult result = new TaskResult();
-            _mealsRepository.DeleteMeal(mealId);
+            await _mealsCacheRepository.DeleteMeal(mealId);
             return result;
         }
     }

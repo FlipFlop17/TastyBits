@@ -29,7 +29,7 @@
                             <input placeholder="onion" class="p-1 border-b-2 focus:outline-none focus:border-emerald-200" type="text"
                             @bind="item.Name" />
                         }else {
-                            <input class="inputFieldEdit" type="text" disabled="@isFieldsDisabled"
+                            <input class="inputFieldEdit" type="text" disabled="disabled"
                             @bind="item.Name" />
                         }
                     </td>
@@ -75,12 +75,11 @@
         newIngridients.Num = UserMealObject.Ingredients.Count + 1;
         UserMealObject.Ingredients.Add(newIngridients);
         StateHasChanged();
+        //TODO set control for the duplicate ingredient names
     }
     private void DeleteIngridient(UserMeal.Ingridient ing)
     {
-        if (UserMealObject.Ingredients.Count != 1) {
-            UserMealObject.Ingredients.Remove(ing);
-        }
+        UserMealObject.Ingredients.Where(ingr => ingr.Num.Equals(ing.Num)).FirstOrDefault().IsDeleted = true;
     }
 
     //TODO implementiraj caching za dohat iz baze
