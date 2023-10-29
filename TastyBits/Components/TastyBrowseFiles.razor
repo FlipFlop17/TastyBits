@@ -1,0 +1,53 @@
+﻿@using System.Collections.ObjectModel;
+@using System.Diagnostics;
+
+<div id="uploadMealImages" class="flex">
+    <label for="inputImage" class="grow border-2 rounded-lg border-dashed border-emerald-400 p-4 mt-2">
+        <div class="flex flex-wrap gap-2">
+            @foreach (var f in AddedFiles) {
+                <div class="flex gap-2 bg-gray-100 p-1 rounded-lg">
+                    <p>@f.Name</p>
+                    <button type="button" @onclick="@(() => RemoveAddedFile(f))">
+                        <i class="fa fa-remove text-red-400"></i>
+                    </button>
+                </div>
+            }
+        </div>
+        <div class="my-2 flex justify-center p-3 rounded-lg bg-emerald-50
+                                    hover:cursor-pointer hover:bg-emerald-100 duration-200">
+            <p class="font-medium">@Caption</p>
+        </div>
+    </label>
+    <InputFile id="inputImage" class="sr-only" multiple OnChange="AddFile">
+
+    </InputFile>
+</div>
+
+@code {
+    [Parameter]
+    public ObservableCollection<IBrowserFile> AddedFiles { get; set; }
+    [Parameter]
+    public string Caption { get; set; } = "Browse files";
+    [Parameter]
+    public string Filter { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (AddedFiles == null)
+            AddedFiles = new();
+        base.OnInitialized();
+    }
+    private void RemoveAddedFile(IBrowserFile file)
+    {
+        AddedFiles.Remove(file);
+    }
+
+    private async Task AddFile(InputFileChangeEventArgs inputFiles)
+    {
+        foreach (var imageFile in inputFiles.GetMultipleFiles()) {
+            if (AddedFiles.Where(a=>a.Name.Equals(imageFile.Name)).ToList().Count==0) {
+                AddedFiles.Add(imageFile);
+            }
+        }
+    }
+}

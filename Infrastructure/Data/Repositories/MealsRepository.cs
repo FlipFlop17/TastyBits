@@ -8,7 +8,6 @@ using Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using static MudBlazor.CategoryTypes;
 
 namespace Infrastructure.Data.Repositories
 {
@@ -45,14 +44,13 @@ namespace Infrastructure.Data.Repositories
                         //only add ingredients that are not already in the database
                         if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) { //
                             //add to the ingredients list
-                            CalorieNinjaApiResultModel apiResult=await _calorieApiService.GetCalorieAsync(ingr.Name);
-                            //TODO api not fetching,check
+                            CalorieNinjaApiResultModel apiResult=await _calorieApiService.GetCalorieAsync(row.Name);
                             if (apiResult.Items.Count == 1) {
                                 row.CaloriesPer100g = apiResult.Items.First().CaloriesPer100;
                             }
                             ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(row);
                             _dbContext.IngredientsTable.Add(ingr);
-                            _logger.LogInformation("ing added");
+                            //_logger.LogInformation("ing added");
                             await _dbContext.SaveChangesAsync();
                             //assign the ingredient primary key to the list of new meal ingredients
                             row.IngredientId = ingr.Id;
@@ -124,7 +122,7 @@ namespace Infrastructure.Data.Repositories
                     .Where(m => m.ValidUntil == null & m.UserId == userId)
                     .Include(r=> r.RecipeIngridients.Where(ing=> ing.ValidUntil==null))
                         .ThenInclude(i => i.Ingredients)
-                    .Include(m => m.RecipeImages).ToList();
+                    .Include(m => m.RecipeImages.Where(m=>m.ValidUntil ==DateTime.MinValue)).ToList();
                 foreach (var item in result) {
                     userMealList.Add(TastyMapper.ConvertUserMealDataEntityToUserMealModel(item));
                 }
@@ -141,12 +139,18 @@ namespace Infrastructure.Data.Repositories
                 await using (_dbContext = await _dbContextFactory.CreateDbContextAsync()) {
 
                     transaction = await _dbContext.Database.BeginTransactionAsync();
+
                     //add any new ingredients to the base ingredient table
                     foreach (var item in newUpdatedMeal.Ingredients) {
                         IngredientsDataEntity ingr = new();
                         //check if the ingredient exists in the database, if not then add it
                         var ingredientAlreadyInDb = await GetIngredientAsync(item.Name, _dbContext);
                         if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) {
+                            //new ingredient, add it
+                            CalorieNinjaApiResultModel apiResult = await _calorieApiService.GetCalorieAsync(item.Name);
+                            if (apiResult.Items.Count == 1) {
+                                item.CaloriesPer100g = apiResult.Items.First().CaloriesPer100;
+                            }
                             ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(item);
                             _dbContext.IngredientsTable.Add(ingr);
                             await _dbContext.SaveChangesAsync();
@@ -155,10 +159,33 @@ namespace Infrastructure.Data.Repositories
                             item.IngredientId= (ingredientAlreadyInDb.Result as IngredientsDataEntity).Id;
                         }
                     }
+
+                    //edit any new images to the images table
+                    List<MealImage> forRemoval = new();
+                    foreach (var img in newUpdatedMeal.Images) {
+                        MealImageDataEntity imgEntity = new();
+                        var imgAlreadyInDatabase = await GetImageAsync(img.Data, _dbContext);
+                        if (imgAlreadyInDatabase.StatusCode == System.Net.HttpStatusCode.OK) {
+                            //image already in the database-update it for new values
+                            // Update the image with new values. Can only be deleted!
+                            var dbImg = (imgAlreadyInDatabase.Result as MealImageDataEntity);
+                            dbImg.ValidUntil = img.ValidUntil;
+                            await _dbContext.SaveChangesAsync();
+                            //remove it from the list of meal since we have update it in the database
+                            forRemoval.Add(img);
+                        } else {
+                            //new image, will be added by Update command /cascade
+                        }
+                    }
+                    foreach (var item in forRemoval) {
+                        newUpdatedMeal.Images.Remove(item);
+                    }
                     var mealEntity = TastyMapper.ConvertUserMealToMealsEntity(newUpdatedMeal);
-                    _dbContext.MealsTable.UpdateRange(mealEntity);
+                    //_dbContext.RecipeImageTable.AttachRange(mealEntity.RecipeImages);
+                    _dbContext.MealsTable.Update(mealEntity);
                     await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
+
                     result.StatusCode = System.Net.HttpStatusCode.OK;
                     RepoChanged(ChangeType.Update);
                 }

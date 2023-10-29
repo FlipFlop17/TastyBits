@@ -29,6 +29,7 @@ namespace Infrastructure.Services
         {
             //repo data has changed
             //clear cache so it can be updated
+            //TODO check caching jer se ne osvježava nakon svake minute-nean pojma
             _logger.LogDebug("[TASTY BITS] repo has been changed-removing cache");
             _memoryCache.Remove(_cacheKey);
         }

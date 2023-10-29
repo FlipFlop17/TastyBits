@@ -18,5 +18,7 @@ namespace Infrastructure.Data.Context
         [ForeignKey("MealId")]
         public virtual MealsDataEntity Meals { get; set; }
         public string? ImageData { get; set; }
+        public string ImageName { get; set; }=string.Empty;
+        public DateTime ValidUntil { get; set; }
     }
 }

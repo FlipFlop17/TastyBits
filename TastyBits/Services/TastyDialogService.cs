@@ -37,9 +37,10 @@ namespace TastyBits.Services
             };
             var dParameters = new DialogParameters<MealDialog>
             {
-                { x => x.Meal,selectedMeal }
+                { x => x.Meal,selectedMeal
+                }
             };
-            return await _mudDialog.ShowAsync<MealDialog>(title:"Meal", parameters:dParameters,options: dOptions);
+            return await _mudDialog.ShowAsync<MealDialog>(title:string.Empty, parameters:dParameters,options: dOptions);
         }
         public async Task<IDialogReference> ShowAddNewMealDialog()
         {

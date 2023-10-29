@@ -4,7 +4,7 @@
     <div id="recipeContent">
         <div id="recipeImage" class="w-auto h-56 overflow-hidden hover:cursor-pointer" @onclick="OnOpenButtonClick">
             @if (Meal.Images.Count>0) {
-                <img class="rounded-lg object-fill w-full h-full" src="data:image/jpeg;base64,@Meal.Images.FirstOrDefault()" alt="Recipe Image" />
+                <img class="rounded-lg object-cover w-full h-full" src="data:image/jpeg;base64,@Meal.Images.FirstOrDefault().Data" alt="Recipe Image" />
             } else {
                 <img class="rounded-lg object-fill w-full h-full" src="/pics/picture-not-available.jpg" alt="eggs" />
             }

@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Infrastructure.Data.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualBasic;
 
 namespace Application.Helpers
@@ -59,11 +60,13 @@ namespace Application.Helpers
 
             return mealDto;
         }
-        public static MealImageDataEntity ConvertMealImageToImageEntity(string imgBytes,int mealId)
+        public static MealImageDataEntity ConvertMealImageToImageEntity(MealImage mealImg,int mealId)
         {
             MealImageDataEntity mealImageDataEntity = new MealImageDataEntity();
             mealImageDataEntity.MealId = mealId;
-            mealImageDataEntity.ImageData = imgBytes;
+            mealImageDataEntity.ImageData = mealImg.Data;
+            mealImageDataEntity.ImageName=mealImg.ImageName;
+            mealImageDataEntity.ValidUntil = mealImg.ValidUntil;
             return mealImageDataEntity;
         }
         public static MealIngredientsDataEntity ConvertMealIngredientToMealIngEntity(UserMeal.Ingridient ingredient,int mealId)
@@ -112,7 +115,7 @@ namespace Application.Helpers
                 userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Dessert);
 
             foreach (var item in mealData.RecipeImages) {
-                userMeal.Images.Add(item.ImageData);
+                userMeal.Images.Add(ConvertMealImageEntityToMealImageUser(item));
             }
             foreach (var item in mealData.RecipeIngridients) {
                 userMeal.Ingredients.Add(ConvertMealsIngredientDataEntityToUserIngredient(item));
@@ -132,6 +135,17 @@ namespace Application.Helpers
             userIngre.Name = ingredientDO.Ingredients.Name;
             userIngre.CaloriesPer100g = ingredientDO.Ingredients.CaloriesPer100Gram;
             return userIngre;
+        }
+
+        public static MealImage ConvertMealImageEntityToMealImageUser(MealImageDataEntity imgDataEntity)
+        {
+            MealImage userMealImage = new MealImage();
+            userMealImage.Data = imgDataEntity.ImageData;
+            userMealImage.ImageName = imgDataEntity.ImageName;
+            userMealImage.MealId=Convert.ToString(imgDataEntity.MealId);
+            userMealImage.Id = Convert.ToString(imgDataEntity.ImageId);
+            userMealImage.ValidUntil = imgDataEntity.ValidUntil;
+            return userMealImage;
         }
 
     }

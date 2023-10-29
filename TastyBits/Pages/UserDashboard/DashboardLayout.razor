@@ -14,9 +14,9 @@
         <MudAppBar >
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
             <MudSpacer></MudSpacer>
-            <MudText>@userEmail</MudText>
+            <MudText Color="Color.Dark">@userEmail</MudText>
         </MudAppBar>
-        <MudDrawer Open="open" Width="20rem">
+        <MudDrawer Color="Color.Transparent" Open="open" Width="20rem">
             <DashboardNav Class="col-start-1 w-50"></DashboardNav>
         </MudDrawer>
         <MudMainContent>
@@ -34,10 +34,14 @@
         {
             Palette = new PaletteLight()
             {
-                Primary = "#059669",
-                Secondary = "#34d399",
-                AppbarBackground = "#10b981",
-                Success = "#059669"
+                Primary = "#10b981",
+                Secondary = "#6ee7b7",
+                AppbarBackground = "#6ee7b7",
+                Success = "#059669",
+                Error = "#d64545",
+                Warning = "#f59e0b",
+                Info = "#6b7280",
+                GrayDark = "#333333"
             }
         };
 

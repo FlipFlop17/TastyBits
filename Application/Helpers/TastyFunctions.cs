@@ -29,11 +29,12 @@ namespace Application.Helpers
         /// Converts uploaded IBrowserfiles to string
         /// </summary>
         /// <returns>List of converted images as string</returns>
-        public static async Task<List<string>> ConvertImageToBytesAsync(IEnumerable<IBrowserFile> uploadedFiles)
+        public static async Task<List<MealImage>> ConvertImageToBytesAsync(IEnumerable<IBrowserFile> uploadedFiles)
         {
-            List<string> bytes = new List<string>();
+            List<MealImage> userImages = new List<MealImage>();
 
             foreach (var imageFile in uploadedFiles) {
+                var uImg = new MealImage();
                 var imageStream = imageFile.OpenReadStream(imageFile.Size);
                 byte[] imageBytes;
                 using (var memoryStream = new MemoryStream()) {
@@ -42,9 +43,11 @@ namespace Application.Helpers
                 }
                 // Convert the byte array to a Base64-encoded string
                 string base64Image = Convert.ToBase64String(imageBytes);
-                bytes.Add(base64Image);
+                uImg.Data = base64Image;
+                uImg.ImageName = imageFile.Name;
+                userImages.Add(uImg);
             }
-            return bytes;
+            return userImages;
         }
     }
 }

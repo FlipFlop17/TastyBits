@@ -8,6 +8,8 @@
 @layout DashboardLayout;
 @using Microsoft.AspNetCore.Components.Forms
 @using Serilog;
+@using System.Diagnostics;
+@using System.ComponentModel.DataAnnotations;
 @using TastyBits.Components;
 @using TastyBits.Services;
 @using Application.Helpers;
@@ -31,23 +33,23 @@
                 <div class="input-form">
                     <label>Describe it</label>
                     <InputText placeholder="eg. scrambled eggs inside a tortilla" @bind-Value="@newRecipe.Description"></InputText>
-                    <ValidationMessage class="dangerText" For="@(() => newRecipe.Description)"></ValidationMessage>
+                    <ValidationMessage class="dangerText" For="@(()=> newRecipe.Description)"></ValidationMessage>
                 </div>
                 <div class="flex gap-3">
                     <div class="input-form">
                         <label>Servings ?</label>
                         <InputText placeholder="eg. two people" @bind-Value="@newRecipe.ServingAmount"></InputText>
-                        <ValidationMessage class="dangerText" For="@(() => newRecipe.ServingAmount)"></ValidationMessage>
+                        <ValidationMessage class="dangerText" For="@(()=> newRecipe.ServingAmount)"></ValidationMessage>
                     </div>
                     <div class="input-form">
                         <label>Time to prepare ?</label>
                         <InputText placeholder="eg. 5-10 minutes" @bind-Value="@newRecipe.PrepTime"></InputText>
-                        <ValidationMessage class="dangerText" For="@(() => newRecipe.PrepTime)"></ValidationMessage>
+                        <ValidationMessage class="dangerText" For="@(()=> newRecipe.PrepTime)"></ValidationMessage>
                     </div>
                     <div class="input-form">
                         <label>Time to cook it ?</label>
                         <InputText placeholder="eg. 5 minutes" @bind-Value="@newRecipe.CookingTime"></InputText>
-                        <ValidationMessage class="dangerText" For="@(() => newRecipe.CookingTime)"></ValidationMessage>
+                        <ValidationMessage class="dangerText" For="@(()=> newRecipe.CookingTime)"></ValidationMessage>
                     </div>
                 </div>
                 <p class="font-medium mt-5">Select what time of day this meals is best suited for ?</p>
@@ -56,44 +58,26 @@
                         <MudChip SelectedColor="Color.Success" Value="tItem">@tItem.ToString()</MudChip>
                     }
                 </MudChipSet>
-                <ValidationMessage class="dangerText" For="@(() => newRecipe.TimeOfDayMeal)"></ValidationMessage>
+                <ValidationMessage class="dangerText" For="@(()=> newRecipe.TimeOfDayMeal)"></ValidationMessage>
                 <div id="mealInstructions" class="input-form">
                     <label>Instructions on how to prepare this meal</label>
                     <InputTextArea class="p-2 border-2 rounded-lg border-gray-300  focus:outline-none focus:border-emerald-400 focus:shadow-sm focus:shadow-emerald-300" @bind-Value="newRecipe.Instructions" placeholder="Start with chopping the onions ..."></InputTextArea>
                 </div>
                 <div class="mt-5">
                     <IngredientTable isAddingNewRecipe="true" UserMealObject="newRecipe"></IngredientTable>
+                    <ValidationMessage For="()=> newRecipe.Ingredients"></ValidationMessage>
                 </div>
                 <div class="mt-5 p-1 bg-amber-200 rounded-lg text-center">
-
                     <p class="text-sm text-gray-500 mb-2 mt-2 p-1 flex items-center">
                         <span class="">
                             <i class="fa-solid fa-circle-info text-blue-400 h-5 mr-2"></i>
                         </span>
-                        We can calculate your meal macros if you enter your ingredients in in english.
+                        We can calculate your meal macros if you enter your ingredients in english.
                      </p>
                 </div>
 
                 <p class="font-medium mt-5">And finally show us how your food looks like with some images</p>
-                <div id="uploadMealImages" class="flex">
-                    <label for="inputImage" class="grow border-2 rounded-lg border-dashed border-emerald-400 p-4 mt-2
-                        hover:cursor-pointer hover:bg-emerald-50 duration-200">
-                        @foreach (var imageF in _imageFiles) {
-                            <div class="flex gap-2">
-                                <p>@imageF.Name</p>
-                                <button type="button" @onclick="@(() => RemoveUploadedImage(imageF))">
-                                    <i class="fa fa-remove text-red-400"></i>
-                                </button>
-                            </div>
-                        }
-                        <div class="flex justify-center">
-                            <p class="font-medium">Browse files</p>
-                        </div>
-                    </label>
-                    <InputFile id="inputImage" class="sr-only" OnChange="UploadImages">
-
-                    </InputFile>
-                </div>
+                <TastyBrowseFiles AddedFiles="_imageFiles"></TastyBrowseFiles>
                 <div id="formActions" class="flex justify-end gap-3 mt-5">
                     <button type="button" class="primaryOutline" @onclick="DialogClosing">
                         <div class ="flex gap-2 items-center">
@@ -114,10 +98,6 @@
                         </div>
                     </button>
                 </div>
-                @*     @foreach (UserMeal.Ingridient item in newRecipe.Ingredients) {
-                <div>@item.Name</div>
-                <div>@item.Quantity</div>
-                } *@
             </EditForm>
         </div>
     </DialogContent>
@@ -149,15 +129,21 @@
     {
         newRecipeContext = new EditContext(newRecipe);
         InitIngredientRows(); // init first row
-
     }
 
     public async Task InsertRecipe(EditContext context)
     {
         newRecipe.TimeOfDayMeal = TastyFunctions.ConvertMealTypes(_selectedChips);
+        //remove any empty ingredients from the UI
+        foreach (var item in newRecipe.Ingredients) {
+            if (item.Name.Length == 0 & newRecipe.Ingredients.Count >1) {
+                newRecipe.Ingredients.Remove(item);
+            }
+        }
         bool isFormValid = context.Validate();
+        //var _validationErrorMessage = "GREŠKE: "+string.Join(", ",context.GetValidationMessages());
+        //Debug.Print(_validationErrorMessage);
         //Log.Information("FORM VALID: "+isValid.ToString());
-
         if (isFormValid) {
             _isLoading = true;
             newRecipe.UserId = _loggedUserService.UserStore.Id;
@@ -177,6 +163,7 @@
             }
         } else {
             // Model is not valid, handle validation errors or display them to the user
+            _snackBar.Add("Error on adding a new recipe", Severity.Error);
         }
         _isLoading = false;
     }
@@ -188,18 +175,6 @@
         newIngridients.Num = 1;
 
         StateHasChanged();
-    }
-
-    private async Task UploadImages(InputFileChangeEventArgs inputFiles)
-    {
-        foreach (var imageFile in inputFiles.GetMultipleFiles()) {
-            _imageFiles.Add(imageFile);
-        }
-    }
-
-    private void RemoveUploadedImage(IBrowserFile img)
-    {
-        _imageFiles.Remove(img);
     }
 
     private void DialogClosing()

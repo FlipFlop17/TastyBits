@@ -1,7 +1,7 @@
 ﻿@using Serilog;
 
 
-<div id="dashboardNavigation" class="bg-emerald-50 @Class">
+<div id="dashboardNavigation" class="@Class">
 	<div class="flex items-center ml-3 lg:w-72">
 		<div class="w-36 lg:w-24">
 			<a href="/dashboard/home">
@@ -36,8 +36,6 @@
 
 
 @code {
-
-
 	[Parameter]
 	public string Class { get; set; }
 }
