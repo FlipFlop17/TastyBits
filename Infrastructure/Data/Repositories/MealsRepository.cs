@@ -169,10 +169,12 @@ namespace Infrastructure.Data.Repositories
                             //image already in the database-update it for new values
                             // Update the image with new values. Can only be deleted!
                             var dbImg = (imgAlreadyInDatabase.Result as MealImageDataEntity);
-                            dbImg.ValidUntil = img.ValidUntil;
-                            await _dbContext.SaveChangesAsync();
-                            //remove it from the list of meal since we have update it in the database
-                            forRemoval.Add(img);
+                            if (img.ValidUntil > DateTime.MinValue) {
+                                dbImg.ValidUntil = img.ValidUntil;
+                                await _dbContext.SaveChangesAsync();
+                                //remove it from the list of meal since we have update it in the database
+                                forRemoval.Add(img);
+                            }
                         } else {
                             //new image, will be added by Update command /cascade
                         }

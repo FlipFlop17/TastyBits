@@ -8,6 +8,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using MudBlazor.Services;
 using Serilog;
 using TastyBits.Services;
@@ -47,16 +48,9 @@ builder.Services.AddTransient<TastyDialogService>();
 builder.Services.AddScoped<LoggedUserService>();
 builder.Services.AddScoped<CalorieApiService>() ;
 builder.Services.AddScoped<ICache, TastyCacheService>();
-builder.Services.AddDistributedMemoryCache(opt =>
-{
-    opt.ExpirationScanFrequency = TimeSpan.FromMinutes(2);
-});
+builder.Services.AddMemoryCache();
 
-builder.Services.Configure<DistributedCacheEntryOptions>(options =>
-{
-    options.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
-    options.SlidingExpiration=TimeSpan.FromMinutes(1);  
-});
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Configuration.AddEnvironmentVariables();

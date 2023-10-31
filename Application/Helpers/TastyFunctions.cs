@@ -32,20 +32,23 @@ namespace Application.Helpers
         public static async Task<List<MealImage>> ConvertImageToBytesAsync(IEnumerable<IBrowserFile> uploadedFiles)
         {
             List<MealImage> userImages = new List<MealImage>();
+            int maxFileSize = 5000000; // Set your maximum file size limit here
 
             foreach (var imageFile in uploadedFiles) {
                 var uImg = new MealImage();
-                var imageStream = imageFile.OpenReadStream(imageFile.Size);
                 byte[] imageBytes;
                 using (var memoryStream = new MemoryStream()) {
+                    var imageStream = imageFile.OpenReadStream(imageFile.Size);
                     await imageStream.CopyToAsync(memoryStream);
                     imageBytes = memoryStream.ToArray();
+                    imageStream.Close();
                 }
                 // Convert the byte array to a Base64-encoded string
                 string base64Image = Convert.ToBase64String(imageBytes);
                 uImg.Data = base64Image;
                 uImg.ImageName = imageFile.Name;
                 userImages.Add(uImg);
+
             }
             return userImages;
         }

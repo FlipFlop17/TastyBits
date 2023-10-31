@@ -3,6 +3,7 @@ using Domain.Interfaces;
 using Domain.Models;
 using Domain.ReturnModels;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -10,14 +11,14 @@ namespace Infrastructure.Services
 {
     public class TastyCacheService : ICache,IDisposable
     {
-        private readonly IDistributedCache _memoryCache;
+        private readonly IMemoryCache _memoryCache;
         private readonly IMealsRepository _mealsRepository;
         private readonly ILogger<TastyCacheService> _logger;
 
         public event EventHandler<RepositoryEventArgs> RepositoryChanged;
         private const string _cacheKey= "meals";
 
-        public TastyCacheService(IDistributedCache memoryCache,IMealsRepository mealsRepository,ILogger<TastyCacheService> logger)
+        public TastyCacheService(IMemoryCache memoryCache,IMealsRepository mealsRepository,ILogger<TastyCacheService> logger)
         {
             _memoryCache = memoryCache;
             _mealsRepository = mealsRepository;
@@ -29,7 +30,6 @@ namespace Infrastructure.Services
         {
             //repo data has changed
             //clear cache so it can be updated
-            //TODO check caching jer se ne osvježava nakon svake minute-nean pojma
             _logger.LogDebug("[TASTY BITS] repo has been changed-removing cache");
             _memoryCache.Remove(_cacheKey);
         }
@@ -48,22 +48,18 @@ namespace Infrastructure.Services
         public async Task<List<UserMeal>> GetUserMealById(string userId)
         {
             //inspect
-            var mealsStringData=await _memoryCache.GetStringAsync(_cacheKey);
-            if(!string.IsNullOrEmpty(mealsStringData)) {
-                List<UserMeal> userMeals = JsonConvert.DeserializeObject<List<UserMeal>>(mealsStringData);
-                userMeals=userMeals.Where(meal=>meal.UserId == userId).ToList();
+            if(!_memoryCache.TryGetValue(_cacheKey,out List<UserMeal> cachedEntities)) {
+
+                // If cache not found, retrieve the data from the database.
+                cachedEntities = await _mealsRepository.GetUserMealById(userId);
+                // Cache the data.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(2)); // Define your preferred expiration time
+
+                _memoryCache.Set(_cacheKey, cachedEntities, cacheEntryOptions);
                 _logger.LogInformation("[TASTY BITS] fetched from cache");
-                return userMeals;
-            }else {
-                //add to cache
-                List<UserMeal> userMeals= await _mealsRepository.GetUserMealById(userId);
-                if (userMeals.Count > 0) {
-                    mealsStringData = JsonConvert.SerializeObject(userMeals);
-                    await _memoryCache.SetStringAsync(_cacheKey, mealsStringData);
-                    _logger.LogInformation("[TASTY BITS] added to cache");
-                }
-                return userMeals;
             }
+            return cachedEntities;
         }
 
         public Task<TaskResult> UpdateMeal(UserMeal newUpdatedMeal)

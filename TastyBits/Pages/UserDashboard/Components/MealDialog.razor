@@ -39,9 +39,9 @@
                                             <button class="rounded-xl bg-red-200 p-3 items-center" @onclick="()=> DeleteImage(img)">
                                                 <div class="flex gap-3">
                                                     <span>
-                                                        <i class="fa fa-trash text-red-400 "></i>
+                                                        <i class="fa fa-trash text-red-500 "></i>
                                                     </span>
-                                                    <p class="text-red-400">Delete</p>
+                                                    <p class="text-red-500">Delete</p>
                                                 </div>
                                             </button>
                                         }
@@ -59,10 +59,22 @@
 
                 </div>
                 <div id="actionBar" class="flex mb-10 items-center mt-7 justify-between bg-gray-50 rounded-lg p-1">
-                    <div id="chipsData" class="flex">
-                        <MudChipSet Filter="true">
-                            @foreach (var item in Meal.TimeOfDayMeal) {
-                                <MudChip Color="Color.Primary" Class="bg-emerald-400">@item.ToString()</MudChip>
+                    <div id="chipsData" class="flex grow">
+                        <MudChipSet  @bind-SelectedChips="_selectedChips" MultiSelection="true" Filter="true">
+                            @if (_isEditMode) {
+                                <div class="">
+                                    @foreach (TimeOfDayMeal tItem in Enum.GetValues(typeof(TimeOfDayMeal))) {
+                                        if (Meal.TimeOfDayMeal.Any(t=>t.Equals(tItem))) {
+                                            <MudChip SelectedColor="Color.Success" Default="true" Value="tItem">@tItem.ToString()</MudChip>
+                                        }else {
+                                            <MudChip SelectedColor="Color.Success" Value="tItem">@tItem.ToString()</MudChip>
+                                        }
+                                    }
+                                </div>
+                            }else {
+                                @foreach (var item in Meal.TimeOfDayMeal) {
+                                    <MudChip Color="Color.Primary" Disabled="true" Style="background:#064e3b">@item.ToString()</MudChip>
+                                }
                             }
                             <MudChip Color="Color.Primary">@Meal.TotalCalories total calories</MudChip>
                         </MudChipSet>
@@ -196,7 +208,7 @@
     private EditContext _formContext { get; set; }
     private UserMeal _orgIncomingMealObject;
     private bool _showValidation { get; set; } = false;
-
+    private MudChip[] _selectedChips;
     protected override void OnInitialized()
     {
         _newImages = new();
@@ -237,6 +249,7 @@
         _showValidation = false;
         _isLoading = true;
 
+        Meal.TimeOfDayMeal = TastyFunctions.ConvertMealTypes(_selectedChips);
         //remove any empty ingredients from the list and any ingredients that werent in the original ones as well
         foreach (var item in Meal.Ingredients) {
             if(item.Name.Length==0) {
@@ -251,12 +264,13 @@
 
             if (_newImages.Count > 0) {
                 //adding any new images
-                var newImages = await TastyFunctions.ConvertImageToBytesAsync(_newImages);
-                Meal.Images.AddRange(newImages);
+                var newImagesToAdd = await TastyFunctions.ConvertImageToBytesAsync(_newImages);
+                Meal.Images.AddRange(newImagesToAdd);
             }
             Meal.Ingredients = MarkMissingIngredientsAsDeleted();
             var result = await updateMealUseCase.UpdateMeal(Meal);
             //await Task.Delay(500);
+            Debug.Print("checking for model errors");
             if (!result.HasError) {
                 _snackBar.Add("Recipe updated", Severity.Success);
             }
@@ -272,7 +286,6 @@
     }
     private void EnableEditMeal()
     {
-        //TODO dodati da mozes i mijenjati chipove za time of day
         isFieldDisabled = false;
         _isEditMode = true;
         StateHasChanged();

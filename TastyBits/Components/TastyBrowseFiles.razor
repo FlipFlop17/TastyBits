@@ -33,8 +33,9 @@
 
     protected override void OnInitialized()
     {
-        if (AddedFiles == null)
+        if (AddedFiles == null) {
             AddedFiles = new();
+        }
         base.OnInitialized();
     }
     private void RemoveAddedFile(IBrowserFile file)
@@ -44,9 +45,17 @@
 
     private async Task AddFile(InputFileChangeEventArgs inputFiles)
     {
-        foreach (var imageFile in inputFiles.GetMultipleFiles()) {
-            if (AddedFiles.Where(a=>a.Name.Equals(imageFile.Name)).ToList().Count==0) {
-                AddedFiles.Add(imageFile);
+        var count = inputFiles.FileCount;
+        //Debug.Print("fl count: "+inputFiles.FileCount.ToString());
+        if(count>1) {
+            foreach (var imageFile in inputFiles.GetMultipleFiles()) {
+                if (AddedFiles.Where(a => a.Name.Equals(imageFile.Name)).ToList().Count == 0) {
+                    AddedFiles.Add(imageFile);
+                }
+            }
+        }else {
+            if (AddedFiles.Where(a => a.Name.Equals(inputFiles.File.Name)).ToList().Count == 0) {
+                AddedFiles.Add(inputFiles.File);
             }
         }
     }

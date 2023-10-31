@@ -1,4 +1,5 @@
 ﻿using Application.Helpers;
+using Domain.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -11,12 +12,23 @@ namespace TastyBits.UnitTests.Application
 {
     public class Functions
     {
-
+        //write me a unit test for the above method.just the Fact
         [Fact]
-        public async void ConvertImages()
+        public async Task ConvertImageToBytesAsync_ShouldReturnListOfMealImages()
         {
-            
-        }
+            // Arrange
+            IEnumerable<IBrowserFile> uploadedFiles = new List<IBrowserFile>
+            {
+                // Add some IBrowser files as needed
+            };
 
+            // Act
+            var result = await TastyFunctions.ConvertImageToBytesAsync(uploadedFiles);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<List<MealImage>>(result);
+            // Add more assertions as needed
+        }
     }
 }

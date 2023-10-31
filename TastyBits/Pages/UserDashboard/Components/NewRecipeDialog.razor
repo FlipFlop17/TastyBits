@@ -77,7 +77,7 @@
                 </div>
 
                 <p class="font-medium mt-5">And finally show us how your food looks like with some images</p>
-                <TastyBrowseFiles AddedFiles="_imageFiles"></TastyBrowseFiles>
+                <TastyBrowseFiles Caption="Browse images" AddedFiles="_imageFiles"></TastyBrowseFiles>
                 <div id="formActions" class="flex justify-end gap-3 mt-5">
                     <button type="button" class="primaryOutline" @onclick="DialogClosing">
                         <div class ="flex gap-2 items-center">
@@ -152,7 +152,7 @@
             TaskResult result = await _createMeal.InsertNewMealAsync(newRecipe);
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
-                await Task.Delay(500);
+                //await Task.Delay(500);
                 newRecipe = new UserMeal();
                 _imageFiles.Clear();
                 InitIngredientRows();
