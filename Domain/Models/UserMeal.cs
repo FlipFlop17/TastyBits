@@ -8,7 +8,7 @@ namespace Domain.Models
     {
         Grams,Pieces
     }
-    public enum TimeOfDayMeal
+    public enum TimeOfDayMealT
     {
         Breakfast,
         Lunch,
@@ -44,7 +44,7 @@ namespace Domain.Models
         }
 
         [Required]
-        public Collection<TimeOfDayMeal> TimeOfDayMeal { get; set; }
+        public Collection<TimeOfDayMealT> TimeOfDayMeal { get; set; }
 
         public class Ingridient
         {

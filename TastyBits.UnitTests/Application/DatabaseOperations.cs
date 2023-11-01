@@ -102,7 +102,7 @@ namespace TastyBits.UnitTests.Application
                 PrepTime = "15 minutes",
                 ServingAmount = "2 servings",
                 Instructions = "Test Instructions",
-                TimeOfDayMeal = new Collection<TimeOfDayMeal> { TimeOfDayMeal.Breakfast }
+                TimeOfDayMeal = new Collection<TimeOfDayMealT> { TimeOfDayMealT.Breakfast }
             };
         }
     }

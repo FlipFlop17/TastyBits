@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
+using System.Diagnostics;
 using TastyBits.Areas.Identity.Pages.Account.Models;
 using TastyBits.Services;
 

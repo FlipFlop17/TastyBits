@@ -24,19 +24,19 @@ namespace Application.Helpers
             //map time of day
             foreach (var item in incomingMeal.TimeOfDayMeal) {
                 switch (item) {
-                    case TimeOfDayMeal.Breakfast:
+                    case TimeOfDayMealT.Breakfast:
                         mealDto.IsBreakfast = true;
                         break;
-                    case TimeOfDayMeal.Dinner:
+                    case TimeOfDayMealT.Dinner:
                         mealDto.IsDinner = true;
                         break;
-                    case TimeOfDayMeal.Lunch:
+                    case TimeOfDayMealT.Lunch:
                         mealDto.IsLunch = true;
                         break;
-                    case TimeOfDayMeal.Snack:
+                    case TimeOfDayMealT.Snack:
                         mealDto.IsSnack = true;
                         break;
-                    case TimeOfDayMeal.Dessert:
+                    case TimeOfDayMealT.Dessert:
                         mealDto.IsDesert = true;
                         break;
                     default:
@@ -104,15 +104,15 @@ namespace Application.Helpers
             userMeal.ServingAmount = mealData.ServingsAmount;
             userMeal.Instructions = mealData.Instructions;
             if (mealData.IsBreakfast) 
-                userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Breakfast);
+                userMeal.TimeOfDayMeal.Add(TimeOfDayMealT.Breakfast);
             if (mealData.IsDinner)
-                userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Dinner);
+                userMeal.TimeOfDayMeal.Add(TimeOfDayMealT.Dinner);
             if (mealData.IsLunch)
-                userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Lunch);
+                userMeal.TimeOfDayMeal.Add(TimeOfDayMealT.Lunch);
             if (mealData.IsSnack)
-                userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Snack);
+                userMeal.TimeOfDayMeal.Add(TimeOfDayMealT.Snack);
             if (mealData.IsDesert)
-                userMeal.TimeOfDayMeal.Add(TimeOfDayMeal.Dessert);
+                userMeal.TimeOfDayMeal.Add(TimeOfDayMealT.Dessert);
 
             foreach (var item in mealData.RecipeImages) {
                 userMeal.Images.Add(ConvertMealImageEntityToMealImageUser(item));

@@ -27,7 +27,8 @@
                 <MudSelectItem T="string" Value="@("Whatever")" />
             </MudSelect>
             <MudSelect @bind-Value="TimeOfDayMeal" Label="Time of day" Variant="Variant.Outlined" Clearable="true" AnchorOrigin="Origin.BottomCenter">
-                @foreach (TimeOfDayMeal tItem in Enum.GetValues(typeof(TimeOfDayMeal))) {
+                @foreach (TimeOfDayMealT tItem in Enum.GetValues(typeof(TimeOfDayMealT)))
+                {
                   <MudSelectItem T="string" Value="@tItem.ToString()">@tItem</MudSelectItem>
                 }
             </MudSelect>

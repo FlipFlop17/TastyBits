@@ -12,13 +12,13 @@ namespace Application.Helpers
         /// </summary>
         /// <param name="selectedChips"></param>
         /// <returns>Enumerable of TimeOfDayMeal</returns>
-        public static Collection<TimeOfDayMeal> ConvertMealTypes(MudChip[] selectedChips)
+        public static Collection<TimeOfDayMealT> ConvertMealTypes(MudChip[] selectedChips)
         {
-            Collection<TimeOfDayMeal> lista=new Collection<TimeOfDayMeal>();
+            Collection<TimeOfDayMealT> lista=new Collection<TimeOfDayMealT>();
             if (selectedChips != null) {
                 foreach (var item in selectedChips) {
                     lista.Add(
-                        (TimeOfDayMeal)Enum.Parse(typeof(TimeOfDayMeal), item.Value.ToString())
+                        (TimeOfDayMealT)Enum.Parse(typeof(TimeOfDayMealT), item.Value.ToString())
                     );
                 }
             }

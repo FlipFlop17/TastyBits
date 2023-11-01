@@ -7,6 +7,7 @@ using Infrastructure.Data.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using MudBlazor.Services;
@@ -50,7 +51,6 @@ builder.Services.AddScoped<CalorieApiService>() ;
 builder.Services.AddScoped<ICache, TastyCacheService>();
 builder.Services.AddMemoryCache();
 
-
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Configuration.AddEnvironmentVariables();
@@ -66,7 +66,9 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
     } else { conString = url; }
     // log mysql connection string
     //Log.Information("url db context: " + builder.Configuration["DATABASE_URL"]);
-    options.UseNpgsql(conString);
+    //options.UseNpgsql(conString);
+    options.UseInMemoryDatabase("FlopsInMemory");
+    options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
 });
 
 builder.Services.AddIdentity<IdentityUser,IdentityRole>(options =>

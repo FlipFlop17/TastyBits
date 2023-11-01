@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
+using System.Diagnostics;
 using TastyBits.Areas.Identity.Pages.Account.Models;
 
 namespace TastyBits.Areas.Identity.Pages.Account
@@ -44,15 +45,16 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     Email=newUserInput.UserEmail,
                 };
                 var result = await _userManager.CreateAsync(newUser, newUserInput.UserPassword);
+                
                 ResultErrors=result.Errors.ToList();
-
                 if (result.Succeeded) {
                     await _signInManager.SignInAsync(newUser,isPersistent: false);
                     Log.Debug("registration success!"); 
                     //_nav.NavigateTo("/dashboard/home");
                     return LocalRedirect("/Identity/Account/login");
                 }else {
-                    ModelState.AddModelError("unknown-err", "Registration invalid");
+                    Debug.Print($"registration error: {result.Errors.First().Description}");
+                    ModelState.AddModelError("unknown-err", result.Errors.First().Description);
                 }
 
             }

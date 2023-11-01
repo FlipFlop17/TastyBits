@@ -63,7 +63,8 @@
                         <MudChipSet  @bind-SelectedChips="_selectedChips" MultiSelection="true" Filter="true">
                             @if (_isEditMode) {
                                 <div class="">
-                                    @foreach (TimeOfDayMeal tItem in Enum.GetValues(typeof(TimeOfDayMeal))) {
+                                    @foreach (TimeOfDayMealT tItem in Enum.GetValues(typeof(TimeOfDayMealT)))
+                                    {
                                         if (Meal.TimeOfDayMeal.Any(t=>t.Equals(tItem))) {
                                             <MudChip SelectedColor="Color.Success" Default="true" Value="tItem">@tItem.ToString()</MudChip>
                                         }else {
@@ -179,7 +180,7 @@
                 </div>
             </button>
         </div>
-        <button type="submit" class="primaryButton flex items-center gap-2 mr-5 p-2" disabled="@isFieldDisabled" @onclick="SaveEditsAsync">
+        <button type="submit" class="primaryButton flex items-center gap-2 mr-5" disabled="@isFieldDisabled" @onclick="SaveEditsAsync">
             <div class="flex items-center gap-3">
                 @if (_isLoading) {
                     <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Primary"></MudProgressCircular>

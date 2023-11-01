@@ -54,7 +54,8 @@
                 </div>
                 <p class="font-medium mt-5">Select what time of day this meals is best suited for ?</p>
                 <MudChipSet @bind-SelectedChips="_selectedChips"  MultiSelection="true" Filter="true">
-                    @foreach (TimeOfDayMeal tItem in Enum.GetValues(typeof(TimeOfDayMeal))) {
+                    @foreach (TimeOfDayMealT tItem in Enum.GetValues(typeof(TimeOfDayMealT)))
+                    {
                         <MudChip SelectedColor="Color.Success" Value="tItem">@tItem.ToString()</MudChip>
                     }
                 </MudChipSet>

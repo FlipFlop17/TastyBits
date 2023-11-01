@@ -45,7 +45,7 @@ namespace Infrastructure.Data.Repositories
                         if (ingredientAlreadyInDb.StatusCode != System.Net.HttpStatusCode.OK) { //
                             //add to the ingredients list
                             CalorieNinjaApiResultModel apiResult=await _calorieApiService.GetCalorieAsync(row.Name);
-                            if (apiResult.Items.Count == 1) {
+                            if (apiResult.Items !=null && apiResult.Items.Count == 1) {
                                 row.CaloriesPer100g = apiResult.Items.First().CaloriesPer100;
                             }
                             ingr = TastyMapper.ConvertIngredientsToIngredientsDataEntity(row);
