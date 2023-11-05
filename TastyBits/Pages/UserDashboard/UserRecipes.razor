@@ -16,6 +16,7 @@
 @inject LoggedUserService _loggedUserService;
 @inject NavigationManager navManager;
 @inject GetUserMealsById _userMealsUseCase;
+@inject DemoDataStore _demoDataStore;
 
 <AuthorizeView>
     <Authorized>
@@ -98,7 +99,13 @@
         //if the selected value is null just show whats already filtered
         if (_timeOfDayMeal !=null) {
         } else {
-            _allRecipes = await _userMealsUseCase.GetUserMeals(_loggedUserService.UserStore.Id);
+            if(await _loggedUserService.IsCurrentUserDemo())
+            {
+                _allRecipes = _demoDataStore.DemoMeals.ToList();
+            }else
+            {
+                _allRecipes = await _userMealsUseCase.GetUserMeals(_loggedUserService.UserStore.Id);
+            }
             _filteredRecipes = _allRecipes;
         }
         StateHasChanged();

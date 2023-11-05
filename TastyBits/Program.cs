@@ -49,6 +49,7 @@ builder.Services.AddTransient<TastyDialogService>();
 builder.Services.AddScoped<LoggedUserService>();
 builder.Services.AddScoped<CalorieApiService>() ;
 builder.Services.AddScoped<ICache, TastyCacheService>();
+builder.Services.AddScoped<DemoDataStore>();
 builder.Services.AddMemoryCache();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

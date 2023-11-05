@@ -1,5 +1,6 @@
 ﻿@using Serilog;
-
+@using TastyBits.Services;
+@inject LoggedUserService _loggedUserService;
 
 <div id="dashboardNavigation" class="@Class">
 	<div class="flex items-center ml-3 lg:w-72">
@@ -32,10 +33,18 @@
 			</div>
 		</NavLink>
 	</nav>
+
+	@if(_isDemo){
+		<div class="p-5 bg-emerald-800 text-gray-50">
+			<p>Demo</p>
+		</div>
+	}
 </div>
 
 
 @code {
 	[Parameter]
 	public string Class { get; set; }
+
+	private bool _isDemo=>_loggedUserService.IsCurrentUserDemo().Result;
 }

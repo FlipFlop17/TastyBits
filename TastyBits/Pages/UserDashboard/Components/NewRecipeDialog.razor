@@ -126,6 +126,9 @@
 
     private MudChip[] _selectedChips;
 
+    [Inject]
+    private DemoDataStore _demoDataStore { get; set; }
+
     protected override void OnInitialized()
     {
         newRecipeContext = new EditContext(newRecipe);
@@ -150,7 +153,16 @@
             newRecipe.UserId = _loggedUserService.UserStore.Id;
             newRecipe.Images=await TastyFunctions.ConvertImageToBytesAsync(_imageFiles);
             //insert into database
-            TaskResult result = await _createMeal.InsertNewMealAsync(newRecipe);
+            TaskResult result = new();
+            if(await _loggedUserService.IsCurrentUserDemo())
+            {
+                //demo user
+                result.HasError = false;
+                _demoDataStore.DemoMeals.Add(newRecipe);
+            }else
+            {
+                result = await _createMeal.InsertNewMealAsync(newRecipe);
+            };
             if (!result.HasError) {
                 Log.Information($"new meal inserted to database");
                 //await Task.Delay(500);

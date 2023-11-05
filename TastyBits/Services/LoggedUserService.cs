@@ -8,8 +8,8 @@ namespace TastyBits.Services
     {
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly UserManager<IdentityUser> _userManager;
-        public IdentityUser UserStore { get; private set; }
 
+        public IdentityUser UserStore { get; private set; }
 
         public LoggedUserService(AuthenticationStateProvider authState ,UserManager<IdentityUser> userManager)
         {
@@ -29,29 +29,29 @@ namespace TastyBits.Services
             }
             return null;
         }
-        public  async Task<bool> IsUserAdmin(IdentityUser forUser)
+        public  async Task<bool> IsCurrentUserAdmin()
         {
-            var userRoles =await  _userManager.GetRolesAsync(forUser);
+            var userRoles =await  _userManager.GetRolesAsync(this.UserStore);
+
             if (userRoles.Any(r=>r.Equals("admin")))
             {
                 return true;
             }
             return false;
         }
-        public async Task<bool> IsUserDemo(IdentityUser forUser)
+        public async Task<bool> IsCurrentUserDemo()
         {
-            var userRoles = await _userManager.GetRolesAsync(forUser);
-
-            if (userRoles.Any(r => r.Equals("demo")))
+            var userRoles = await _userManager.GetRolesAsync(this.UserStore);
+            if (userRoles.Any(r => r.ToLower().Equals("demo")))
             {
                 return true;
             }
             return false;
         }
-        public async Task<bool> IsUserStandard(IdentityUser forUser)
+        public async Task<bool> IsCurrentUserStandard()
         {
-            var userRoles = await _userManager.GetRolesAsync(forUser);
-            if (userRoles.Any(r => r.Equals("standard")))
+            var userRoles = await _userManager.GetRolesAsync(this.UserStore);
+            if (userRoles.Any(r => r.ToLower().Equals("standard")))
             {
                 return true;
             }
@@ -61,8 +61,6 @@ namespace TastyBits.Services
 
         private void testing()
         {
-            ClaimsPrincipal princ = new ClaimsPrincipal();
-
             
         }
     }

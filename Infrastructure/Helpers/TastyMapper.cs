@@ -7,8 +7,6 @@ namespace Application.Helpers
 {
     public class TastyMapper
     {
-
-
         public static MealsDataEntity ConvertUserMealToMealsEntity(UserMeal incomingMeal)
         {
             MealsDataEntity mealDto = new MealsDataEntity();

@@ -21,6 +21,15 @@ namespace TastyBits.Areas.Identity.Pages.Account
         {
             //Log.Information("ulogiran: "+_signInManager.IsSignedIn(User).ToString());
             if (_signInManager.IsSignedIn(User)) { //if already singed in
+                var identityUser = await _signInManager.UserManager.GetUserAsync(User);
+                if (identityUser.Email.Contains("demo@"))
+                {
+                    await _signInManager.UserManager.AddToRoleAsync(identityUser, "Demo");
+                }
+                else
+                {
+                    await _signInManager.UserManager.AddToRoleAsync(identityUser, "Standard");
+                }
                 return LocalRedirect("/dashboard/home");
             }
             return Page();
@@ -44,6 +53,14 @@ namespace TastyBits.Areas.Identity.Pages.Account
 
                 if (result.Succeeded) {
                     Log.Debug("login success");
+                    var identityUser = await _signInManager.UserManager.GetUserAsync(User);
+                    if (newUserInput.UserEmail.Contains("demo@"))
+                    {
+                        await _signInManager.UserManager.AddToRoleAsync(identityUser,"Demo");
+                    }else
+                    {
+                        await _signInManager.UserManager.AddToRoleAsync(identityUser, "Standard");
+                    }
                     return LocalRedirect("/dashboard/home");
                 }else {
                     ModelState.AddModelError("unknown-err", "Incorrect login attempt");

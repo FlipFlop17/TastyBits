@@ -45,7 +45,6 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     Email=newUserInput.UserEmail,
                 };
                 var result = await _userManager.CreateAsync(newUser, newUserInput.UserPassword);
-                
                 ResultErrors=result.Errors.ToList();
                 if (result.Succeeded) {
                     await _signInManager.SignInAsync(newUser,isPersistent: false);
