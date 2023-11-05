@@ -67,9 +67,9 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
     } else { conString = url; }
     // log mysql connection string
     //Log.Information("url db context: " + builder.Configuration["DATABASE_URL"]);
-    //options.UseNpgsql(conString);
-    options.UseInMemoryDatabase("FlopsInMemory");
-    options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+    options.UseNpgsql(conString);
+    //options.UseInMemoryDatabase("FlopsInMemory");
+    //options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
 });
 
 builder.Services.AddIdentity<IdentityUser,IdentityRole>(options =>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Serilog;
 using System.Diagnostics;
+using System.Security.Claims;
 using TastyBits.Areas.Identity.Pages.Account.Models;
 
 namespace TastyBits.Areas.Identity.Pages.Account
@@ -44,6 +45,9 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     UserName=newUserInput.UserEmail,
                     Email=newUserInput.UserEmail,
                 };
+
+                //Claim demoClaim = new Claim("Demo", "true");
+                //await _userManager.AddClaimAsync(newUser, demoClaim);
                 var result = await _userManager.CreateAsync(newUser, newUserInput.UserPassword);
                 ResultErrors=result.Errors.ToList();
                 if (result.Succeeded) {
@@ -55,7 +59,7 @@ namespace TastyBits.Areas.Identity.Pages.Account
                     Debug.Print($"registration error: {result.Errors.First().Description}");
                     ModelState.AddModelError("unknown-err", result.Errors.First().Description);
                 }
-
+                //TODO password forget option
             }
             return Page();
         }

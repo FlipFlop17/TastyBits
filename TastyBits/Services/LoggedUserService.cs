@@ -29,39 +29,21 @@ namespace TastyBits.Services
             }
             return null;
         }
-        public  async Task<bool> IsCurrentUserAdmin()
-        {
-            var userRoles =await  _userManager.GetRolesAsync(this.UserStore);
 
-            if (userRoles.Any(r=>r.Equals("admin")))
-            {
+        //yes, roles should be done via role manager, some other time.
+        public async Task<bool> IsCurrentUserAdmin()
+        {
+            if (this.UserStore.Email.Equals("petarsoce@gmail.com")) {
                 return true;
             }
-            return false;
+            return false;   
         }
         public async Task<bool> IsCurrentUserDemo()
         {
-            var userRoles = await _userManager.GetRolesAsync(this.UserStore);
-            if (userRoles.Any(r => r.ToLower().Equals("demo")))
-            {
+			if (this.UserStore.Email.Contains("tastydemo@demo.com")) {
                 return true;
             }
             return false;
-        }
-        public async Task<bool> IsCurrentUserStandard()
-        {
-            var userRoles = await _userManager.GetRolesAsync(this.UserStore);
-            if (userRoles.Any(r => r.ToLower().Equals("standard")))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        private void testing()
-        {
-            
         }
     }
 }

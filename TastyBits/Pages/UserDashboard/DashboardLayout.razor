@@ -11,10 +11,15 @@
 
 <div class="flex min-h-screen">
     <MudLayout>
-        <MudAppBar >
+        <MudAppBar>
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
             <MudSpacer></MudSpacer>
-            <MudText Color="Color.Dark">@userEmail</MudText>
+            @if (_demoMode) {
+                <div class="p-3 bg-amber-300 text-gray-50 flex justify-center mr-40 rounded-lg">
+                    <p class="text-lg text-emerald-800">Demo</p>
+                </div>
+            }
+            <MudText  Color="Color.Dark">@userEmail</MudText>
         </MudAppBar>
         <MudDrawer Color="Color.Transparent" Open="open" Width="20rem">
             <DashboardNav Class="col-start-1 w-50"></DashboardNav>
@@ -53,10 +58,11 @@
     }
 
     private string userEmail { get; set; }
-
+    private bool _demoMode { get; set; }
     protected override async Task OnInitializedAsync()
     {
         var user = await loggedUser.GetUserDataAsync();
         userEmail = user.Email;
+        _demoMode = await loggedUser.IsCurrentUserDemo();
     }
 }
