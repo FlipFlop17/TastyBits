@@ -1,9 +1,6 @@
-﻿using Application.Interfaces;
-using Application.Services;
-using Domain.Interfaces;
+﻿using Application.Cache;
+using Infrastructure.APIs;
 using Infrastructure.Data.Context;
-using Infrastructure.Data.Repositories;
-using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -50,7 +47,6 @@ namespace TastyBits.UnitTests.Application
             });
 
             services.AddSingleton(_config);
-            services.AddScoped<IMealsRepository, MealsRepository>();
             services.AddScoped<ICache, TastyCacheService>();
             services.AddScoped<CalorieApiService>();
             services.AddDistributedMemoryCache(opt =>

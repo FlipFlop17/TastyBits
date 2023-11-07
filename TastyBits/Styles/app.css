@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-
 .dangerText {
     @apply text-red-400 mt-3;
 }

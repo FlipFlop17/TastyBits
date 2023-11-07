@@ -1,0 +1,370 @@
+﻿@page "/dashboard/meal"
+@layout DashboardLayout;
+@using Application.Features;
+@using Application.Features.Meals.Commands.DeleteMeal;
+@using Application.Features.Meals.Commands.UpdateMeal;
+@using Infrastructure.Data;
+@using Serilog;
+@using Domain.Models;
+@using System.Collections.ObjectModel;
+@using System.Diagnostics;
+@using TastyBits.Services;
+@inject ISnackbar _snackBar;
+@using TastyBits.Components;
+@using Application.Common.Helpers;
+@inject DeleteMealUseCase deleteMealUseCase;
+@inject UpdateMealUseCase updateMealUseCase;
+@inject ILogger<MudDialog> _logger;
+
+<MudDialog>
+    @* <TitleContent>
+        @Meal.Name
+    </TitleContent> *@
+    <DialogContent>
+        <EditForm EditContext="_formContext" >
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <div id="mealInfo">
+                <div class="flex items-center gap-2 mb-5">
+                    <label class="text-2xl">
+                        🍲
+                    </label>
+                    <InputText class="inputFieldEdit !bg-transparent !text-4xl" disabled="@isFieldDisabled" @bind-Value="@Meal.Name"></InputText>
+                </div>
+                <div class="flex justify-center">
+                    <MudCarousel TData="object" AutoCycle="true" EnableSwipeGesture="true" ShowArrows="true" ShowBullets="false"
+                                 Class="h-96 w-full rounded-lg">
+                        @if (Meal.Images.Where(i=>i.ValidUntil==DateTime.MinValue).Any()) {
+                            @foreach (var img in Meal.Images.Where(i=>i.ValidUntil==DateTime.MinValue)) {
+                                <MudCarouselItem Transition="transitionType">
+                                    <div id="picActions" class="absolute bottom-2 right-2">
+                                        @if (_isEditMode) {
+                                            <button class="rounded-xl bg-red-200 p-3 items-center" @onclick="()=> DeleteImage(img)">
+                                                <div class="flex gap-3">
+                                                    <span>
+                                                        <i class="fa fa-trash text-red-500 "></i>
+                                                    </span>
+                                                    <p class="text-red-500">Delete</p>
+                                                </div>
+                                            </button>
+                                        }
+                                    </div>
+                                    @*  <img class="object-fill w-full h-full" src="data:image/jpeg;base64,@img" alt="Recipe Image" /> *@
+                                    <img class="object-fill w-full h-full" src="data:image/jpeg;base64,@img.Data" alt="Recipe Image" />
+                                </MudCarouselItem>
+                            }
+                        } else {
+                            <MudCarouselItem Transition="Transition.Slide">
+                                <img class="object-contain w-full h-full" src="/pics/picture-not-available.jpg" alt="no image" />
+                            </MudCarouselItem>
+                        }
+                    </MudCarousel>
+
+                </div>
+                <div id="actionBar" class="flex mb-10 items-center mt-7 justify-between bg-gray-50 rounded-lg p-1">
+                    <div id="chipsData" class="flex grow">
+                        <MudChipSet  @bind-SelectedChips="_selectedChips" MultiSelection="true" Filter="true">
+                            @if (_isEditMode) {
+                                <div class="">
+                                    @foreach (TimeOfDayMealT tItem in Enum.GetValues(typeof(TimeOfDayMealT)))
+                                    {
+                                        if (Meal.TimeOfDayMeal.Any(t=>t.Equals(tItem))) {
+                                            <MudChip SelectedColor="Color.Success" Default="true" Value="tItem">@tItem.ToString()</MudChip>
+                                        }else {
+                                            <MudChip SelectedColor="Color.Success" Value="tItem">@tItem.ToString()</MudChip>
+                                        }
+                                    }
+                                </div>
+                            }else {
+                                @foreach (var item in Meal.TimeOfDayMeal) {
+                                    <MudChip Color="Color.Primary" Disabled="true" Style="background:#064e3b">@item.ToString()</MudChip>
+                                }
+                            }
+                            <MudChip Color="Color.Primary">@Meal.TotalCalories total calories</MudChip>
+                        </MudChipSet>
+                    </div>
+                    <div id="mealEditActions">
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                            <MudMenuItem @onclick="@EnableEditMeal">
+                                <div class="flex items-center gap-2 text-emerald-600">
+                                    <span>
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                    <p>Edit</p>
+                                </div>
+                            </MudMenuItem>
+                            <MudMenuItem @onclick="@TooglePopOver">
+                                <div class="flex items-center gap-2 text-red-400">
+                                    <span>
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                    <p>Delete</p>
+                                </div>
+                            </MudMenuItem>
+                            <MudMenuItem @onclick="@ShareMeal">
+                                <div class="flex items-center gap-2 text-blue-500">
+                                    <span>
+                                        <i class="fa fa-share"></i>
+                                    </span>
+                                    <p>Share</p>
+                                </div>
+                            </MudMenuItem>
+                        </MudMenu>
+                        <MudPopover Open="isToogledPopOver" AnchorOrigin="Origin.TopCenter" Fixed="true" Class="p-3">
+                            <div class="flex flex-col text-red-400">
+                                <p class="font-medium">Are you sure you want to delete this recipe ?</p>
+                                <div class="flex gap-3 mt-3">
+                                    <button class="primaryOutline" @onclick="TooglePopOver">
+                                        Cancel
+                                    </button>
+                                    <button class="primaryButton !bg-red-400" @onclick="DeleteMeal">
+                                        <div class="flex items-center gap-3">
+                                            @if (_isLoading) {
+                                                <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Secondary"></MudProgressCircular>
+                                            }
+                                            <p>Delete</p>
+                                        </div>
+                                    </button>
+                                    @* <MudButton @onclick="DeleteMeal">
+                                    <div class="flex items-center gap-3">
+                                    @if (_isLoading) {
+                                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Primary"></MudProgressCircular>
+                                    }
+                                    <p>Delete</p>
+                                    </div>
+                                    </MudButton> *@
+                                </div>
+                            </div>
+                        </MudPopover>
+                    </div>
+                </div>
+                <div id="mealInfoData" class="mt-7 flex flex-col space-y-4">
+                    <div class="flex flex-col space-y-3 grow">
+                        <label class="font-medium text-xl">📜 Description</label>
+                        <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.Description"></InputText>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="flex flex-col space-y-3">
+                            <label class="font-medium text-xl">🍽️ Servings</label>
+                            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.ServingAmount"></InputText>
+                        </div>
+                        <div class="flex flex-col space-y-3">
+                            <label class="font-medium text-xl">🔪 Preping time</label>
+                            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.PrepTime"></InputText>
+                        </div>
+                        <div class="flex flex-col space-y-3">
+                            <label class="font-medium text-xl">👨‍🍳 Cooking time</label>
+                            <InputText class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.CookingTime"></InputText>
+                        </div>
+                    </div>
+                    <div class="flex flex-col space-y-3">
+                        <label class="font-medium text-xl">📜 Instructions</label>
+                        <InputTextArea class="inputFieldEdit" disabled="@isFieldDisabled" @bind-Value="@Meal.Instructions"></InputTextArea>
+                    </div>
+                    <IngredientTable isAddingNewRecipe="false" UserMealObject="Meal"></IngredientTable>
+                    @if (!isFieldDisabled) {
+                        <TastyBrowseFiles Caption="Browse images"  AddedFiles="_newImages"></TastyBrowseFiles>
+                    }
+                </div>
+            </div>
+            @if (_showValidation) {
+                <div class="bg-red-300 p-3 rounded-lg mt-5">
+                    <ValidationSummary class="text-gray-50 font-bold"></ValidationSummary>
+                </div>
+            }
+        </EditForm>
+    </DialogContent>
+    <DialogActions >
+        <div class="ml-5 p-1 text-red-400 text-lg hover:text-red-600" hidden="@isFieldDisabled">
+            <button type="button" @onclick="@CancelEdit">
+                <div class="flex gap-2 items-center" title="Cancel edit">
+                    <i class="fa fa-cancel"></i>
+                    <p>Cancel</p>
+                </div>
+            </button>
+        </div>
+        <button type="submit" class="primaryButton flex items-center gap-2 mr-5" disabled="@isFieldDisabled" @onclick="SaveEditsAsync">
+            <div class="flex items-center gap-3">
+                @if (_isLoading) {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Color="Color.Primary"></MudProgressCircular>
+                } else {
+                    <span>
+                        <i class="fa fa-save"></i>
+                    </span>
+                }
+                <p class="text-lg">Save</p>
+            </div>
+        </button>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public UserMeal Meal { get; set; }
+    private bool _isLoading { get; set; } = false;
+    private Transition transitionType { get => _isEditMode?Transition.None:Transition.Slide; }
+    private bool isFieldDisabled { get; set; } = true;
+    private bool _isEditMode { get; set; } = false;
+    private bool isToogledPopOver { get; set; } = false;
+    private ObservableCollection<IBrowserFile> _newImages { get; set; }
+    private EditContext _formContext { get; set; }
+    private UserMeal _orgIncomingMealObject;
+    private bool _showValidation { get; set; } = false;
+    private MudChip[] _selectedChips;
+    protected override void OnInitialized()
+    {
+        _newImages = new();
+        _orgIncomingMealObject = new UserMeal()
+            {
+                Name = Meal.Name,
+                MealId = Meal.MealId,
+                Ingredients = new ObservableCollection<UserMeal.Ingridient>(Meal.Ingredients.Select(ingredient => new UserMeal.Ingridient
+                {
+                    Name = ingredient.Name,
+                    Id = ingredient.Id,
+                    CaloriesPer100g = ingredient.CaloriesPer100g,
+                    IsDeleted = ingredient.IsDeleted,
+                    Quantity = ingredient.Quantity,
+                    QuantityUnit = ingredient.QuantityUnit,
+                    IngredientId = ingredient.IngredientId,
+                    UnicodeChars = ingredient.UnicodeChars
+                })),
+                CookingTime = Meal.CookingTime,
+                Images = Meal.Images,
+                PrepTime = Meal.PrepTime,
+                ServingAmount = Meal.ServingAmount,
+                Description = Meal.Description,
+                Instructions = Meal.Instructions,
+                TimeOfDayMeal = Meal.TimeOfDayMeal
+    };
+        _formContext = new EditContext(Meal);
+        base.OnInitialized();
+    }
+
+    private void TooglePopOver()
+    {
+        isToogledPopOver = !isToogledPopOver;
+    }
+
+    private async Task<bool> SaveEditsAsync()
+    {
+        _showValidation = false;
+        _isLoading = true;
+
+        Meal.TimeOfDayMeal = TastyFunctions.ConvertMealTypes(_selectedChips);
+        //remove any empty ingredients from the list and any ingredients that werent in the original ones as well
+        foreach (var item in Meal.Ingredients) {
+            if(item.Name.Length==0) {
+                Meal.Ingredients.Remove(item);
+            }else if(item.IsDeleted & _orgIncomingMealObject.Ingredients.Where(i => i.Name.Equals(item.Name)).Any()==false) {
+                Meal.Ingredients.Remove(item);
+            }
+        }
+        bool validForm=_formContext.Validate();
+
+        if(validForm) {
+
+            if (_newImages.Count > 0) {
+                //adding any new images
+                var newImagesToAdd = await TastyFunctions.ConvertImageToBytesAsync(_newImages);
+                Meal.Images.AddRange(newImagesToAdd);
+            }
+            Meal.Ingredients = MarkMissingIngredientsAsDeleted();
+            var result = await updateMealUseCase.UpdateMeal(Meal);
+            //await Task.Delay(500);
+            Debug.Print("checking for model errors");
+            if (!result.HasError) {
+                _snackBar.Add("Recipe updated", Severity.Success);
+            }
+
+        }else {
+            Debug.Print("form validation is not succesfull");
+            _showValidation = true;
+            Debug.Print(string.Join(",", _formContext.GetValidationMessages()));
+            _logger.LogError("saving edits not successful",_formContext.GetValidationMessages());
+        }
+        _isLoading = false;
+        return true;
+    }
+    private void EnableEditMeal()
+    {
+        isFieldDisabled = false;
+        _isEditMode = true;
+        StateHasChanged();
+    }
+    private void CancelEdit()
+    {
+        Meal = _orgIncomingMealObject;
+        isFieldDisabled = true;
+        _isEditMode = false;
+        _showValidation = false;
+        StateHasChanged();
+    }
+    private async Task<bool> DeleteMeal()
+    {
+        _isLoading = true;
+        var result= await deleteMealUseCase.DeleteMealAsync(Meal.MealId);
+
+        //await Task.Delay(500);
+        if (!result.HasError) {
+            _snackBar.Add("Recipe deleted",Severity.Success);
+            MudDialog.Close();
+            _isLoading = false;
+            return true;
+        }
+        _isLoading = false;
+        return false;
+    }
+
+    private void ShareMeal()
+    {
+        //TODO implement SHARE meal option
+        //TODO  provjeri nekakva je greška ako se dodaje više slika jedna po jedna.
+    }
+    private void DeleteImage(MealImage img)
+    {
+        img.ValidUntil = DateTime.Now;
+    }
+    /// <summary>
+    /// Adding and editing the original recipe ingredients with the newly added/deleted 
+    /// </summary>
+    /// <returns></returns>
+    private ObservableCollection<UserMeal.Ingridient> MarkMissingIngredientsAsDeleted()
+    {
+        ObservableCollection<UserMeal.Ingridient> addition = new();
+
+        foreach (var editedIngre in Meal.Ingredients) {
+            UserMeal.Ingridient orgIngre = _orgIncomingMealObject.Ingredients.Where(i => i.Id>0 & i.Id.Equals(editedIngre.Id)).FirstOrDefault();
+            if (orgIngre ==null) {
+                //not found in the original list- add as new
+                addition.Add(new UserMeal.Ingridient()
+                    {
+                        Name = editedIngre.Name,
+                        Quantity = editedIngre.Quantity,
+                        QuantityUnit = editedIngre.QuantityUnit
+                    });
+            }else {
+                //found by the same Id, check if name is changed to insert as new ingredient
+                if (!editedIngre.Name.Equals(orgIngre.Name)) {
+                    //name changed, mark for deletion and add new
+                    orgIngre.IsDeleted = true;
+                    addition.Add(new UserMeal.Ingridient()
+                    {
+                        Name = editedIngre.Name,
+                        Quantity = editedIngre.Quantity,
+                        QuantityUnit = editedIngre.QuantityUnit
+                    });
+                }else if(editedIngre.Quantity != orgIngre.Quantity | editedIngre.QuantityUnit != orgIngre.QuantityUnit) {
+                    orgIngre.Quantity = editedIngre.Quantity;
+                    orgIngre.QuantityUnit = editedIngre.QuantityUnit;
+                }
+            }
+        }
+        foreach (var item in addition) {
+            _orgIncomingMealObject.Ingredients.Add(item);
+        }
+        return _orgIncomingMealObject.Ingredients;
+    }
+
+}

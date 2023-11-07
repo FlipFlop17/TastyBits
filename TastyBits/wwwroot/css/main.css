@@ -630,10 +630,6 @@ video {
   grid-column-start: 1;
 }
 
-.col-start-2 {
-  grid-column-start: 2;
-}
-
 .\!-m-px {
   margin: -1px !important;
 }
@@ -777,14 +773,6 @@ video {
   margin-top: auto;
 }
 
-.mt-20 {
-  margin-top: 5rem;
-}
-
-.mr-40 {
-  margin-right: 10rem;
-}
-
 .block {
   display: block;
 }
@@ -851,10 +839,6 @@ video {
 
 .h-5 {
   height: 1.25rem;
-}
-
-.h-56 {
-  height: 14rem;
 }
 
 .h-6 {
@@ -945,10 +929,6 @@ video {
   width: 2rem;
 }
 
-.w-\[27rem\] {
-  width: 27rem;
-}
-
 .w-auto {
   width: auto;
 }
@@ -1001,10 +981,6 @@ video {
 
 .items-center {
   align-items: center;
-}
-
-.justify-start {
-  justify-content: flex-start;
 }
 
 .justify-end {
@@ -1235,6 +1211,11 @@ video {
   background-color: rgb(253 230 138 / var(--tw-bg-opacity));
 }
 
+.bg-amber-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 211 77 / var(--tw-bg-opacity));
+}
+
 .bg-amber-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(251 191 36 / var(--tw-bg-opacity));
@@ -1270,11 +1251,6 @@ video {
   background-color: rgb(4 120 87 / var(--tw-bg-opacity));
 }
 
-.bg-emerald-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(6 95 70 / var(--tw-bg-opacity));
-}
-
 .bg-gray-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
@@ -1305,9 +1281,9 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-amber-300 {
+.bg-gray-300 {
   --tw-bg-opacity: 1;
-  background-color: rgb(252 211 77 / var(--tw-bg-opacity));
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 .bg-gradient-to-r {
@@ -1585,10 +1561,6 @@ video {
 
 .opacity-50 {
   opacity: 0.5;
-}
-
-.opacity-60 {
-  opacity: 0.6;
 }
 
 .shadow-lg {
@@ -1982,6 +1954,71 @@ video {
   }
 }
 
+@media (min-width: 640px) {
+  .sm\:mt-10 {
+    margin-top: 2.5rem;
+  }
+
+  .sm\:h-80 {
+    height: 20rem;
+  }
+
+  .sm\:h-\[55rem\] {
+    height: 55rem;
+  }
+
+  .sm\:h-\[7\.5rem\] {
+    height: 7.5rem;
+  }
+
+  .sm\:grow {
+    flex-grow: 1;
+  }
+
+  .sm\:flex-row {
+    flex-direction: row;
+  }
+
+  .sm\:flex-col {
+    flex-direction: column;
+  }
+
+  .sm\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
+  }
+
+  .sm\:p-10 {
+    padding: 2.5rem;
+  }
+
+  .sm\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .sm\:text-\[2em\] {
+    font-size: 2em;
+  }
+
+  .sm\:text-\[3em\] {
+    font-size: 3em;
+  }
+
+  .sm\:text-\[4em\] {
+    font-size: 4em;
+  }
+
+  .sm\:text-\[4rem\] {
+    font-size: 4rem;
+  }
+
+  .sm\:text-\[5em\] {
+    font-size: 5em;
+  }
+}
+
 @media (min-width: 768px) {
   .md\:justify-between {
     justify-content: space-between;
@@ -2015,6 +2052,10 @@ video {
     margin-top: 0px;
   }
 
+  .lg\:mt-2 {
+    margin-top: 0.5rem;
+  }
+
   .lg\:flex {
     display: flex;
   }
@@ -2043,12 +2084,20 @@ video {
     height: 10rem;
   }
 
+  .lg\:h-56 {
+    height: 14rem;
+  }
+
   .lg\:h-\[450px\] {
     height: 450px;
   }
 
   .lg\:h-\[500px\] {
     height: 500px;
+  }
+
+  .lg\:h-auto {
+    height: auto;
   }
 
   .lg\:w-1\/2 {
@@ -2083,6 +2132,10 @@ video {
     width: 18rem;
   }
 
+  .lg\:w-\[27rem\] {
+    width: 27rem;
+  }
+
   .lg\:w-\[450px\] {
     width: 450px;
   }
@@ -2097,6 +2150,14 @@ video {
 
   .lg\:flex-row {
     flex-direction: row;
+  }
+
+  .lg\:flex-col {
+    flex-direction: column;
+  }
+
+  .lg\:flex-wrap {
+    flex-wrap: wrap;
   }
 
   .lg\:items-start {
@@ -2123,6 +2184,12 @@ video {
     gap: 9rem;
   }
 
+  .lg\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  }
+
   .lg\:p-5 {
     padding: 1.25rem;
   }
@@ -2146,6 +2213,15 @@ video {
     line-height: 2.5rem;
   }
 
+  .lg\:text-\[2rem\] {
+    font-size: 2rem;
+  }
+
+  .lg\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
   .lg\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
@@ -2161,6 +2237,10 @@ video {
 
   .lg\:underline {
     text-decoration-line: underline;
+  }
+
+  .lg\:opacity-60 {
+    opacity: 0.6;
   }
 }
 

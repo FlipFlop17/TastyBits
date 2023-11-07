@@ -1,7 +1,8 @@
 ﻿using Domain.Models;
 using MudBlazor;
 using TastyBits.Components;
-using TastyBits.Pages.UserDashboard.Components;
+using TastyBits.Pages.UserDashboard.Meal.AddNewMeal;
+using TastyBits.Pages.UserDashboard.Meal.MealView;
 
 namespace TastyBits.Services
 {
@@ -49,7 +50,7 @@ namespace TastyBits.Services
                 FullWidth = true,CloseOnEscapeKey = false,CloseButton = false
             };
 
-            var newMealDialog= await _mudDialog.ShowAsync<NewRecipeDialog>(title: "Add your new meal",options:dOptions);
+            var newMealDialog= await _mudDialog.ShowAsync<DialogTest>(title: "Add your new meal",options:dOptions);
             return newMealDialog;
         }
     }

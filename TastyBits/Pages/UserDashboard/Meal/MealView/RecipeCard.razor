@@ -1,0 +1,66 @@
+﻿@using Domain.Models;
+
+<div class="border-solid border-2 rounded-lg lg:p-5 sm:p-10 bg-gray-50 drop-shadow-xl hover:drop-shadow-2xl lg:w-[27rem] lg:h-auto
+ sm:h-[55rem]">
+    <div id="recipeContent">
+        <div id="recipeImage" class="w-auto lg:h-56 overflow-hidden hover:cursor-pointer sm:h-80" @onclick="OnOpenButtonClick">
+            @if (AsLoading) {
+                <img class="rounded-lg object-fill w-full h-full" src="/pics/picture-not-available.jpg" alt="eggs" />
+            }else {
+                @if (Meal.Images.Count > 0) {
+                    <img class="rounded-lg object-cover w-full h-full" src="data:image/jpeg;base64,@Meal.Images.FirstOrDefault().Data" alt="Recipe Image" />
+                } else {
+                    <img class="rounded-lg object-fill w-full h-full" src="/pics/picture-not-available.jpg" alt="eggs" />
+                }
+            }
+        </div>
+        <div class="lg:text-xl font-bold text-emerald-700 lg:mt-2
+sm:text-[5em] sm:mt-10">
+            @if (AsLoading) {
+                <p class="bg-gray-300 w-10"></p>
+            } else {
+                @Meal.Name
+            }
+        </div>
+        <hr />
+        <div class="p-3 lg:text-lg sm:text-[4em]">
+            @if (AsLoading) {
+                <p>Loading ...</p>
+            } else {
+                @Meal.Description
+            }
+        </div>
+        <hr />
+        <div class="font-bold text-emerald-600 space-y-3 mt-3 lg:text-lg sm:text-[3em]">
+            @if (AsLoading) {
+                <p>Preparation time: ...</p>
+                <p>Cooking time: ...</p>
+                <p>Calories: ...</p>
+            }else {
+                <p>Preparation time: @Meal.PrepTime</p>
+                <p>Cooking time: @Meal.CookingTime</p>
+                <p>Calories: @Meal.TotalCalories</p>
+            }
+        </div>
+        <div id="recipeCardActions" class="flex gap-2 justify-end">
+            <button class="text-emerald-700" @onclick="OnOpenButtonClick">
+                <div class="flex items-center gap-2" >
+                    <i class="fa-solid fa-arrow-up-right-from-square lg:text-xl sm:text-[3em]"></i>
+                    @* <p>Open</p> *@
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public UserMeal Meal { get; set; }
+    [Parameter]
+    public EventCallback OnOpenButtonClick { get; set; }
+    /// <summary>
+    /// Displays the card in loading mode
+    /// </summary>
+    [Parameter]
+    public bool AsLoading { get; set; }
+}
