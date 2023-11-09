@@ -50,7 +50,7 @@ namespace TastyBits.Services
                 FullWidth = true,CloseOnEscapeKey = false,CloseButton = false
             };
 
-            var newMealDialog= await _mudDialog.ShowAsync<DialogTest>(title: "Add your new meal",options:dOptions);
+            var newMealDialog= await _mudDialog.ShowAsync<NewRecipeDialog>(title: "Add your new meal",options:dOptions);
             return newMealDialog;
         }
     }

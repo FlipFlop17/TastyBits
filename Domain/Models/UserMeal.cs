@@ -6,7 +6,7 @@ namespace Domain.Models
 {
     public enum QuantityUnit
     {
-        Grams,Pieces
+        Grams
     }
     public enum TimeOfDayMealT
     {

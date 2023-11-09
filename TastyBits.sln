@@ -18,6 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F98BC01D-4C92-41D8-99BA-61B314249AEA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{B81D1122-F7AC-45F3-AFE0-5D48FFFB33D0}"
+	ProjectSection(SolutionItems) = preProject
+		MIT-license.txt = MIT-license.txt
+		..\..\..\..\Desktop\TastyLanding.png = ..\..\..\..\Desktop\TastyLanding.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

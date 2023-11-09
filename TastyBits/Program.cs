@@ -7,6 +7,7 @@ using Infrastructure.APIs;
 using Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using MudBlazor.Services;
 using Serilog;
 using TastyBits.Services;

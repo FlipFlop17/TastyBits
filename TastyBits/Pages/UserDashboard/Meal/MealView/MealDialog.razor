@@ -8,6 +8,7 @@
 @using Domain.Models;
 @using System.Collections.ObjectModel;
 @using System.Diagnostics;
+@using TastyBits.Pages.UserDashboard.Common
 @using TastyBits.Services;
 @inject ISnackbar _snackBar;
 @using TastyBits.Components;
@@ -306,7 +307,7 @@
         _isLoading = true;
         var result= await deleteMealUseCase.DeleteMealAsync(Meal.MealId);
 
-        //await Task.Delay(500);
+        await Task.Delay(500);
         if (!result.HasError) {
             _snackBar.Add("Recipe deleted",Severity.Success);
             MudDialog.Close();
