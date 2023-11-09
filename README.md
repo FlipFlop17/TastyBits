@@ -19,7 +19,8 @@ Scroll to the bottom of the page and opt for the Demo version if you just want t
 ## Installation
 
 1. Clone the project.
-2. Inside Program.cs enable InMemoryDbUsage and disable options.UseNpgsql(conString)  
+2. Open in IDE
+3. Inside Program.cs enable InMemoryDbUsage and disable options.UseNpgsql(conString)  
 `
 ...  
  //options.UseNpgsql(conString);  
@@ -27,7 +28,8 @@ options.UseInMemoryDatabase("FlopsInMemory");
 options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));  
 });
 ...  
-` 
+`   
+4. Run the project
 - If you want to create your own database just use migrations history to set everything up.
 
 
