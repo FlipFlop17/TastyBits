@@ -1,16 +1,5 @@
 # Project Title
 
-Brief project description goes here.
-
-## Table of Contents
-
-- [About](#about)
-- [Installation](#installation)
-- [Features](#features)
-- [License](#license)
-
-## About
-
 **TastyBits is a web application created for the sole purpose of practicing Blazor functionalities. This project represents my first venture into web development, and as such, some parts of the page may appear unfinished or incomplete.**
 
 TastyBits is a web application that allows users to manage their meal plans effectively. The application consists of a landing page that provides an overview of the features and functionalities. It primarily functions as a static page, providing information about the purpose and usage of the platform.
@@ -20,8 +9,12 @@ Upon registration and login, users gain access to their personalized dashboard, 
 You can try the application at: 
 
 Scroll to the bottom of the page and opt for the Demo version if you just want to try it out without registering.
+## Table of Contents
 
-![Landing](items/TastyLanding.png)
+- [About](#about)
+- [Installation](#installation)
+- [Features](#features)
+- [License](#license)
 
 ## Installation
 
