@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 
-
 .dangerText {
     @apply text-red-400 mt-3;
 }
@@ -25,6 +24,7 @@
 .primaryButton {
     @apply p-3 bg-emerald-600 hover:bg-emerald-400 duration-1000;
     @apply text-gray-50 rounded-lg font-medium;
+    @apply disabled:bg-gray-300;
 }
 .input-form {
     @apply flex flex-col lg:mt-2 xl:mt-5 2xl:mt-5;

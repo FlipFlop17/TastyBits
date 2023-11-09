@@ -1,0 +1,43 @@
+﻿@using Serilog;
+@using TastyBits.Services;
+@inject LoggedUserService _loggedUserService;
+
+<div id="dashboardNavigation" class="@Class">
+	<div class="flex items-center ml-3 lg:w-72">
+		<div class="w-36 lg:w-24">
+			<a href="/dashboard/home">
+				<img alt="tastyLogo" class="w-full" src="pics/tasty-logo.png" />
+			</a>
+		</div>
+		<div>
+			<a class="font-bold text-6xl lg:text-2xl sm:text-[2em] text-emerald-700 ml-5" href="/">Tasty Bits</a>
+		</div>
+	</div>
+	<nav class="flex flex-col lg:text-lg sm:text-2xl">
+		<NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium " Href="dashboard/allrecipes">
+			<div>
+				<i class="fa-solid fa-carrot"></i>
+				Recipes
+			</div>
+		</NavLink>
+		@* <NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="dashboard/settings">
+		<div>
+		<i class="fa-solid fa-gear"></i>
+		Settings
+		</div>
+		</NavLink> *@
+		<NavLink class="hover:bg-emerald-300 text-gray-700 duration-500 p-5 font-medium" Href="Identity/Account/logout">
+			<div>
+				<i class="fa-solid fa-right-from-bracket"></i>
+				Log out
+			</div>
+		</NavLink>
+	</nav>
+
+</div>
+
+
+@code {
+	[Parameter]
+	public string Class { get; set; }
+}

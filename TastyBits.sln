@@ -11,9 +11,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{6E5E6EBD-8B8A-4F06-BC4C-14B5109084A6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E52ED355-C763-44D0-9024-F1885BBF3767}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TastyBits.UnitTests", "TastyBits.UnitTests\TastyBits.UnitTests.csproj", "{F7F33FBA-AB69-4339-B237-0F25BD5D4930}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A76EDBAC-8022-4ED0-891A-43B47D4031C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F98BC01D-4C92-41D8-99BA-61B314249AEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{B81D1122-F7AC-45F3-AFE0-5D48FFFB33D0}"
+	ProjectSection(SolutionItems) = preProject
+		MIT-license.txt = MIT-license.txt
+		..\..\..\..\Desktop\TastyLanding.png = ..\..\..\..\Desktop\TastyLanding.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,8 +65,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{404EBA14-2D85-47D9-A4EE-DE080EBD86F0} = {E52ED355-C763-44D0-9024-F1885BBF3767}
-		{6E5E6EBD-8B8A-4F06-BC4C-14B5109084A6} = {E52ED355-C763-44D0-9024-F1885BBF3767}
+		{CDC53381-CDDE-4BCF-8E10-1400FCC8C3AB} = {A76EDBAC-8022-4ED0-891A-43B47D4031C5}
+		{404EBA14-2D85-47D9-A4EE-DE080EBD86F0} = {A76EDBAC-8022-4ED0-891A-43B47D4031C5}
+		{EE6CFBAE-7E18-4BFF-A775-BF1201D0EFC6} = {A76EDBAC-8022-4ED0-891A-43B47D4031C5}
+		{6E5E6EBD-8B8A-4F06-BC4C-14B5109084A6} = {A76EDBAC-8022-4ED0-891A-43B47D4031C5}
+		{F7F33FBA-AB69-4339-B237-0F25BD5D4930} = {F98BC01D-4C92-41D8-99BA-61B314249AEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4751513B-D432-4B87-86D5-253BE0597DC8}

@@ -1,0 +1,130 @@
+﻿@page "/dashboard/allrecipes";
+@page "/dashboard/home";
+@layout DashboardLayout;
+@using System.Collections.ObjectModel;
+@using Application.Features;
+@using Domain.Models;
+@using Infrastructure.Data;
+@using Microsoft.EntityFrameworkCore;
+@using Serilog;
+@using System.Diagnostics;
+@using TastyBits.Pages.UserDashboard.Meal.MealView
+@using TastyBits.Services;
+@using Application.Features.Meals.Queries;
+@inject TastyDialogService _tastyDialog;
+@inject ISnackbar _snackBar;
+@inject LoggedUserService _loggedUserService;
+@inject NavigationManager navManager;
+@inject GetUserMealsById _userMealsUseCase;
+@inject DemoDataStore _demoDataStore;
+
+<AuthorizeView>
+    <Authorized>
+        <div id="recipeToolbar" class="flex lg:flex-row p-2 gap-3 rounded-lg focus:outline-none sm:flex-col">
+            <MudSelect T="string" Label="Meal type" Clearable="true" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="string" Value="@("Meat")" />
+                <MudSelectItem T="string" Value="@("Vegetarian")" />
+                <MudSelectItem T="string" Value="@("Vegan")" />
+                <MudSelectItem T="string" Value="@("Whatever")" />
+            </MudSelect>
+            <MudSelect  @bind-Value="TimeOfDayMeal" Label="Time of day" Variant="Variant.Outlined" Clearable="true" AnchorOrigin="Origin.BottomCenter">
+                @foreach (TimeOfDayMealT tItem in Enum.GetValues(typeof(TimeOfDayMealT)))
+                {
+                  <MudSelectItem T="string" Value="@tItem.ToString()">@tItem</MudSelectItem>
+                }
+            </MudSelect>
+        </div>
+        <div class="flex">
+            <div id="recipes" class="lg:flex lg:flex-row lg:flex-wrap sm:flex-col mt-5 gap-10 p-2 sm:space-y-10 lg:space-y-0 sm:grow justify-center">
+                <div @onclick=@AddNewMeal class="flex justify-center items-center border-dashed border-emerald-200 border-2 rounded-lg lg:w-[27rem]
+                    hover:cursor-pointer hover:bg-emerald-50
+                    hover:border-emerald-300 duration-300
+                    sm:h-[7.5rem] lg:h-auto">
+                    <div class="flex lg:flex-col items-center sm:flex-row text-center text-emerald-500 lg:opacity-60">
+                        <i class="fa fa-add h-10 w-10"></i>
+                        <p class="font-medium lg:text-[2rem] sm:text-[4rem]">Add New</p>
+                    </div>
+                </div>
+                @if (_loading) {
+                    <RecipeCard AsLoading="true"></RecipeCard>
+                } else {
+                    @foreach (UserMeal meal in _filteredRecipes) {
+                        <RecipeCard Meal="meal"
+                                    OnOpenButtonClick="@( ()=>OpenSelectedMeal(meal) )">
+                        </RecipeCard>
+                    }
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h1 role="note">Please login in to view this page</h1>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private List<UserMeal> _allRecipes = new List<UserMeal>();
+    private List<UserMeal> _filteredRecipes { get; set; } = new List<UserMeal>();
+    private bool _loading { get; set; } = true;
+    private string _timeOfDayMeal; 
+    public string TimeOfDayMeal
+    {
+        get => _timeOfDayMeal;
+        set
+        {
+            _timeOfDayMeal = value;
+            FilterSelectedTimeOfDay(_timeOfDayMeal);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_loggedUserService.UserStore != null & firstRender) {
+            await LoadUserRecipes();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task AddNewMeal()
+    {
+        var newDialog=await _tastyDialog.ShowAddNewMealDialog();
+        var result = await newDialog.Result;
+        await LoadUserRecipes();
+    }
+    private async Task OpenSelectedMeal(UserMeal selectedMeal)
+    {
+        var newDialog = await _tastyDialog.ShowMealDialog(selectedMeal);
+        var result = await newDialog.Result;
+        await LoadUserRecipes();
+    }
+    private async Task LoadUserRecipes()
+    {
+        //if the selected value is null just show whats already filtered
+        if (_timeOfDayMeal !=null) {
+        } else {
+            if(await _loggedUserService.IsCurrentUserDemo())
+            {
+                _allRecipes = _demoDataStore.DemoMeals.ToList();
+            }else
+            {
+                _allRecipes = await _userMealsUseCase.GetUserMeals(_loggedUserService.UserStore.Id);
+            }
+            _filteredRecipes = _allRecipes;
+        }
+        _loading = false;   
+        StateHasChanged();
+    }
+
+    private void FilterSelectedTimeOfDay(string selectedTime)
+    {
+        if(selectedTime is null) {
+            LoadUserRecipes();
+        }else {
+            _filteredRecipes = _allRecipes.Where(meal =>
+              meal.TimeOfDayMeal.Any(time => time.ToString() == selectedTime)
+              ).ToList();
+        }
+    }
+    //TODO proaj prilagodit za mobile view
+}

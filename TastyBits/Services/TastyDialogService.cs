@@ -1,7 +1,8 @@
 ﻿using Domain.Models;
 using MudBlazor;
 using TastyBits.Components;
-using TastyBits.Pages.UserDashboard.Components;
+using TastyBits.Pages.UserDashboard.Meal.AddNewMeal;
+using TastyBits.Pages.UserDashboard.Meal.MealView;
 
 namespace TastyBits.Services
 {

@@ -1,39 +1,43 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Identity;
-@using TastyBits.Pages.UserDashboard.Components
+@using TastyBits.Pages.UserDashboard.Nav
 @using TastyBits.Services;
 @inject LoggedUserService loggedUser;
 
 
 <MudThemeProvider Theme="MyCustomTheme"/>
-<MudDialogProvider CloseButton="true" />
+<MudDialogProvider  CloseButton="true" />
 <MudSnackbarProvider />
 
-<div class="flex min-h-screen">
-    <MudLayout>
-        <MudAppBar>
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
-            <MudSpacer></MudSpacer>
-            @if (_demoMode) {
-                <div class="p-3 bg-amber-300 text-gray-50 flex justify-center mr-40 rounded-lg">
-                    <p class="text-lg text-emerald-800">Demo</p>
-                </div>
-            }
-            <MudText  Color="Color.Dark">@userEmail</MudText>
-        </MudAppBar>
-        <MudDrawer Color="Color.Transparent" Open="open" Width="20rem">
-            <DashboardNav Class="col-start-1 w-50"></DashboardNav>
-        </MudDrawer>
-        <MudMainContent>
-            <main id="rightDashboardLayout" class="col-start-2 grow">
-                <div class="p-5">
-                    @Body
-                </div>
-            </main>
-        </MudMainContent>
-    </MudLayout>
-</div>
 
+<MudLayout>
+    <MudAppBar ToolBarClass="appclass" >
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+                @if (_demoMode) {
+                    <div class="p-3 bg-amber-300 text-gray-50 flex justify-center rounded-lg ">
+                        <p class="text-lg text-emerald-800">Demo</p>
+                    </div>
+                }
+            <MudText Class="mailSize" Color="Color.Dark">@userEmail</MudText>
+    </MudAppBar>
+    <MudDrawer Color="Color.Transparent" PreserveOpenState="false" @bind-Open="@open" Width="20rem" Variant="DrawerVariant.Responsive">
+        <DashboardNav Class="col-start-1 w-50"></DashboardNav>
+    </MudDrawer> 
+    <MudMainContent >
+        <main id="rightDashboardLayout" class="flex justify-center">
+            <div class="p-5 grow">
+                @Body
+            </div>
+        </main>
+    </MudMainContent>
+</MudLayout>
+
+<style>
+    .appclass {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
 @code {
     MudTheme MyCustomTheme = new MudTheme()
         {
@@ -50,7 +54,7 @@
             }
         };
 
-    bool open = true;
+    bool open =false;
 
     void ToggleDrawer()
     {
